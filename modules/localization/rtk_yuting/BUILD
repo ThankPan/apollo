@@ -1,5 +1,5 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
-load("//tools/install:install/bzl", "install")
+load("//tools/install:install.bzl", "install")
 load("//tools:cpplint.bzl", "cpplint")
 
 package(default_visibility = ["//visibility:public"])
@@ -8,11 +8,11 @@ cc_library(
     name = "rtk_yt_localization_component_lib",
     srcs = [
         "rtk_yt_component.cc",
-        "rty_yt_localization.cc",
+        "rtk_yt_localization.cc",
     ],
     hdrs = [
-        "rtk_yt_component.cc",
-        "rty_yt_localization.cc",
+        "rtk_yt_component.h",
+        "rtk_yt_localization.h",
     ],
     copts = ["-DMODULE_NAME=\\\"yt_localization\\\""],
     deps = [
@@ -50,4 +50,4 @@ install(
     ],
 )
 
-cpplint()
+# cpplint()

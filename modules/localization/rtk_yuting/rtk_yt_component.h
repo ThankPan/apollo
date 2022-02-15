@@ -18,7 +18,7 @@
 #include "cyber/component/component.h"
 #include "cyber/cyber.h"
 #include "cyber/message/raw_message.h"
-#include "modules/localization/rtk/rtk_localization.h"
+#include "modules/localization/rtk_yuting/rtk_yt_localization.h"
 #include "modules/transform/transform_broadcaster.h"
 
 namespace apollo {
@@ -70,10 +70,10 @@ class RTKYTLocalizationComponent final : public cyber::Component<Gps> {
   std::unique_ptr<RTKYTLocalization> localization_;
 };
 
-}  // namespace localization
-}  // namespace apollo
-
 // Dont forget to register the component in cyber
 CYBER_REGISTER_COMPONENT(RTKYTLocalizationComponent);
+
+}  // namespace localization
+}  // namespace apollo
 
 #endif

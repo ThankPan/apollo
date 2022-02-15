@@ -16,10 +16,11 @@ bool RTKYTLocalizationComponent::Init() {
   // Set tf broadcaster to create writer for this node
   tf2_broadcaster_.reset(new apollo::transform::TransformBroadcaster(node_));
   if (!InitConfig()) {
-    AERROR << "Init Config falseed" return false;
+    AERROR << "Init Config falseed";
+    return false;
   }
   if (!InitIO()) {
-    AERROR << "Init Interval falseed"
+    AERROR << "Init Interval falseed";
   }
 
   return true;
@@ -53,11 +54,11 @@ bool RTKYTLocalizationComponent::InitIO() {
   // The readers initialized here wont trigger the process of component, but
   // those defined in .dag will
   corrected_imu_listener_ = node_->CreateReader<CorrectedImu>(
-      imu_topic_, std::bind(&RTKYTLocalization::GpsStatusCallback,
+      imu_topic_, std::bind(&RTKYTLocalization::ImuCallback,
                             localization_.get(), std::placeholders::_1));
   ACHECK(corrected_imu_listener_);
   gps_status_listener_ = node_->CreateReader<drivers::gnss::InsStat>(
-      gps_status_topic_, std::bind(&RTKLocalization::GpsStatusCallback,
+      gps_status_topic_, std::bind(&RTKYTLocalization::GpsStatusCallback,
                                    localization_.get(), std::placeholders::_1));
   ACHECK(gps_status_listener_);
 
@@ -71,7 +72,7 @@ bool RTKYTLocalizationComponent::InitIO() {
   return true;
 }
 
-bool RTKYTLocalization::Proc(const std::shared_ptr<Gps>& gps_msg) {
+bool RTKYTLocalizationComponent::Proc(const std::shared_ptr<Gps>& gps_msg) {
   // Gps message is designated in .dag file, so this would trigger component
   // processing
   // TODO: (yuting) process incoming gps message
@@ -110,7 +111,7 @@ void RTKYTLocalizationComponent::PublishPoseBroadcastTopic(
   localization_talker_->Write(localization);
 }
 
-void RTKLocalizationComponent::PublishLocalizationStatus(
+void RTKYTLocalizationComponent::PublishLocalizationStatus(
     const LocalizationStatus& localization_status) {
   // Write to output channel once
   localization_status_talker_->Write(localization_status);

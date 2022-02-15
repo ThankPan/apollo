@@ -45,8 +45,10 @@ class RTKYTLocalization {
   void PrepareLocalizationMsg(const Gps &gps_msg,
                               LocalizationEstimate *localization,
                               LocalizationStatus *localization_status);
-  void ComposeLocalizationMsg(const Gps &) void FillLocalizationMsgHeader(
-      LocalizationEstimate *localization);
+  void ComposeLocalizationMsg(const localization::Gps &gps,
+                              const localization::CorrectedImu &imu,
+                              LocalizationEstimate *localization);
+  void FillLocalizationMsgHeader(LocalizationEstimate *localization);
   void FillLocalizationStatusMsg(const drivers::gnss::InsStat &status,
                                  LocalizationStatus *localization_status);
 
