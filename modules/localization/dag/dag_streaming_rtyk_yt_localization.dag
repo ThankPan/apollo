@@ -1,0 +1,21 @@
+# Define all coms in DAG streaming.
+module_config {
+    module_library : "/apollo/bazel-bin/modules/localization/rtk/librtk_yt_localization_component.so"
+
+    components {
+      class_name : "RTKYTLocalizationComponent"
+      config {
+        name : "rtk_yt_localization"
+        config_file_path : "/apollo/modules/localization/conf/rtk_localization.pb.txt"
+        readers: [
+          {
+            channel: "/apollo/sensor/gnss/odometry"
+            qos_profile: {
+              depth : 10
+            }
+            pending_queue_size: 50
+          }
+        ]
+      }
+    }
+}
