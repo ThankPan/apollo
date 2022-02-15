@@ -6,16 +6,17 @@
 
 #include <limits>
 
+#include "modules/drivers/gnss/proto/gnss_best_pose.pb.h"
+
 #include "cyber/time/clock.h"
 #include "modules/common/math/quaternion.h"
 #include "modules/common/util/string_util.h"
-#include "modules/drivers/gnss/proto/gnss_best_pose.pb.h"
 
 namespace apollo {
 namespace localization {
 
 using apollo::cyber::Clock;
-using ::Eigen::Vector3d; // ::Eigen means global namespace Eigen
+using ::Eigen::Vector3d;  // ::Eigen means global namespace Eigen
 
 RTKYTLocalization::RTKYTLocalization()
     : map_offset_{0.0, 0.0, 0.0},
@@ -309,7 +310,7 @@ void RTKYTLocalization::ComposeLocalizationMsg(
 }
 
 bool RTKYTLocalization::FindMatchingIMU(const double gps_timestamp_sec,
-                                      CorrectedImu *imu_msg) {
+                                        CorrectedImu *imu_msg) {
   if (imu_msg == nullptr) {
     AERROR << "imu_msg should NOT be nullptr.";
     return false;
@@ -383,9 +384,9 @@ bool RTKYTLocalization::FindMatchingIMU(const double gps_timestamp_sec,
 }
 
 bool RTKYTLocalization::InterpolateIMU(const CorrectedImu &imu1,
-                                     const CorrectedImu &imu2,
-                                     const double timestamp_sec,
-                                     CorrectedImu *imu_msg) {
+                                       const CorrectedImu &imu2,
+                                       const double timestamp_sec,
+                                       CorrectedImu *imu_msg) {
   if (!(imu1.header().has_timestamp_sec() &&
         imu2.header().has_timestamp_sec())) {
     AERROR << "imu1 and imu2 has no header or no timestamp_sec in header";
@@ -438,7 +439,7 @@ bool RTKYTLocalization::InterpolateIMU(const CorrectedImu &imu1,
 
 template <class T>
 T RTKYTLocalization::InterpolateXYZ(const T &p1, const T &p2,
-                                  const double frac1) {
+                                    const double frac1) {
   T p;
   double frac2 = 1.0 - frac1;
   if (p1.has_x() && !std::isnan(p1.x()) && p2.has_x() && !std::isnan(p2.x())) {
@@ -454,7 +455,7 @@ T RTKYTLocalization::InterpolateXYZ(const T &p1, const T &p2,
 }
 
 bool RTKYTLocalization::FindNearestGpsStatus(const double gps_timestamp_sec,
-                                           drivers::gnss::InsStat *status) {
+                                             drivers::gnss::InsStat *status) {
   CHECK_NOTNULL(status);
 
   std::unique_lock<std::mutex> lock(gps_status_list_mutex_);
@@ -484,5 +485,5 @@ bool RTKYTLocalization::FindNearestGpsStatus(const double gps_timestamp_sec,
   return true;
 }
 
-} // namespace localization   
-} // namespace apollo
+}  // namespace localization
+}  // namespace apollo
