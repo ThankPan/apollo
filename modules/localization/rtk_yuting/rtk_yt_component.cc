@@ -1,3 +1,7 @@
+// Implement RTKYTLocalizationComponent
+// Author: Yuting Xie
+// 2022.2.15
+
 #include "modules/localization/rtk_yuting/rtk_yt_component.h"
 #include "cyber/time/clock.h"
 

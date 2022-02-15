@@ -67,7 +67,7 @@ private:
     
     // The actual worker for this component
     std::unique_ptr<RTKYTLocalization> localization_;
-}
+};
 
 } // namespace localization
 } // namespace apollo
