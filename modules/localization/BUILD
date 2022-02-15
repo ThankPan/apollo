@@ -28,6 +28,7 @@ install(
         "//modules/localization/msf:install",
         "//modules/localization/ndt:install",
         "//modules/localization/rtk:install",
+        "//modules/localization/rtk_yuting:install",
     ],
 )
 
