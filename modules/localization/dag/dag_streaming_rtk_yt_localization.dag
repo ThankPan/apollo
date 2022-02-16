@@ -1,6 +1,6 @@
 # Define all coms in DAG streaming.
 module_config {
-    module_library : "/apollo/bazel-bin/modules/localization/rtk/librtk_yt_localization_component.so"
+    module_library : "/apollo/bazel-bin/modules/localization/rtk_yuting/librtk_yt_localization_component.so"
 
     components {
       class_name : "RTKYTLocalizationComponent"
