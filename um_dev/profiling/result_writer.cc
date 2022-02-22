@@ -8,7 +8,9 @@
 
 namespace um_dev {
 namespace profiling {
-namespace {
+
+ProfilingResultWriter* ProfilingResultWriter::instance_ =
+    new ProfilingResultWriter();
 
 ProfilingResultWriter::ProfilingResultWriter() {
   // TODO: (yuting) figure out the run-time working directory to write to
@@ -16,13 +18,7 @@ ProfilingResultWriter::ProfilingResultWriter() {
   std::cout << "[Profiling] Simulate open files\n";
 }
 
-ProfilingResultWriter::~ProfilingResultWriter() {
-  // TODO: (yuting) close files here
-  // fout_timing_.close();
-  std::cout << "[Profiling] Simulate close files\n";
-}
-
-ProfilingResultWriter& ProfilingResultWriter::Instance() { return instance_; }
+ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }
 
 bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           const std::string& content) {
@@ -40,8 +36,6 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
 
   return true;
 }
-
-}  // namespace
 
 }  // namespace profiling
 }  // namespace um_dev
