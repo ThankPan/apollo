@@ -14,7 +14,8 @@ message LaneWaypoint {
   optional apollo.common.PointENU pose = 3;
   // When the developer selects a point on the dreamview route editing
   // the direction can be specified by dragging the mouse
-  // dreamview calculates the heading based on this to support construct lane way point with heading
+  // dreamview calculates the heading based on this to support construct lane
+  // way point with heading
   optional double heading = 4;
 }
 

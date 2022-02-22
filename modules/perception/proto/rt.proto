@@ -1981,7 +1981,7 @@ message DetectionOutputSSDParameter {
   optional float threshold_objectness = 5 [default = 0.0];
   optional GenAnchorParameter gen_anchor_param = 6;
   // Whether to refine boxes that are out of feature map.
-  optional bool refine_out_of_map_bbox = 7  [default = false];
+  optional bool refine_out_of_map_bbox = 7 [default = false];
   optional NMSSSDParameter nms_param = 8;
   // Number of object classes.
   optional uint32 num_class = 9 [default = 1];
@@ -1993,19 +1993,19 @@ message DetectionOutputSSDParameter {
   repeated float threshold = 12;
 }
 message NMSSSDParameter {
-  optional bool     need_nms = 1 [default = true];
-  repeated float    overlap_ratio = 2 ;
-  repeated uint32   top_n = 3 ;
-  optional bool     add_score = 4 [default = false];
-  repeated int32    max_candidate_n = 5;
-  repeated bool     use_soft_nms = 6;
-  optional bool     nms_among_classes = 7 [default = false];
-  repeated bool     voting = 8;
-  repeated float    vote_iou = 9;
+  optional bool need_nms = 1 [default = true];
+  repeated float overlap_ratio = 2;
+  repeated uint32 top_n = 3;
+  optional bool add_score = 4 [default = false];
+  repeated int32 max_candidate_n = 5;
+  repeated bool use_soft_nms = 6;
+  optional bool nms_among_classes = 7 [default = false];
+  repeated bool voting = 8;
+  repeated float vote_iou = 9;
   // Thresholds for learning nms.
-  optional float    force_identity_iou_thr = 10 [default = 1.0];
-  optional float    force_imparity_iou_thr = 11 [default = 0.0];
-  optional int32   nms_gpu_max_n_per_time = 12 [default = -1];
+  optional float force_identity_iou_thr = 10 [default = 1.0];
+  optional float force_imparity_iou_thr = 11 [default = 0.0];
+  optional int32 nms_gpu_max_n_per_time = 12 [default = -1];
 }
 message GenAnchorParameter {
   // Widths and heights for generating anchors.

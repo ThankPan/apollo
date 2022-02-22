@@ -29,7 +29,7 @@ message CycleRoutingTask {
 message ParkingRoutingTask {
   optional double lane_width = 1;
   optional apollo.routing.RoutingRequest routing_request = 2;
-} 
+}
 
 message DeadEndRoutingTask {
   optional apollo.routing.RoutingRequest routing_request_in = 2;
