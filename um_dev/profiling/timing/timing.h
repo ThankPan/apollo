@@ -10,8 +10,8 @@
 
 #include "cyber/time/time.h"
 
-#define NS_TO_MS(ns) ((ns) / 1000)
-#define MS_TO_NS(ms) ((ms)*1000)
+#define NANO_TO_MICRO (0.001)
+#define MICRO_TO_MILLI (0.001)
 
 namespace um_dev {
 namespace profiling {
