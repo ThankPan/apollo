@@ -80,6 +80,7 @@ cc_library(
         "//modules/transform/proto:transform_cc_proto",
         "//modules/v2x/common:v2x_proxy_gflags",
         "//modules/v2x/proto:v2x_traffic_light_cc_proto",
+        "//um_dev/profiling/timing:timing",
         "@eigen",
         "@opencv//:highgui",
     ],
@@ -144,6 +145,7 @@ cc_library(
         "//modules/perception/onboard/common_flags",
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
         "//modules/perception/onboard/transform_wrapper",
+        "//um_dev/profiling/timing:timing",
         "@eigen",
     ],
 )
