@@ -125,13 +125,13 @@ message OutputObstacle {
   // 2-right continuous obstacle
   optional uint32 continuouslabel = 7;
   //(0/1) 0: current fuzzy estimation is invalid; 1: current fuzzy estimation is
-  //valid
+  // valid
   optional uint32 fuzzyestimationvalid = 8;
   // the obstacle Type: INVALID=0,VEHICLE, PEDESTRIAN, ...
   optional RecognitionType obstacletype = 9;
 
   //(pixel) the average disparity of an obstacle with adding infDisp: avgDisp =
-  //BF_VALUE/avgDitance+infDis
+  // BF_VALUE/avgDitance+infDis
   optional float avgdisp = 10;
   //(m) the average Z distance of single obstacle rectangle
   optional float avgdistancez = 11;
@@ -140,19 +140,19 @@ message OutputObstacle {
   //(m) the longest Z distance of continuous ob
   optional float fardistancez = 13;
   //(-+m) the left X for real 3D coordinate of the obstacle(the origin X is the
-  //center of car, right is positive)
+  // center of car, right is positive)
   optional float real3dleftx = 14;
   //(-+m) the right X for real 3D coordinate of the obstacle(the origin X is the
-  //center of car, right is positive)
+  // center of car, right is positive)
   optional float real3drightx = 15;
   //(-+m) the center X for real 3D coordinate of the obstacle(the origin X is
-  //the center of car, right is positive)
+  // the center of car, right is positive)
   optional float real3dcenterx = 16;
   //(-+m) the up Y for real 3D coordinate of the obstacle(the origin Y is the
-  //camera position, down is positive)
+  // camera position, down is positive)
   optional float real3dupy = 17;
   //(-+m) the Low y for real 3D coordinate of the obstacle(the origin Y is the
-  //camera position, down is positive)
+  // camera position, down is positive)
   optional float real3dlowy = 18;
 
   //(pixel) the X-axis of first point of rectangle, the first point :(x, y),
@@ -164,28 +164,32 @@ message OutputObstacle {
   // full size pixel coordinate
   optional uint32 firstpointy = 20;
   //(pixel) the X-axis of second point of rectangle, the second point:(x+width,
-  //y),
+  // y),
   // right top point of single obstacle/near top point of continuous obstacle,
   // full size pixel coordinate
   optional uint32 secondpointx = 21;
   //(pixel) the Y-axis of second point of rectangle, the second point:(x+width,
-  //y), right top point of single obstacle/near top point of continuous
+  // y), right top point of single obstacle/near top point of continuous
   // obstacle, full size pixel coordinate
   optional uint32 secondpointy = 22;
   //(pixel) the X-axis of third point of rectangle, the third point :(x+width,
-  //y+height), right bottom point of single obstacle/far top point of continuous
+  // y+height), right bottom point of single obstacle/far top point of
+  // continuous
   // obstacle, full size pixel coordinate
   optional uint32 thirdpointx = 23;
   //(pixel) the Y-axis of third point of rectangle, the third point :(x+width,
-  //y+height), right bottom point of single obstacle/far top point of continuous
+  // y+height), right bottom point of single obstacle/far top point of
+  // continuous
   // obstacle, full size pixel coordinate
   optional uint32 thirdpointy = 24;
   //(pixel) the X-axis of fourth point of rectangle, the fourth
-  //point:(x,y+height), left bottom point of single obstacle/far bottom point of
+  // point:(x,y+height), left bottom point of single obstacle/far bottom point
+  // of
   // continuous obstacle, full size pixel coordinate
   optional uint32 fourthpointx = 25;
   //(pixel) the Y-axis of fourth point of rectangle, the fourth
-  //point:(x,y+height), left bottom point of single obstacle/far bottom point of
+  // point:(x,y+height), left bottom point of single obstacle/far bottom point
+  // of
   // continuous obstacle, full size pixel coordinate
   optional uint32 fourthpointy = 26;
 
@@ -201,26 +205,26 @@ message OutputObstacle {
   //(m) estimated real 3D width of current obstacle
   optional float fuzzy3dwidth = 31;
   //(-+m) estimated real 3D position of obstacle center in X direction (the
-  //origin X is the center of car, right is positive)
+  // origin X is the center of car, right is positive)
   optional float fuzzy3dcenterx = 32;
   //(-+m) estimated real 3D position of obstacle left in X direction (the origin
-  //X is the center of car, right is positive)
+  // X is the center of car, right is positive)
   optional float fuzzy3dleftx = 33;
   //(-+m) estimated real 3D position of obstacle right in X direction (the
-  //origin X is the center of car, right is positive)
+  // origin X is the center of car, right is positive)
   optional float fuzzy3drightx = 34;
   //(m) estimated real 3D height of current obstacle
   optional float fuzzy3dheight = 35;
   //(-+m) estimated real 3D position of obstacle up in Y direction (the origin Y
-  //is the camera position, down is positive)
+  // is the camera position, down is positive)
   optional float fuzzy3dupy = 36;
   //(-+m) estimated real 3D position of obstacle low in Y direction (the origin
-  //Y is the camera position, down is positive)
+  // Y is the camera position, down is positive)
   optional float fuzzy3dlowy = 37;
 
   optional float fuzzyrelativespeedcenterx =
       38;  //(m/second) estimated center speed in X direction of current
-           //obstacle
+           // obstacle
   optional float fuzzyrelativespeedleftx =
       39;  //(m/second) estimated left speed in X direction of current obstacle
   optional float fuzzyrelativespeedrightx =

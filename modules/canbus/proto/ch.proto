@@ -241,18 +241,20 @@ message Ecu_status_3_517 {
 }
 
 message Ch {
-  optional Throttle_command_110 throttle_command_110 = 1; // control message
-  optional Brake_command_111 brake_command_111 = 2; // control message
-  optional Steer_command_112 steer_command_112 = 3; // control message
-  optional Turnsignal_command_113 turnsignal_command_113 = 4; // control message
-  optional Gear_command_114 gear_command_114 = 5; // control message
-  optional Control_command_115 control_command_115 = 6; // control message
-  optional Throttle_status__510 throttle_status__510 = 7; // report message
-  optional Brake_status__511 brake_status__511 = 8; // report message
-  optional Steer_status__512 steer_status__512 = 9; // report message
-  optional Turnsignal_status__513 turnsignal_status__513 = 10; // report message
-  optional Gear_status_514 gear_status_514 = 11; // report message
-  optional Ecu_status_1_515 ecu_status_1_515 = 12; // report message
-  optional Ecu_status_2_516 ecu_status_2_516 = 13; // report message
-  optional Ecu_status_3_517 ecu_status_3_517 = 14; // report message
+  optional Throttle_command_110 throttle_command_110 = 1;  // control message
+  optional Brake_command_111 brake_command_111 = 2;        // control message
+  optional Steer_command_112 steer_command_112 = 3;        // control message
+  optional Turnsignal_command_113 turnsignal_command_113 =
+      4;                                                   // control message
+  optional Gear_command_114 gear_command_114 = 5;          // control message
+  optional Control_command_115 control_command_115 = 6;    // control message
+  optional Throttle_status__510 throttle_status__510 = 7;  // report message
+  optional Brake_status__511 brake_status__511 = 8;        // report message
+  optional Steer_status__512 steer_status__512 = 9;        // report message
+  optional Turnsignal_status__513 turnsignal_status__513 =
+      10;                                           // report message
+  optional Gear_status_514 gear_status_514 = 11;    // report message
+  optional Ecu_status_1_515 ecu_status_1_515 = 12;  // report message
+  optional Ecu_status_2_516 ecu_status_2_516 = 13;  // report message
+  optional Ecu_status_3_517 ecu_status_3_517 = 14;  // report message
 }
