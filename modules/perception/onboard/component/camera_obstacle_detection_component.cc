@@ -30,7 +30,6 @@
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/component/camera_perception_viz_message.h"
-#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace perception {
@@ -270,7 +269,6 @@ bool CameraObstacleDetectionComponent::Init() {
 void CameraObstacleDetectionComponent::OnReceiveImage(
     const std::shared_ptr<apollo::drivers::Image> &message,
     const std::string &camera_name) {
-  um_dev::profiling::UM_Timing timing("CameraObstacleDetectionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
   AINFO << "Enter CameraObstacleDetectionComponent::Proc(), "

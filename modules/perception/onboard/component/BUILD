@@ -80,7 +80,6 @@ cc_library(
         "//modules/transform/proto:transform_cc_proto",
         "//modules/v2x/common:v2x_proxy_gflags",
         "//modules/v2x/proto:v2x_traffic_light_cc_proto",
-        "//um_dev/profiling/timing:timing",
         "@eigen",
         "@opencv//:highgui",
     ],

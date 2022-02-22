@@ -18,11 +18,11 @@ UM_Timing::UM_Timing(std::string taskname) : taskname_(taskname) {
 UM_Timing::~UM_Timing() {
   auto duration = apollo::cyber::Time::Now() - inner_time_;
   long long ns = duration.ToNanosecond();
-  auto& result_writer = ProfilingResultWriter::Instance();
+  std::string timing_result =
+      "task: [" + taskname_ + "], time elapsed: " + std::to_string(ns) + "ns.";
 
-  result_writer.write_to_file(
-      PROFILING_METRICS::TIMING,
-      "task: [" + taskname_ + "], time elapsed: " + std::to_string(ns) + "ns.");
+  ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
+                                                  timing_result);
 }
 
 }  // namespace profiling

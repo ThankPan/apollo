@@ -11,7 +11,6 @@
 
 namespace um_dev {
 namespace profiling {
-namespace {
 
 enum PROFILING_METRICS {
   TIMING = 0,
@@ -22,7 +21,6 @@ enum PROFILING_METRICS {
 class ProfilingResultWriter {
  public:
   ProfilingResultWriter(ProfilingResultWriter&) = delete;
-  ~ProfilingResultWriter();
   static ProfilingResultWriter& Instance();
   bool write_to_file(PROFILING_METRICS profiling_type,
                      const std::string& content);
@@ -31,7 +29,7 @@ class ProfilingResultWriter {
   ProfilingResultWriter();
 
  private:
-  static ProfilingResultWriter instance_;
+  static ProfilingResultWriter* instance_;
   static std::mutex mutex_instance_;
 
   // Mutexs to write to different profiling result files, according to
@@ -46,7 +44,6 @@ class ProfilingResultWriter {
   std::ofstream fout_gpu_;
 };
 
-}  // namespace
 }  // namespace profiling
 }  // namespace um_dev
 #endif
