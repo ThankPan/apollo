@@ -26,8 +26,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
   switch (profiling_type) {
     case TIMING: {
       std::lock_guard<std::mutex> lock(mutex_timing_);
-      std::cout << "[Profiling] type = Timing" << std::endl;
-      std::cout << content << std::endl;
+      std::cout << "[Profiling] type = Timing, " << content << std::endl;
       break;
     }
     default:

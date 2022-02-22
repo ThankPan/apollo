@@ -18,8 +18,9 @@ UM_Timing::UM_Timing(std::string taskname) : taskname_(taskname) {
 UM_Timing::~UM_Timing() {
   auto duration = apollo::cyber::Time::Now() - inner_time_;
   long long ns = duration.ToNanosecond();
+  double ms = ns * NANO_TO_MICRO * MICRO_TO_MILLI;
   std::string timing_result =
-      "task: [" + taskname_ + "], time elapsed: " + std::to_string(ns) + "ns.";
+      "task: [" + taskname_ + "], time elapsed: " + std::to_string(ms) + "ms";
 
   ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
                                                   timing_result);
