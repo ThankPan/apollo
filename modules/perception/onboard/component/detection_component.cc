@@ -22,6 +22,7 @@
 #include "modules/perception/lidar/common/lidar_frame_pool.h"
 #include "modules/perception/lidar/common/lidar_log.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 using ::apollo::cyber::Clock;
 
@@ -57,6 +58,7 @@ bool DetectionComponent::Init() {
 
 bool DetectionComponent::Proc(
     const std::shared_ptr<drivers::PointCloud>& message) {
+  um_dev::profiling::UM_Timing timing("DetectionComponent::Proc");
   AINFO << std::setprecision(16)
         << "Enter detection component, message timestamp: "
         << message->measurement_time()

@@ -22,7 +22,7 @@ UM_Timing::~UM_Timing() {
 
   result_writer.write_to_file(
       PROFILING_METRICS::TIMING,
-      "task: " + taskname_ + ", time elapsed: " + std::to_string(ns) + "ns.");
+      "task: [" + taskname_ + "], time elapsed: " + std::to_string(ns) + "ns.");
 }
 
 }  // namespace profiling

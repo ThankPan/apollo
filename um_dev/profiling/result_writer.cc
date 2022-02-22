@@ -8,6 +8,7 @@
 
 namespace um_dev {
 namespace profiling {
+namespace {
 
 ProfilingResultWriter::ProfilingResultWriter() {
   // TODO: (yuting) figure out the run-time working directory to write to
@@ -39,6 +40,8 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
 
   return true;
 }
+
+}  // namespace
 
 }  // namespace profiling
 }  // namespace um_dev
