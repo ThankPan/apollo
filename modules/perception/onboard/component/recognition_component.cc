@@ -22,6 +22,7 @@
 #include "modules/perception/lidar/common/lidar_error_code.h"
 #include "modules/perception/lidar/common/lidar_log.h"
 // #include "modules/perception/onboard/component/lidar_common_flags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 using Clock = apollo::cyber::Clock;
 
@@ -47,6 +48,7 @@ bool RecognitionComponent::Init() {
 
 bool RecognitionComponent::Proc(
     const std::shared_ptr<LidarFrameMessage>& message) {
+  um_dev::profiling::UM_Timing timing("RecognitionComponent::Proc");
   AINFO << std::setprecision(16)
         << "Enter Tracking component, message timestamp: "
         << message->timestamp_
