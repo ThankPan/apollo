@@ -9,6 +9,8 @@
 #include <mutex>
 #include <string>
 
+#include "cyber/time/time.h"
+
 namespace um_dev {
 namespace profiling {
 
@@ -21,6 +23,7 @@ enum PROFILING_METRICS {
 class ProfilingResultWriter {
  public:
   ProfilingResultWriter(ProfilingResultWriter&) = delete;
+  ~ProfilingResultWriter();
   static ProfilingResultWriter& Instance();
   bool write_to_file(PROFILING_METRICS profiling_type,
                      const std::string& content);
@@ -39,9 +42,15 @@ class ProfilingResultWriter {
   std::mutex mutex_gpu_;
 
   // Result files
+  std::string timing_output_file_;
+  std::string memory_output_file_;
+  std::string gpu_output_file_;
   std::ofstream fout_timing_;
   std::ofstream fout_memory_;
   std::ofstream fout_gpu_;
+
+  // To keep write to file throttle
+  static apollo::cyber::Time last_write_time_;
 };
 
 }  // namespace profiling
