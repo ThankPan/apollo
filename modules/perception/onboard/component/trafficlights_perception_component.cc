@@ -37,6 +37,7 @@
 #include "modules/perception/camera/common/data_provider.h"
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace perception {
@@ -312,6 +313,8 @@ int TrafficLightsPerceptionComponent::InitCameraFrame() {
 void TrafficLightsPerceptionComponent::OnReceiveImage(
     const std::shared_ptr<apollo::drivers::Image> msg,
     const std::string& camera_name) {
+  std::cout << "YUTING TAG\n";
+  um_dev::profiling::UM_Timing timing("TrafficLightsPerceptionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lck(mutex_);
   double receive_img_timestamp = Clock::NowInSeconds();
   double image_msg_ts = msg->measurement_time();

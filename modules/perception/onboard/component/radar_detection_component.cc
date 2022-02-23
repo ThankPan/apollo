@@ -18,6 +18,7 @@
 #include "cyber/time/clock.h"
 #include "modules/common/util/perf_util.h"
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
+#include "um_dev/profiling/timing/timing.h"
 
 using Clock = apollo::cyber::Clock;
 
@@ -61,6 +62,7 @@ bool RadarDetectionComponent::Init() {
 }
 
 bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
+  um_dev::profiling::UM_Timing timing("RadarDetectionComponent::Proc");
   AINFO << "Enter radar preprocess, message timestamp: "
         << message->header().timestamp_sec() << " current timestamp "
         << Clock::NowInSeconds();
