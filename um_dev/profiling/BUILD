@@ -7,4 +7,8 @@ cc_library(
     name = "result_writer",
     srcs = ["result_writer.cc"],
     hdrs = ["result_writer.h"],
+    deps = [
+        "//cyber/time:time",
+        "//cyber/time:duration",
+    ],
 )
