@@ -48,7 +48,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   switch (profiling_type) {
     case TIMING: {
-      if (now - last_write_time_ < apollo::cyber::Duration(1.0)) {
+      if (now - last_write_time_ < apollo::cyber::Duration(0.1)) {
         return true;
       }
       std::lock_guard<std::mutex> lock(mutex_timing_);
