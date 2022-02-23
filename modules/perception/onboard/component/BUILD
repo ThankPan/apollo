@@ -170,6 +170,7 @@ cc_library(
         "//modules/perception/onboard/inner_component_messages",
         "//modules/perception/onboard/msg_serializer",
         "//modules/perception/onboard/proto:fusion_component_config_cc_proto",
+        "//um_dev/profiling/timing:timing",
         "@eigen",
     ],
     alwayslink = True,

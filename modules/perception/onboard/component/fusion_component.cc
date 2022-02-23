@@ -20,6 +20,7 @@
 #include "modules/perception/base/object_pool_types.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/msg_serializer/msg_serializer.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace perception {
@@ -55,6 +56,7 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
   if (message->process_stage_ == ProcessStage::SENSOR_FUSION) {
     return true;
   }
+  um_dev::profiling::UM_Timing timing("FusionComponent::Proc"); // timing the whole function
   std::shared_ptr<PerceptionObstacles> out_message(new (std::nothrow)
                                                        PerceptionObstacles);
   std::shared_ptr<SensorFrameMessage> viz_message(new (std::nothrow)
