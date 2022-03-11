@@ -35,8 +35,8 @@ class ProfilingResultWriter {
   static ProfilingResultWriter* instance_;
   static std::mutex mutex_instance_;
 
-  // Mutexs to write to different profiling result files, according to
-  // supporting types
+  std::string profiling_scenario_;
+
   std::mutex mutex_timing_;
   std::mutex mutex_memory_;
   std::mutex mutex_gpu_;
