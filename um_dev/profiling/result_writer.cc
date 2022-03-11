@@ -2,11 +2,13 @@
 // Author: Yuting Xie
 // 2022.2.22
 
-#include "./result_writer.h"
+#include "um_dev/profiling/result_writer.h"
 
-#include <assert.h>
+#include "um_dev/utils/files.h"
 
 #include <iostream>
+#include <unistd.h>
+#include <assert.h>
 
 namespace um_dev {
 namespace profiling {
@@ -16,15 +18,20 @@ ProfilingResultWriter* ProfilingResultWriter::instance_ =
 apollo::cyber::Time ProfilingResultWriter::last_write_time_ =
     apollo::cyber::Time::Now();
 
-ProfilingResultWriter::ProfilingResultWriter()
-    : timing_output_file_("/apollo/um_dev/profiling/results/timing_result_"),
-      memory_output_file_("/apollo/um_dev/profiling/results/memory_result_"),
-      gpu_output_file_("/apollo/um_dev/profiling/results/gpu_result_") {
+ProfilingResultWriter::ProfilingResultWriter() : profiling_scenario_("default"){
+  // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
-  fout_timing_.open(timing_output_file_ + std::to_string(now.ToSecond()) +
-                    ".log");
-  assert(fout_timing_.is_open());
-  std::cout << "[Profiling] Simulate open files\n";
+  const std::string result_dir = 
+    "/apollo/um_dev/profiling/results/" + profiling_scenario_ + "_" + std::to_string(now.ToNanosecond());
+  assert(um_dev::utils::um_mkdir(result_dir));
+  std::cout << "Profiling result path created: " + result_dir << std::endl;
+
+  auto pid_str = std::to_string(getpid());
+
+  // Open result files here
+  fout_timing_.open(result_dir + "/timing_" + pid_str + ".log");
+  fout_memory_.open(result_dir + "/memory_" + pid_str + ".log");
+  fout_gpu_.open(result_dir + "/gpu_" + pid_str + ".log");
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
@@ -43,7 +50,6 @@ ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }
 
 bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           const std::string& content) {
-  // TODO: more reasonable throttle by timer rather than thread-unsafe static
   // member
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   switch (profiling_type) {
@@ -52,7 +58,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
         return true;
       }
       std::lock_guard<std::mutex> lock(mutex_timing_);
-      fout_timing_ << "[Profiling] type = Timing, " << content << std::endl;
+      fout_timing_ << "[Timing]: " << content << std::endl;
       break;
     }
     default:
