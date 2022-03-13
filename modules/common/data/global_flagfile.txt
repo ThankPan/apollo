@@ -13,7 +13,7 @@
 
 --map_dir=/apollo/modules/map/data/sunnyvale_loop
 
---use_sim_time=false
+--use_sim_time=true
 
 --use_cyber_time=true
 
