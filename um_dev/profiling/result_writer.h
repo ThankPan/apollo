@@ -8,6 +8,7 @@
 #include <fstream>
 #include <mutex>
 #include <string>
+#include <map>
 
 #include "cyber/time/time.h"
 
@@ -25,7 +26,7 @@ class ProfilingResultWriter {
   ProfilingResultWriter(ProfilingResultWriter&) = delete;
   ~ProfilingResultWriter();
   static ProfilingResultWriter& Instance();
-  bool write_to_file(PROFILING_METRICS profiling_type,
+  bool write_to_file(PROFILING_METRICS profiling_type, const std::string& task_name,
                      const std::string& content);
 
  private:
@@ -35,22 +36,17 @@ class ProfilingResultWriter {
   static ProfilingResultWriter* instance_;
   static std::mutex mutex_instance_;
 
+  const float throttle_threshold_; // throttle threshold in second
   std::string profiling_scenario_;
 
-  std::mutex mutex_timing_;
-  std::mutex mutex_memory_;
-  std::mutex mutex_gpu_;
+  std::map<std::string, apollo::cyber::Time> task_to_timestamp_;
+
+  std::mutex mutex_result_file_;
+  std::mutex mutex_map_;
 
   // Result files
-  std::string timing_output_file_;
-  std::string memory_output_file_;
-  std::string gpu_output_file_;
-  std::ofstream fout_timing_;
-  std::ofstream fout_memory_;
-  std::ofstream fout_gpu_;
-
-  // To keep write to file throttle
-  static apollo::cyber::Time last_write_time_;
+  std::string result_file_;
+  std::ofstream fout_;
 };
 
 }  // namespace profiling

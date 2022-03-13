@@ -15,10 +15,8 @@ namespace profiling {
 
 ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
-apollo::cyber::Time ProfilingResultWriter::last_write_time_ =
-    apollo::cyber::Time::Now();
 
-ProfilingResultWriter::ProfilingResultWriter() : profiling_scenario_("default"){
+ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profiling_scenario_("default") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir = 
@@ -31,42 +29,42 @@ ProfilingResultWriter::ProfilingResultWriter() : profiling_scenario_("default"){
 
   // Open result files here
   auto time_str = std::to_string(now.ToMicrosecond());
-  fout_timing_.open(result_dir + "/timing_" + time_str + '_' + pid_str + ".log");
-  fout_memory_.open(result_dir + "/memory_" + time_str + '_' + pid_str + ".log");
-  fout_gpu_.open(result_dir + "/gpu_" + time_str + '_' + pid_str + ".log");
+  fout_.open(result_dir + "/profiling_" + time_str + '_' + pid_str + ".log");
+
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
-  if (fout_timing_.is_open()) {
-    fout_timing_.close();
-  }
-  if (fout_memory_.is_open()) {
-    fout_memory_.close();
-  }
-  if (fout_gpu_.is_open()) {
-    fout_gpu_.close();
+  if (fout_.is_open()) {
+    fout_.close();
   }
 }
 
 ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }
 
-bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
+bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type, const std::string& task_name,
                                           const std::string& content) {
-  // member
-  apollo::cyber::Time now = apollo::cyber::Time::Now();
+  {
+    std::lock_guard<std::mutex> lock(mutex_map_);
+    apollo::cyber::Time now = apollo::cyber::Time::Now();
+    auto it = task_to_timestamp_.find(task_name);
+    if (it == task_to_timestamp_.end()) {
+      task_to_timestamp_[task_name] = now;
+    } else if (now - it->second < apollo::cyber::Duration(throttle_threshold_)) {
+      return true;
+    } else {
+      it->second = now;
+    }
+  }
+
   switch (profiling_type) {
     case TIMING: {
-      if (now - last_write_time_ < apollo::cyber::Duration(0.1)) {
-        return true;
-      }
-      std::lock_guard<std::mutex> lock(mutex_timing_);
-      fout_timing_ << "[Timing]: " << content << std::endl;
+      std::lock_guard<std::mutex> lock(mutex_result_file_);
+      fout_ << "[Timing]: " << content << std::endl;
       break;
     }
     default:
       break;
   }
-  last_write_time_ = now;
 
   return true;
 }
