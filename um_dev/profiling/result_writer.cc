@@ -22,16 +22,18 @@ ProfilingResultWriter::ProfilingResultWriter() : profiling_scenario_("default"){
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir = 
-    "/apollo/um_dev/profiling/results/" + profiling_scenario_ + "_" + std::to_string(now.ToNanosecond());
-  assert(um_dev::utils::um_mkdir(result_dir));
-  std::cout << "Profiling result path created: " + result_dir << std::endl;
+    "/apollo/um_dev/profiling/results/" + profiling_scenario_;
+  // FIXME: (yuting) unable to mkdir
+  // assert(um_dev::utils::um_mkdir(result_dir));
+  // std::cout << "Profiling result path created: " + result_dir << std::endl;
 
   auto pid_str = std::to_string(getpid());
 
   // Open result files here
-  fout_timing_.open(result_dir + "/timing_" + pid_str + ".log");
-  fout_memory_.open(result_dir + "/memory_" + pid_str + ".log");
-  fout_gpu_.open(result_dir + "/gpu_" + pid_str + ".log");
+  auto time_str = std::to_string(now.ToMicrosecond());
+  fout_timing_.open(result_dir + "/timing_" + time_str + '_' + pid_str + ".log");
+  fout_memory_.open(result_dir + "/memory_" + time_str + '_' + pid_str + ".log");
+  fout_gpu_.open(result_dir + "/gpu_" + time_str + '_' + pid_str + ".log");
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
