@@ -20,6 +20,7 @@
 
 #include "modules/common/adapters/adapter_gflags.h"
 #include "modules/routing/common/routing_gflags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 DECLARE_string(flagfile);
 
@@ -79,6 +80,7 @@ bool RoutingComponent::Init() {
 }
 
 bool RoutingComponent::Proc(const std::shared_ptr<RoutingRequest>& request) {
+  um_dev::profiling::UM_Timing um_timing("RoutingComponent::Proc");
   auto response = std::make_shared<RoutingResponse>();
   if (!routing_.Process(request, response.get())) {
     return false;

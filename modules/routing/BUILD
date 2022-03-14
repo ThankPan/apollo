@@ -29,6 +29,7 @@ cc_library(
     deps = [
         ":routing",
         "//cyber/time:clock",
+        "//um_dev/profiling/timing:timing",
     ],
 )
 
