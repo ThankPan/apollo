@@ -33,6 +33,7 @@
 #include "modules/prediction/proto/prediction_conf.pb.h"
 #include "modules/prediction/scenario/scenario_manager.h"
 #include "modules/prediction/util/data_extraction.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace prediction {
@@ -113,6 +114,7 @@ bool PredictionComponent::Init() {
 
 bool PredictionComponent::Proc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles) {
+  um_dev::profiling::UM_Timing um_timing("PredictionComponent::Proc");
   if (FLAGS_use_lego) {
     return ContainerSubmoduleProcess(perception_obstacles);
   }

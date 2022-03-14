@@ -21,5 +21,16 @@ bool um_mkdir(const std::string &path) {
     return false;
 }
 
+bool um_rmdir(const std::string &path) {
+    if (access(path.c_str(), 0) == -1) {
+        return true;
+    }
+    auto err = rmdir(path.c_str());
+    if (err != 0) {
+        return false;
+    }
+    return true;
+}
+
 }  // utils
 }  // um_dev
