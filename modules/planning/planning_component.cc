@@ -26,6 +26,7 @@
 #include "modules/planning/common/planning_context.h"
 #include "modules/planning/navi_planning.h"
 #include "modules/planning/on_lane_planning.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace planning {
@@ -121,6 +122,7 @@ bool PlanningComponent::Proc(
     const std::shared_ptr<canbus::Chassis>& chassis,
     const std::shared_ptr<localization::LocalizationEstimate>&
         localization_estimate) {
+  um_dev::profiling::UM_Timing um_timing("PlanningComponent::Proc");
   ACHECK(prediction_obstacles != nullptr);
 
   // check and process possible rerouting request
