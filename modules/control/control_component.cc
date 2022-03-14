@@ -23,6 +23,7 @@
 #include "modules/common/latency_recorder/latency_recorder.h"
 #include "modules/common/vehicle_state/vehicle_state_provider.h"
 #include "modules/control/common/control_gflags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace control {
@@ -277,6 +278,7 @@ Status ControlComponent::ProduceControlCommand(
 }
 
 bool ControlComponent::Proc() {
+  um_dev::profiling::UM_Timing um_timing("ControlComponent::Proc");
   const auto start_time = Clock::Now();
 
   chassis_reader_->Observe();
