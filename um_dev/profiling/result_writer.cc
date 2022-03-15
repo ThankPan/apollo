@@ -16,7 +16,7 @@ namespace profiling {
 ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
-ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profiling_scenario_("default") {
+ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profiling_scenario_("lgsvl") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir = 
@@ -28,7 +28,7 @@ ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profi
   auto pid_str = std::to_string(getpid());
 
   // Open result files here
-  auto time_str = std::to_string(now.ToMicrosecond());
+  auto time_str = now.ToString();
   fout_.open(result_dir + "/profiling_" + time_str + '_' + pid_str + ".log");
 
 }
