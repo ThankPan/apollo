@@ -6,31 +6,32 @@ namespace um_dev {
 namespace utils {
 
 bool um_mkdir(const std::string &path) {
-    if (access(path.c_str(), 0) == -1) {
-        auto err = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO); // 777
-        if (err != 0) {
-            std::cout << "Enable to mkdir: " << path << ", errno = " << err << std::endl;
-            return false;
-        }
-        if (access(path.c_str(), 0) == -1) {
-            std::cout << "mkdir failed: " << path << ", errno = " << err << std::endl;
-            return false;
-        }
-        return true;
+  if (access(path.c_str(), 0) == -1) {
+    auto err = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);  // 777
+    if (err != 0) {
+      std::cout << "Enable to mkdir: " << path << ", errno = " << err
+                << std::endl;
+      return false;
     }
-    return false;
+    if (access(path.c_str(), 0) == -1) {
+      std::cout << "mkdir failed: " << path << ", errno = " << err << std::endl;
+      return false;
+    }
+    return true;
+  }
+  return false;
 }
 
 bool um_rmdir(const std::string &path) {
-    if (access(path.c_str(), 0) == -1) {
-        return true;
-    }
-    auto err = rmdir(path.c_str());
-    if (err != 0) {
-        return false;
-    }
+  if (access(path.c_str(), 0) == -1) {
     return true;
+  }
+  auto err = rmdir(path.c_str());
+  if (err != 0) {
+    return false;
+  }
+  return true;
 }
 
-}  // utils
-}  // um_dev
+}  // namespace utils
+}  // namespace um_dev

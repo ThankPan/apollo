@@ -6,9 +6,9 @@
 #define RESULT_WRITER_H
 
 #include <fstream>
+#include <map>
 #include <mutex>
 #include <string>
-#include <map>
 
 #include "cyber/time/time.h"
 
@@ -26,8 +26,8 @@ class ProfilingResultWriter {
   ProfilingResultWriter(ProfilingResultWriter&) = delete;
   ~ProfilingResultWriter();
   static ProfilingResultWriter& Instance();
-  bool write_to_file(PROFILING_METRICS profiling_type, const std::string& task_name,
-                     const std::string& content);
+  bool write_to_file(PROFILING_METRICS profiling_type,
+                     const std::string& task_name, const std::string& content);
 
  private:
   ProfilingResultWriter();
@@ -36,7 +36,7 @@ class ProfilingResultWriter {
   static ProfilingResultWriter* instance_;
   static std::mutex mutex_instance_;
 
-  const float throttle_threshold_; // throttle threshold in second
+  const float throttle_threshold_;  // throttle threshold in second
   std::string profiling_scenario_;
 
   std::map<std::string, apollo::cyber::Time> task_to_timestamp_;
