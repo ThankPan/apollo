@@ -4,11 +4,12 @@
 
 #include "um_dev/profiling/result_writer.h"
 
-#include "um_dev/utils/files.h"
+#include <assert.h>
+#include <unistd.h>
 
 #include <iostream>
-#include <unistd.h>
-#include <assert.h>
+
+#include "um_dev/utils/files.h"
 
 namespace um_dev {
 namespace profiling {
@@ -16,11 +17,12 @@ namespace profiling {
 ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
-ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profiling_scenario_("lgsvl") {
+ProfilingResultWriter::ProfilingResultWriter()
+    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_radar") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
-  const std::string result_dir = 
-    "/apollo/um_dev/profiling/results/" + profiling_scenario_;
+  const std::string result_dir =
+      "/apollo/um_dev/profiling/results/" + profiling_scenario_;
   // FIXME: (yuting) unable to mkdir
   // assert(um_dev::utils::um_mkdir(result_dir));
   // std::cout << "Profiling result path created: " + result_dir << std::endl;
@@ -30,7 +32,6 @@ ProfilingResultWriter::ProfilingResultWriter() : throttle_threshold_(1.f), profi
   // Open result files here
   auto time_str = now.ToString();
   fout_.open(result_dir + "/profiling_" + time_str + '_' + pid_str + ".log");
-
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
@@ -41,7 +42,8 @@ ProfilingResultWriter::~ProfilingResultWriter() {
 
 ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }
 
-bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type, const std::string& task_name,
+bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
+                                          const std::string& task_name,
                                           const std::string& content) {
   {
     std::lock_guard<std::mutex> lock(mutex_map_);
@@ -49,7 +51,8 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type, cons
     auto it = task_to_timestamp_.find(task_name);
     if (it == task_to_timestamp_.end()) {
       task_to_timestamp_[task_name] = now;
-    } else if (now - it->second < apollo::cyber::Duration(throttle_threshold_)) {
+    } else if (now - it->second <
+               apollo::cyber::Duration(throttle_threshold_)) {
       return true;
     } else {
       it->second = now;

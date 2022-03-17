@@ -20,8 +20,8 @@ UM_Timing::~UM_Timing() {
   long long ns = duration.ToNanosecond();
   double ms = ns * NANO_TO_MICRO * MICRO_TO_MILLI;
   std::string timing_result = taskname_ + ": " + std::to_string(ms) + "ms";
-  ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING, taskname_,
-                                                  timing_result);
+  ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
+                                                  taskname_, timing_result);
 }
 
 }  // namespace profiling
