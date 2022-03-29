@@ -14,6 +14,9 @@ COLORS = ['blue', 'yellowgreen', 'brown',
 
 MARKERS = ['.', '^', '*', 'D', 'o', ',', '_', 's', 'p']
 
+# Set matplotlib to use SciencePlots
+plt.style.use(['science','ieee'])
+
 def load_data_from_file(file_path, results):
   with open(file_path) as f:
     for line in f.readlines():
@@ -42,11 +45,12 @@ def plot_data(results):
     data = np.array(data_list)
     # data = np.log(data)
     plt.plot(range(len(data_list)), data,
-             color=COLORS[idx % len(COLORS)],
+             # color=COLORS[idx % len(COLORS)],
              label=task_name,
-             marker=MARKERS[idx % len(MARKERS)],
-             linewidth=0.8,
-             markersize=0.8)
+             # marker=MARKERS[idx % len(MARKERS)],
+             # linewidth=0.8,
+             # markersize=0.8
+             )
     plt.ylabel("Latency(ms)")
     plt.xlabel("No.")
     idx += 1
