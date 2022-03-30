@@ -1,0 +1,2120 @@
+[1mdiff --git a/modules/common/data/global_flagfile.txt b/modules/common/data/global_flagfile.txt[m
+[1mindex 86c670700d..15d2408d92 100644[m
+[1m--- a/modules/common/data/global_flagfile.txt[m
+[1m+++ b/modules/common/data/global_flagfile.txt[m
+[36m@@ -22,3 +22,5 @@[m
+ --map_dir=/apollo/modules/map/data/carla_town03[m
+ [m
+ --map_dir=/apollo/modules/map/data/borregas_ave[m
+[32m+[m
+[32m+[m[32m--map_dir=/apollo/modules/map/data/carla_town03[m
+[1mdiff --git a/modules/common/data/vehicle_param.pb.txt b/modules/common/data/vehicle_param.pb.txt[m
+[1mindex fa008bc925..e48dff6427 100644[m
+[1m--- a/modules/common/data/vehicle_param.pb.txt[m
+[1m+++ b/modules/common/data/vehicle_param.pb.txt[m
+[36m@@ -1,20 +1,24 @@[m
+ vehicle_param {[m
+[31m-  front_edge_to_center: 3.705[m
+[31m-  back_edge_to_center: 0.995[m
+[31m-  left_edge_to_center: 1.03[m
+[31m-  right_edge_to_center: 1.03[m
+[32m+[m[32m  brand: LINCOLN_MKZ[m
+[32m+[m[32m  vehicle_id {[m
+[32m+[m[32m      other_unique_id: "mkz"[m
+[32m+[m[32m  }[m
+[32m+[m[32m  front_edge_to_center: 3.89[m
+[32m+[m[32m  back_edge_to_center: 1.043[m
+[32m+[m[32m  left_edge_to_center: 1.055[m
+[32m+[m[32m  right_edge_to_center: 1.055[m
+ [m
+[31m-  length: 4.70[m
+[31m-  width: 2.06[m
+[31m-  height: 2.05[m
+[32m+[m[32m  length: 4.933[m
+[32m+[m[32m  width: 2.11[m
+[32m+[m[32m  height: 1.48[m
+   min_turn_radius: 5.05386147161[m
+   max_acceleration: 2.0[m
+   max_deceleration: -6.0[m
+   max_steer_angle: 8.20304748437[m
+   max_steer_angle_rate: 6.98131700798[m
+   steer_ratio: 16[m
+[31m-  wheel_base: 2.837007[m
+[31m-  wheel_rolling_radius: 0.33[m
+[32m+[m[32m  wheel_base: 2.8448[m
+[32m+[m[32m  wheel_rolling_radius: 0.335[m
+   max_abs_speed_when_stopped: 0.2[m
+   brake_deadzone: 14.5[m
+   throttle_deadzone: 15.7[m
+[1mdiff --git a/modules/control/conf/navigation_lincoln.pb.txt b/modules/control/conf/navigation_lincoln.pb.txt[m
+[1mindex 1680dc2d9e..d974f94668 100644[m
+[1m--- a/modules/control/conf/navigation_lincoln.pb.txt[m
+[1m+++ b/modules/control/conf/navigation_lincoln.pb.txt[m
+[36m@@ -18,15 +18,19 @@[m [mlat_controller_conf {[m
+   preview_window: 0[m
+   cf: 155494.663[m
+   cr: 155494.663[m
+[31m-  mass_fl: 530[m
+[31m-  mass_fr: 530[m
+[31m-  mass_rl: 530[m
+[31m-  mass_rr: 530[m
+[32m+[m[32m  mass_fl: 520[m
+[32m+[m[32m  mass_fr: 520[m
+[32m+[m[32m  mass_rl: 520[m
+[32m+[m[32m  mass_rr: 520[m
+   eps: 0.01[m
+   matrix_q: 0.005[m
+   matrix_q: 0.0[m
+   matrix_q: 0.25[m
+   matrix_q: 0.02[m
+[32m+[m[32m  reverse_matrix_q: 0.5[m
+[32m+[m[32m  reverse_matrix_q: 0.0[m
+[32m+[m[32m  reverse_matrix_q: 0.4[m
+[32m+[m[32m  reverse_matrix_q: 0.0[m
+   cutoff_freq: 10[m
+   mean_filter_window_size: 10[m
+   max_iteration: 150[m
+[36m@@ -56,10 +60,6 @@[m [mlat_controller_conf {[m
+       speed: 24.6[m
+       ratio: 0.049[m
+     }[m
+[31m-    scheduler {[m
+[31m-      speed: 30.0[m
+[31m-      ratio: 0.05[m
+[31m-    }[m
+   }[m
+   heading_err_gain_scheduler {[m
+     scheduler {[m
+[36m@@ -86,16 +86,12 @@[m [mlat_controller_conf {[m
+       speed: 24.6[m
+       ratio: 0.06[m
+     }[m
+[31m-    scheduler {[m
+[31m-      speed: 30.0[m
+[31m-      ratio: 0.05[m
+[31m-    }[m
+   }[m
+ }[m
+ lon_controller_conf {[m
+   ts: 0.01[m
+[31m-  brake_deadzone: 15.5[m
+[31m-  throttle_deadzone: 18.0[m
+[32m+[m[32m  brake_minimum_action: 0.0[m
+[32m+[m[32m  throttle_minimum_action: 0.0[m
+   speed_controller_input_limit: 2.0[m
+   station_error_limit: 2.0[m
+   preview_window: 20.0[m
+[36m@@ -122,6 +118,20 @@[m [mlon_controller_conf {[m
+     kd: 0.0[m
+   }[m
+   switch_speed: 2.0[m
+[32m+[m[32m  reverse_station_pid_conf {[m
+[32m+[m[32m    integrator_enable: false[m
+[32m+[m[32m    integrator_saturation_level: 0.5[m
+[32m+[m[32m    kp: 0.4[m
+[32m+[m[32m    ki: 0.2[m
+[32m+[m[32m    kd: 0.0[m
+[32m+[m[32m  }[m
+[32m+[m[32m  reverse_speed_pid_conf {[m
+[32m+[m[32m    integrator_enable: true[m
+[32m+[m[32m    integrator_saturation_level: 0.1[m
+[32m+[m[32m    kp: 0.05[m
+[32m+[m[32m    ki: 0.0[m
+[32m+[m[32m    kd: 0.0[m
+[32m+[m[32m  }[m
+   pitch_angle_filter_conf {[m
+     cutoff_freq: 5[m
+   }[m
+[1mdiff --git a/modules/drivers/gnss/conf/gnss_conf.pb.txt b/modules/drivers/gnss/conf/gnss_conf.pb.txt[m
+[1mindex 410dcd0548..878484d4af 100644[m
+[1m--- a/modules/drivers/gnss/conf/gnss_conf.pb.txt[m
+[1m+++ b/modules/drivers/gnss/conf/gnss_conf.pb.txt[m
+[36m@@ -6,18 +6,18 @@[m [mdata {[m
+     }[m
+ }[m
+ [m
+[31m-#rtk_from {[m
+[31m-#    format: RTCM_V3[m
+[31m-#    ntrip {[m
+[31m-        #address: "111.111.111.11"[m
+[31m-        #port: 0000[m
+[31m-        #mount_point: "yourport"[m
+[31m-        #user: "username"[m
+[31m-        #password: "password"[m
+[31m-        #timeout_s: 5[m
+[31m-#    }[m
+[31m-#    push_location: true[m
+[31m-#}[m
+[32m+[m[32mrtk_from {[m
+[32m+[m[32m    format: RTCM_V3[m
+[32m+[m[32m    ntrip {[m
+[32m+[m[32m        address: "<IP>"[m
+[32m+[m[32m        port: <PORT>[m
+[32m+[m[32m        mount_point: "<MOUNTPOINT>"[m
+[32m+[m[32m        user: "<USER>"[m
+[32m+[m[32m        password: "<PASSWORD>"[m
+[32m+[m[32m        timeout_s: 5[m
+[32m+[m[32m    }[m
+[32m+[m[32m    push_location: true[m
+[32m+[m[32m}[m
+ [m
+ rtk_to {[m
+     format: NOVATEL_BINARY[m
+[36m@@ -36,13 +36,12 @@[m [mcommand {[m
+ }[m
+ [m
+ rtk_solution_type: RTK_RECEIVER_SOLUTION[m
+[31m-imu_type: ADIS16488[m
+[32m+[m[32mimu_type: G320N[m
+ proj4_text: "+proj=utm +zone=10 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"[m
+ [m
+ tf {[m
+     frame_id: "world"[m
+     child_frame_id: "novatel"[m
+[31m-    enable: true[m
+ }[m
+ [m
+ # If given, the driver will send velocity info into novatel one time per second[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne128_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne128_conf.pb.txt[m
+[1mindex 6715188c12..41a5de81bc 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne128_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne128_conf.pb.txt[m
+[36m@@ -11,7 +11,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: false[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/velodyne128_VLS_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/velodyne128_VLS_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/lidar128/PointCloud2"[m
+ use_poll_sync: true[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne16_front_center_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne16_front_center_conf.pb.txt[m
+[1mindex e83d098c43..c8f9306e6d 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne16_front_center_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne16_front_center_conf.pb.txt[m
+[36m@@ -11,7 +11,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: false[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/VLP16_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/VLP16_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/lidar16/front/center/PointCloud2"[m
+ use_poll_sync: true[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne16_rear_left_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne16_rear_left_conf.pb.txt[m
+[1mindex c68f3623f3..587e4b0bc3 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne16_rear_left_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne16_rear_left_conf.pb.txt[m
+[36m@@ -11,7 +11,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: false[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/VLP16_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/VLP16_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/lidar16/rear/left/PointCloud2"[m
+ use_poll_sync: true[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne16_rear_right_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne16_rear_right_conf.pb.txt[m
+[1mindex 8caa2ddb87..0ac1f52ec5 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne16_rear_right_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne16_rear_right_conf.pb.txt[m
+[36m@@ -11,7 +11,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: false[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/VLP16_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/VLP16_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/lidar16/rear/right/PointCloud2"[m
+ use_poll_sync: true[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne16_up_center_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne16_up_center_conf.pb.txt[m
+[1mindex caf8913c55..cd1cd5c7e0 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne16_up_center_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne16_up_center_conf.pb.txt[m
+[36m@@ -11,7 +11,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: false[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/VLP16_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/VLP16_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/lidar16/up/center/PointCloud2"[m
+ use_poll_sync: true[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/conf/velodyne64_conf.pb.txt b/modules/drivers/lidar/velodyne/conf/velodyne64_conf.pb.txt[m
+[1mindex 5f48cb22ca..0d9760925c 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/conf/velodyne64_conf.pb.txt[m
+[1m+++ b/modules/drivers/lidar/velodyne/conf/velodyne64_conf.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ frame_id: "velodyne64"[m
+[31m-scan_channel: "/apollo/sensor/velodyne64/VelodyneScan"[m
+[32m+[m[32mscan_channel: "/apollo/sensor/lidar64/Scan"[m
+ rpm: 600.0[m
+ model: HDL64E_S3D[m
+ mode: STRONGEST[m
+[36m@@ -10,8 +10,7 @@[m [mmax_range: 100.0[m
+ min_range: 0.9[m
+ use_gps_time: true[m
+ calibration_online: true[m
+[31m-calibration_file: "/apollo/modules/drivers/lidar/velodyne/params/velodyne64_S3_calibration.yaml"[m
+[32m+[m[32mcalibration_file: "/apollo/modules/drivers/velodyne/params/velodyne64_S3_calibration.yaml"[m
+ organized: false[m
+ convert_channel_name: "/apollo/sensor/velodyne64/PointCloud2"[m
+[31m-use_poll_sync: true[m
+[31m-is_main_frame: true[m
+[32m+[m[32mcompensator_channel_name: "/apollo/sensor/velodyne64/compensator/PointCloud2"[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/params/64E_S3_calibration_example.yaml b/modules/drivers/lidar/velodyne/params/64E_S3_calibration_example.yaml[m
+[1mindex a02c68421c..a84564e054 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/params/64E_S3_calibration_example.yaml[m
+[1m+++ b/modules/drivers/lidar/velodyne/params/64E_S3_calibration_example.yaml[m
+[36m@@ -1,243 +1,246 @@[m
+ lasers:[m
+[31m-- {dist_correction: 1.3280478, dist_correction_x: 1.3733278999999998, dist_correction_y: 1.3565268000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 0.75, horiz_offset_correction: 0.025999999, laser_id: 0,[m
+[31m-  min_intensity: 5, rot_correction: -0.08042396035379652, vert_correction: -0.12376696608832838,[m
+[31m-  vert_offset_correction: 0.21551828}[m
+[31m-- {dist_correction: 1.4387065, dist_correction_x: 1.4772083, dist_correction_y: 1.4930743000000002,[m
+[31m-  focal_distance: 18.5, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[31m-  min_intensity: 40, rot_correction: -0.043931143295210404, vert_correction: -0.11852979325378328,[m
+[31m-  vert_offset_correction: 0.21513613}[m
+[31m-- {dist_correction: 1.4198532000000001, dist_correction_x: 1.4513388, dist_correction_y: 1.4459473,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 2,[m
+[31m-  min_intensity: 40, rot_correction: 0.05671893510512383, vert_correction: 0.006831742116548479,[m
+[32m+[m[32m- {dist_correction: 1.2752063, dist_correction_x: 1.3139189, dist_correction_y: 1.3201204000000002,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 0, min_intensity: 40, rot_correction: -0.07883297231288532, vert_correction: -0.1225589730984748,[m
+[32m+[m[32m  vert_offset_correction: 0.21543011}[m
+[32m+[m[32m- {dist_correction: 1.354117, dist_correction_x: 1.3893244999999999, dist_correction_y: 1.3824525,[m
+[32m+[m[32m  focal_distance: 11.1, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.04257169063286875, vert_correction: -0.11732028531813898,[m
+[32m+[m[32m  vert_offset_correction: 0.21504793}[m
+[32m+[m[32m- {dist_correction: 1.3552602999999999, dist_correction_x: 1.4380073999999998, dist_correction_y: 1.4320663,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 2, min_intensity: 40, rot_correction: 0.0576001797697238, vert_correction: 0.006831742116548479,[m
+   vert_offset_correction: 0.20608189}[m
+[31m-- {dist_correction: 1.432045, dist_correction_x: 1.4576363, dist_correction_y: 1.5053079,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 3, min_intensity: 40, rot_correction: 0.09507418428186684, vert_correction: 0.011737269755557637,[m
+[32m+[m[32m- {dist_correction: 1.3331795, dist_correction_x: 1.3594026, dist_correction_y: 1.3993605,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 3, min_intensity: 40, rot_correction: 0.09708671122503676, vert_correction: 0.011737269755557637,[m
+   vert_offset_correction: 0.2057291}[m
+[31m-- {dist_correction: 1.3768561, dist_correction_x: 1.4095345000000001, dist_correction_y: 1.4140973,[m
+[32m+[m[32m- {dist_correction: 1.272046, dist_correction_x: 1.3137018, dist_correction_y: 1.2978722,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 4, min_intensity: 40, rot_correction: -0.004134042716809833, vert_correction: -0.11106570246674108,[m
+[32m+[m[32m  vert_offset_correction: 0.21459229000000002}[m
+[32m+[m[32m- {dist_correction: 1.1886112, dist_correction_x: 1.2300569000000001, dist_correction_y: 1.2463203,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 5,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.03539678170426023, vert_correction: -0.1054088809215172,[m
+[32m+[m[32m  vert_offset_correction: 0.21418074}[m
+[32m+[m[32m- {dist_correction: 1.2976839000000002, dist_correction_x: 1.3396898, dist_correction_y: 1.3132230999999999,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 6, min_intensity: 40, rot_correction: -0.01812813105654391, vert_correction: -0.14704592330533348,[m
+[32m+[m[32m  vert_offset_correction: 0.2172233}[m
+[32m+[m[32m- {dist_correction: 1.2863681, dist_correction_x: 1.3238104000000002, dist_correction_y: 1.3377951,[m
+[32m+[m[32m  focal_distance: 14.0, focal_slope: 1.25, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 7, min_intensity: 40, rot_correction: 0.020696316728341994, vert_correction: -0.14023825084996633,[m
+[32m+[m[32m  vert_offset_correction: 0.21672356}[m
+[32m+[m[32m- {dist_correction: 1.2849046000000002, dist_correction_x: 1.3267589000000002, dist_correction_y: 1.3180791,[m
+   focal_distance: 24.0, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 4, min_intensity: 40, rot_correction: -0.0052020566354620415, vert_correction: -0.11207511538496126,[m
+[31m-  vert_offset_correction: 0.21466578}[m
+[31m-- {dist_correction: 1.4579066, dist_correction_x: 1.5030013, dist_correction_y: 1.5402745,[m
+[31m-  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 5, min_intensity: 40, rot_correction: 0.034271327080062704, vert_correction: -0.10662164389621649,[m
+[31m-  vert_offset_correction: 0.21426891}[m
+[31m-- {dist_correction: 1.4042904999999999, dist_correction_x: 1.4512584000000002, dist_correction_y: 1.4358795000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 6, min_intensity: 40, rot_correction: -0.019350118096339984, vert_correction: -0.14744596324186607,[m
+[31m-  vert_offset_correction: 0.21725271}[m
+[31m-- {dist_correction: 1.4530759, dist_correction_x: 1.4934110999999999, dist_correction_y: 1.4934732,[m
+[31m-  focal_distance: 16.5, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 7, min_intensity: 40, rot_correction: 0.019696635766030937, vert_correction: -0.1420415773930044,[m
+[31m-  vert_offset_correction: 0.21685585}[m
+[31m-- {dist_correction: 1.3928452999999998, dist_correction_x: 1.4412779, dist_correction_y: 1.4351759000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 8, min_intensity: 10, rot_correction: 0.06977400140069993, vert_correction: -0.10055477120587059,[m
+[31m-  vert_offset_correction: 0.21382797}[m
+[31m-- {dist_correction: 1.4649026, dist_correction_x: 1.4811482, dist_correction_y: 1.5390858,[m
+[31m-  focal_distance: 16.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[31m-  min_intensity: 40, rot_correction: 0.10867481606700684, vert_correction: -0.09508820800240662,[m
+[31m-  vert_offset_correction: 0.21343111}[m
+[31m-- {dist_correction: 1.3307669000000002, dist_correction_x: 1.3797191000000002, dist_correction_y: 1.3716772000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 10, min_intensity: 40, rot_correction: 0.05614793318704137, vert_correction: -0.13622757149534595,[m
+[31m-  vert_offset_correction: 0.2164296}[m
+[31m-- {dist_correction: 1.3771700999999998, dist_correction_x: 1.4101131, dist_correction_y: 1.4538571,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.35, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 11, min_intensity: 40, rot_correction: 0.09458836664858647, vert_correction: -0.13060523940147076,[m
+[31m-  vert_offset_correction: 0.21601805}[m
+[31m-- {dist_correction: 1.3797005, dist_correction_x: 1.4142267000000002, dist_correction_y: 1.4085233,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[31m-  min_intensity: 10, rot_correction: -0.08058553944528767, vert_correction: -0.05321597901122562,[m
+[31m-  vert_offset_correction: 0.21040320999999998}[m
+[31m-- {dist_correction: 1.3646324, dist_correction_x: 1.3887102, dist_correction_y: 1.4070561000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[31m-  min_intensity: 40, rot_correction: -0.04053784798354424, vert_correction: -0.04669103069605979,[m
+[31m-  vert_offset_correction: 0.20993286000000003}[m
+[31m-- {dist_correction: 1.3809781, dist_correction_x: 1.4282532000000001, dist_correction_y: 1.4207353,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[31m-  min_intensity: 40, rot_correction: -0.09419900463641756, vert_correction: -0.08758781436692292,[m
+[31m-  vert_offset_correction: 0.21288727000000002}[m
+[31m-- {dist_correction: 1.3950202999999999, dist_correction_x: 1.4285829, dist_correction_y: 1.4621552,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 15,[m
+[31m-  min_intensity: 40, rot_correction: -0.054354701628396805, vert_correction: -0.08292035016148458,[m
+[31m-  vert_offset_correction: 0.21254919000000003}[m
+[31m-- {dist_correction: 1.2988774, dist_correction_x: 1.3749954, dist_correction_y: 1.3734656,[m
+[32m+[m[32m  laser_id: 8, min_intensity: 40, rot_correction: 0.0709183561953673, vert_correction: -0.09954287817478333,[m
+[32m+[m[32m  vert_offset_correction: 0.21375446}[m
+[32m+[m[32m- {dist_correction: 1.3211784, dist_correction_x: 1.3745055, dist_correction_y: 1.3908893,[m
+[32m+[m[32m  focal_distance: 17.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.11014432221066224, vert_correction: -0.09387264202892864,[m
+[32m+[m[32m  vert_offset_correction: 0.21334291}[m
+[32m+[m[32m- {dist_correction: 1.2667397, dist_correction_x: 1.3151773, dist_correction_y: 1.3144638000000002,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 1.8, horiz_offset_correction: 0.025999999, laser_id: 10,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.05752680089198221, vert_correction: -0.1352242183602887,[m
+[32m+[m[32m  vert_offset_correction: 0.21635611000000002}[m
+[32m+[m[32m- {dist_correction: 1.2552061, dist_correction_x: 1.2864645, dist_correction_y: 1.313914,[m
+[32m+[m[32m  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 11,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.09560686749622178, vert_correction: -0.12939936000534133,[m
+[32m+[m[32m  vert_offset_correction: 0.21592983000000002}[m
+[32m+[m[32m- {dist_correction: 1.2950737, dist_correction_x: 1.3264038, dist_correction_y: 1.3272704,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07894119668914298, vert_correction: -0.05117740128364046,[m
+[32m+[m[32m  vert_offset_correction: 0.21025623}[m
+[32m+[m[32m- {dist_correction: 1.3314511, dist_correction_x: 1.3439276000000002, dist_correction_y: 1.3750456,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.039590087075821526, vert_correction: -0.04567113183969363,[m
+[32m+[m[32m  vert_offset_correction: 0.20985937}[m
+[32m+[m[32m- {dist_correction: 1.2853152, dist_correction_x: 1.3545485, dist_correction_y: 1.32582,[m
+[32m+[m[32m  focal_distance: 20.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09264152866247388, vert_correction: -0.08697921631142325,[m
+[32m+[m[32m  vert_offset_correction: 0.21284317000000003}[m
+[32m+[m[32m- {dist_correction: 1.1956883999999999, dist_correction_x: 1.2309952, dist_correction_y: 1.2384804,[m
+[32m+[m[32m  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 15, min_intensity: 40, rot_correction: -0.053828922936562766, vert_correction: -0.08088988123360417,[m
+[32m+[m[32m  vert_offset_correction: 0.21240220999999998}[m
+[32m+[m[32m- {dist_correction: 1.2622006000000001, dist_correction_x: 1.3391359, dist_correction_y: 1.3450137000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 16,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.004196640695761861, vert_correction: -0.040366165181013325,[m
+[32m+[m[32m  vert_offset_correction: 0.20947721000000002}[m
+[32m+[m[32m- {dist_correction: 1.3882208, dist_correction_x: 1.4129477, dist_correction_y: 1.4390656000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: 0.035191251731545366, vert_correction: -0.03485476621439488,[m
+[32m+[m[32m  vert_offset_correction: 0.20908035000000003}[m
+[32m+[m[32m- {dist_correction: 1.270416, dist_correction_x: 1.3805045999999999, dist_correction_y: 1.3587926,[m
+   focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 16, min_intensity: 40, rot_correction: -0.005133124856654525, vert_correction: -0.04077432787988471,[m
+[31m-  vert_offset_correction: 0.20950663}[m
+[31m-- {dist_correction: 1.4723137, dist_correction_x: 1.5056056000000002, dist_correction_y: 1.5041873000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[31m-  min_intensity: 20, rot_correction: 0.033464606229193644, vert_correction: -0.03526310344619148,[m
+[31m-  vert_offset_correction: 0.20910976000000003}[m
+[31m-- {dist_correction: 1.3093359000000002, dist_correction_x: 1.4065028000000002, dist_correction_y: 1.3988147000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 18,[m
+[31m-  min_intensity: 20, rot_correction: -0.01912024950720607, vert_correction: -0.07662373803636939,[m
+[31m-  vert_offset_correction: 0.21209354000000002}[m
+[31m-- {dist_correction: 1.4292241, dist_correction_x: 1.4580751, dist_correction_y: 1.4810971000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 19,[m
+[31m-  min_intensity: 15, rot_correction: 0.0202102704569296, vert_correction: -0.07052442491121666,[m
+[32m+[m[32m  laser_id: 18, min_intensity: 40, rot_correction: -0.01796702320395082, vert_correction: -0.07621729099615271,[m
+[32m+[m[32m  vert_offset_correction: 0.21206415}[m
+[32m+[m[32m- {dist_correction: 1.4391471999999998, dist_correction_x: 1.4701469, dist_correction_y: 1.4810228,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 19, min_intensity: 10, rot_correction: 0.021402925493316658, vert_correction: -0.07052442491121666,[m
+   vert_offset_correction: 0.21165258}[m
+[31m-- {dist_correction: 1.3831145, dist_correction_x: 1.4038123999999998, dist_correction_y: 1.3966234,[m
+[32m+[m[32m- {dist_correction: 1.3115741, dist_correction_x: 1.4043790000000003, dist_correction_y: 1.3746985,[m
+   focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 20,[m
+[31m-  min_intensity: 30, rot_correction: 0.06874179273711946, vert_correction: -0.029137015224983895,[m
+[31m-  vert_offset_correction: 0.2086688}[m
+[31m-- {dist_correction: 1.402925, dist_correction_x: 1.4443744, dist_correction_y: 1.471532,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[31m-  min_intensity: 5, rot_correction: 0.10747970535236223, vert_correction: -0.02341734437339572,[m
+[31m-  vert_offset_correction: 0.20825726}[m
+[31m-- {dist_correction: 1.4234489, dist_correction_x: 1.4673076, dist_correction_y: 1.4543761000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 22, min_intensity: 5, rot_correction: 0.05514045060297391, vert_correction: -0.0642162831410628,[m
+[31m-  vert_offset_correction: 0.21119694}[m
+[31m-- {dist_correction: 1.470387, dist_correction_x: 1.4879053, dist_correction_y: 1.5217740000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 23,[m
+[31m-  min_intensity: 30, rot_correction: 0.09433926976708334, vert_correction: -0.05892161916095702,[m
+[31m-  vert_offset_correction: 0.21081478}[m
+[31m-- {dist_correction: 1.3722501, dist_correction_x: 1.4119496, dist_correction_y: 1.4214716,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[31m-  min_intensity: 20, rot_correction: -0.08011834622045531, vert_correction: 0.01868575851656834,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.07015680097488135, vert_correction: -0.02893277679591552,[m
+[32m+[m[32m  vert_offset_correction: 0.20865412}[m
+[32m+[m[32m- {dist_correction: 1.3147861, dist_correction_x: 1.3458926, dist_correction_y: 1.3786374000000001,[m
+[32m+[m[32m  focal_distance: 22.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[32m+[m[32m  min_intensity: 15, rot_correction: 0.10896112162283324, vert_correction: -0.022600128857734412,[m
+[32m+[m[32m  vert_offset_correction: 0.20819845}[m
+[32m+[m[32m- {dist_correction: 1.2870654, dist_correction_x: 1.3318181000000002, dist_correction_y: 1.3219449,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 22, min_intensity: 5, rot_correction: 0.056491201053665105, vert_correction: -0.06441985659968617,[m
+[32m+[m[32m  vert_offset_correction: 0.21121164}[m
+[32m+[m[32m- {dist_correction: 1.3116136, dist_correction_x: 1.3367073, dist_correction_y: 1.3722873999999998,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 23, min_intensity: 5, rot_correction: 0.09605195612607761, vert_correction: -0.058717920038627504,[m
+[32m+[m[32m  vert_offset_correction: 0.21080008}[m
+[32m+[m[32m- {dist_correction: 1.334183, dist_correction_x: 1.3770262, dist_correction_y: 1.3650365,[m
+[32m+[m[32m  focal_distance: 15.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07814212387105615, vert_correction: 0.01868575851656834,[m
+   vert_offset_correction: 0.20522938000000002}[m
+[31m-- {dist_correction: 1.4577922, dist_correction_x: 1.4821321, dist_correction_y: 1.4774638,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 25, min_intensity: 10, rot_correction: -0.0415592740030059, vert_correction: 0.023180922072920565,[m
+[31m-  vert_offset_correction: 0.20490601000000003}[m
+[31m-- {dist_correction: 1.4175369, dist_correction_x: 1.4441992, dist_correction_y: 1.4484555000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[31m-  min_intensity: 20, rot_correction: -0.09469728915654493, vert_correction: -0.01647002637924725,[m
+[31m-  vert_offset_correction: 0.20775749000000002}[m
+[31m-- {dist_correction: 1.4383292, dist_correction_x: 1.4573476, dist_correction_y: 1.4790007,[m
+[31m-  focal_distance: 7.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 27,[m
+[31m-  min_intensity: 10, rot_correction: -0.055555304894197445, vert_correction: -0.011156249123969949,[m
+[31m-  vert_offset_correction: 0.20737534000000002}[m
+[31m-- {dist_correction: 1.3976639, dist_correction_x: 1.434787, dist_correction_y: 1.4289362,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 28, min_intensity: 40, rot_correction: -0.0056653665027087, vert_correction: 0.030126075858796564,[m
+[31m-  vert_offset_correction: 0.20440624}[m
+[31m-- {dist_correction: 1.5147818000000002, dist_correction_x: 1.5457281, dist_correction_y: 1.5337862000000002,[m
+[31m-  focal_distance: 16.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 29,[m
+[31m-  min_intensity: 10, rot_correction: 0.032454556265796485, vert_correction: 0.03461850099355241,[m
+[31m-  vert_offset_correction: 0.20408289000000002}[m
+[31m-- {dist_correction: 1.4410570999999999, dist_correction_x: 1.4812628, dist_correction_y: 1.4802063,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[31m-  min_intensity: 20, rot_correction: -0.019155442326243284, vert_correction: -0.004819796717085346,[m
+[31m-  vert_offset_correction: 0.20691969000000002}[m
+[31m-- {dist_correction: 1.5121419, dist_correction_x: 1.525024, dist_correction_y: 1.5161595,[m
+[31m-  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 31, rot_correction: 0.019031284839244163, vert_correction: 0.0006993883727657528,[m
+[31m-  vert_offset_correction: 0.20652283000000002}[m
+[31m-- {dist_correction: 1.4162563000000001, dist_correction_x: 1.4498225, dist_correction_y: 1.4345399,[m
+[31m-  focal_distance: 8.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 32,[m
+[31m-  rot_correction: -0.1322630822793796, vert_correction: -0.39265743814277154, vert_offset_correction: 0.1598857}[m
+[31m-- {dist_correction: 1.3670056, dist_correction_x: 1.3952693, dist_correction_y: 1.4121672,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 33, rot_correction: -0.07110342218260252, vert_correction: -0.38671040324952605,[m
+[31m-  vert_offset_correction: 0.15945383}[m
+[31m-- {dist_correction: 1.4511356000000002, dist_correction_x: 1.4689107000000001, dist_correction_y: 1.4972537,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 34, rot_correction: 0.08401589158763215, vert_correction: -0.1973354249839361,[m
+[32m+[m[32m- {dist_correction: 1.3277109999999999, dist_correction_x: 1.3308896, dist_correction_y: 1.3380003,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 25,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: -0.04068591124530794, vert_correction: 0.02481530248969487,[m
+[32m+[m[32m  vert_offset_correction: 0.20478842}[m
+[32m+[m[32m- {dist_correction: 1.3784187, dist_correction_x: 1.4020284, dist_correction_y: 1.4110085,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09248550146333334, vert_correction: -0.015856927119606682,[m
+[32m+[m[32m  vert_offset_correction: 0.20771341}[m
+[32m+[m[32m- {dist_correction: 1.3299843000000002, dist_correction_x: 1.3475424, dist_correction_y: 1.3875761,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 27, rot_correction: -0.05342781834918644, vert_correction: -0.01033868471699117,[m
+[32m+[m[32m  vert_offset_correction: 0.20731655000000002}[m
+[32m+[m[32m- {dist_correction: 1.3601752, dist_correction_x: 1.4000146000000002, dist_correction_y: 1.3781789,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 28, rot_correction: -0.004424292891278668, vert_correction: 0.029513378024883952,[m
+[32m+[m[32m  vert_offset_correction: 0.20445036000000003}[m
+[32m+[m[32m- {dist_correction: 1.3607886, dist_correction_x: 1.4001455999999999, dist_correction_y: 1.4214912000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 29, rot_correction: 0.03487417427567706, vert_correction: 0.03625176439960543,[m
+[32m+[m[32m  vert_offset_correction: 0.2039653}[m
+[32m+[m[32m- {dist_correction: 1.3876024000000002, dist_correction_x: 1.4266457, dist_correction_y: 1.3987584000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[32m+[m[32m  rot_correction: -0.018163875399624756, vert_correction: -0.004615383580558845, vert_offset_correction: 0.20690498000000002}[m
+[32m+[m[32m- {dist_correction: 1.3872712999999999, dist_correction_x: 1.409449, dist_correction_y: 1.4333896,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 31, rot_correction: 0.020882827848197862, vert_correction: 0.001312627241293188,[m
+[32m+[m[32m  vert_offset_correction: 0.20647875}[m
+[32m+[m[32m- {dist_correction: 1.3152968000000003, dist_correction_x: 1.3551462, dist_correction_y: 1.3403419,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 32, rot_correction: -0.12998286720751434, vert_correction: -0.3917846862503118,[m
+[32m+[m[32m  vert_offset_correction: 0.15982219}[m
+[32m+[m[32m- {dist_correction: 1.1306184000000001, dist_correction_x: 1.1613448, dist_correction_y: 1.1695766,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 33,[m
+[32m+[m[32m  rot_correction: -0.06963576259729572, vert_correction: -0.38355018793281753, vert_offset_correction: 0.15922519}[m
+[32m+[m[32m- {dist_correction: 1.2786647, dist_correction_x: 1.3059875, dist_correction_y: 1.3299147,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 34, rot_correction: 0.08608836360929105, vert_correction: -0.1973354249839361,[m
+   vert_offset_correction: 0.14657393000000002}[m
+[31m-- {dist_correction: 1.3593520000000001, dist_correction_x: 1.3602931, dist_correction_y: 1.3982458,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.75, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 35, rot_correction: 0.14363965670666648, vert_correction: -0.19024942312742418,[m
+[31m-  vert_offset_correction: 0.14611665000000001}[m
+[31m-- {dist_correction: 1.4114377, dist_correction_x: 1.4772849, dist_correction_y: 1.4348904,[m
+[31m-  focal_distance: 17.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 36, rot_correction: -0.011690171347560868, vert_correction: -0.376852242582194,[m
+[31m-  vert_offset_correction: 0.15874252}[m
+[31m-- {dist_correction: 1.307847, dist_correction_x: 1.3645581000000002, dist_correction_y: 1.376617,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 37,[m
+[31m-  rot_correction: 0.049492148009829026, vert_correction: -0.3699409132772216, vert_offset_correction: 0.15824712999999999}[m
+[31m-- {dist_correction: 1.4213585, dist_correction_x: 1.4421179000000002, dist_correction_y: 1.4552965,[m
+[32m+[m[32m- {dist_correction: 1.3474704, dist_correction_x: 1.3588457, dist_correction_y: 1.3945218,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 35,[m
+[32m+[m[32m  rot_correction: 0.14181459383312406, vert_correction: -0.18432959791721729, vert_offset_correction: 0.14573559}[m
+[32m+[m[32m- {dist_correction: 1.2310821, dist_correction_x: 1.2938965, dist_correction_y: 1.2814186,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 36, rot_correction: -0.009213370242732586, vert_correction: -0.37561450743655717,[m
+[32m+[m[32m  vert_offset_correction: 0.1586536}[m
+[32m+[m[32m- {dist_correction: 1.2136781, dist_correction_x: 1.2622253, dist_correction_y: 1.2666883,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 0.44999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 37, rot_correction: 0.05153091946896116, vert_correction: -0.36709468269294687,[m
+[32m+[m[32m  vert_offset_correction: 0.1580439}[m
+[32m+[m[32m- {dist_correction: 1.3207919000000001, dist_correction_x: 1.3694466, dist_correction_y: 1.3758972,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.43000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 38, rot_correction: -0.032988304130995134, vert_correction: -0.42738242167398816,[m
+[32m+[m[32m  vert_offset_correction: 0.16245152000000002}[m
+[32m+[m[32m- {dist_correction: 1.254662, dist_correction_x: 1.2655572, dist_correction_y: 1.2925728,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 39,[m
+[32m+[m[32m  rot_correction: 0.02996149305566275, vert_correction: -0.4197376875640353, vert_offset_correction: 0.16187992}[m
+[32m+[m[32m- {dist_correction: 1.2326976, dist_correction_x: 1.2977957, dist_correction_y: 1.2959807,[m
+   focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 38, rot_correction: -0.03418474478652977, vert_correction: -0.4311006362058518,[m
+[31m-  vert_offset_correction: 0.16273095999999998}[m
+[31m-- {dist_correction: 1.3356409, dist_correction_x: 1.3397028, dist_correction_y: 1.3601659000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 39, rot_correction: 0.026626332916051272, vert_correction: -0.4231418824568801,[m
+[31m-  vert_offset_correction: 0.16213396}[m
+[31m-- {dist_correction: 1.3662766, dist_correction_x: 1.4298528, dist_correction_y: 1.4232704,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 40, rot_correction: 0.1092471200007113, vert_correction: -0.35798081768512774,[m
+[31m-  vert_offset_correction: 0.15739609}[m
+[31m-- {dist_correction: 1.2853244000000001, dist_correction_x: 1.3026004, dist_correction_y: 1.3116373,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.5, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[31m-  rot_correction: 0.16893982038921165, vert_correction: -0.3493458884773484, vert_offset_correction: 0.1567864}[m
+[31m-- {dist_correction: 1.4113557, dist_correction_x: 1.4361624000000002, dist_correction_y: 1.4260374,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 42,[m
+[31m-  rot_correction: 0.08876389924739155, vert_correction: -0.41221208962882355, vert_offset_correction: 0.16132105}[m
+[31m-- {dist_correction: 1.3126003, dist_correction_x: 1.3216837000000001, dist_correction_y: 1.3253735,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 43, rot_correction: 0.15014050027953305, vert_correction: -0.40135006793562183,[m
+[31m-  vert_offset_correction: 0.1605208}[m
+[31m-- {dist_correction: 1.4849261000000002, dist_correction_x: 1.5387573, dist_correction_y: 1.5140117000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.45, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[31m-  rot_correction: -0.1289198918798797, vert_correction: -0.285349621541792, vert_offset_correction: 0.15237877}[m
+[31m-- {dist_correction: 1.3467159000000002, dist_correction_x: 1.385616, dist_correction_y: 1.398739,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999, laser_id: 45,[m
+[31m-  rot_correction: -0.06875650237205527, vert_correction: -0.27837142867317577, vert_offset_correction: 0.1519088}[m
+[31m-- {dist_correction: 1.4548677, dist_correction_x: 1.5237317, dist_correction_y: 1.4852321000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[31m-  rot_correction: -0.15456063213134205, vert_correction: -0.3373837683033222, vert_offset_correction: 0.15594806}[m
+[31m-- {dist_correction: 1.2609565999999999, dist_correction_x: 1.3084103, dist_correction_y: 1.3194104,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 47, rot_correction: -0.0921635423215472, vert_correction: -0.329718648747706,[m
+[31m-  vert_offset_correction: 0.15541457}[m
+[31m-- {dist_correction: 1.2807050000000002, dist_correction_x: 1.3367023, dist_correction_y: 1.3303235000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 48, rot_correction: -0.01087391977724544, vert_correction: -0.2702265530127714,[m
+[31m-  vert_offset_correction: 0.15136261}[m
+[31m-- {dist_correction: 1.3420832999999999, dist_correction_x: 1.3902283, dist_correction_y: 1.3959544,[m
+[32m+[m[32m  laser_id: 40, rot_correction: 0.11124875259869024, vert_correction: -0.35546799734786144,[m
+[32m+[m[32m  vert_offset_correction: 0.15721827}[m
+[32m+[m[32m- {dist_correction: 1.2586923, dist_correction_x: 1.2898768999999999, dist_correction_y: 1.2877043000000001,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[32m+[m[32m  rot_correction: 0.17148979704092368, vert_correction: -0.34319637793757907, vert_offset_correction: 0.15635452000000002}[m
+[32m+[m[32m- {dist_correction: 1.2951652999999999, dist_correction_x: 1.3469331, dist_correction_y: 1.3253401,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 42, rot_correction: 0.08973073485850933, vert_correction: -0.4113537192494002,[m
+[32m+[m[32m  vert_offset_correction: 0.16125753}[m
+[32m+[m[32m- {dist_correction: 1.2491970000000001, dist_correction_x: 1.2513244000000001, dist_correction_y: 1.2672708000000001,[m
+[32m+[m[32m  focal_distance: 6.0, focal_slope: 1.45, horiz_offset_correction: -0.025999999, laser_id: 43,[m
+[32m+[m[32m  rot_correction: 0.15193096025532546, vert_correction: -0.398922524385608, vert_offset_correction: 0.16034298}[m
+[32m+[m[32m- {dist_correction: 1.3504793000000002, dist_correction_x: 1.3742923, dist_correction_y: 1.3776834,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[32m+[m[32m  rot_correction: -0.12746921783885332, vert_correction: -0.2851614052352569, vert_offset_correction: 0.15236607}[m
+[32m+[m[32m- {dist_correction: 1.3194353, dist_correction_x: 1.3555048, dist_correction_y: 1.3676692,[m
+[32m+[m[32m  focal_distance: 5.0, focal_slope: 0.55000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 45, rot_correction: -0.0670297922925212, vert_correction: -0.27515581660600885,[m
+[32m+[m[32m  vert_offset_correction: 0.15169286}[m
+[32m+[m[32m- {dist_correction: 1.2517572, dist_correction_x: 1.3298462000000002, dist_correction_y: 1.2881517,[m
+[32m+[m[32m  focal_distance: 9.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[32m+[m[32m  rot_correction: -0.1522074465887801, vert_correction: -0.33538020013520276, vert_offset_correction: 0.15580834}[m
+[32m+[m[32m- {dist_correction: 1.214207, dist_correction_x: 1.2622674, dist_correction_y: 1.2687372000000001,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 47, rot_correction: -0.08983663794686182, vert_correction: -0.3282540382526024,[m
+[32m+[m[32m  vert_offset_correction: 0.15531295}[m
+[32m+[m[32m- {dist_correction: 1.1414406, dist_correction_x: 1.2080206, dist_correction_y: 1.1919655,[m
+[32m+[m[32m  focal_distance: 8.5, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 48,[m
+[32m+[m[32m  rot_correction: -0.008088342700603029, vert_correction: -0.26946698572230343, vert_offset_correction: 0.1513118}[m
+[32m+[m[32m- {dist_correction: 1.1837295, dist_correction_x: 1.2247887, dist_correction_y: 1.2112551,[m
+   focal_distance: 15.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 49, rot_correction: 0.04819382026855073, vert_correction: -0.2603276912672828,[m
+[31m-  vert_offset_correction: 0.1507021}[m
+[31m-- {dist_correction: 1.4451799, dist_correction_x: 1.5144832, dist_correction_y: 1.4737889000000002,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.5, horiz_offset_correction: 0.025999999, laser_id: 50,[m
+[31m-  rot_correction: -0.033916384706072375, vert_correction: -0.3244024456593014, vert_offset_correction: 0.15504621000000002}[m
+[31m-- {dist_correction: 1.2771001, dist_correction_x: 1.3374065, dist_correction_y: 1.339816,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 51,[m
+[31m-  rot_correction: 0.027376620290886354, vert_correction: -0.3166693629826125, vert_offset_correction: 0.15451272}[m
+[31m-- {dist_correction: 1.3977615, dist_correction_x: 1.4442108, dist_correction_y: 1.4371663000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 52, rot_correction: 0.10492072454703917, vert_correction: -0.25133544080174264,[m
+[31m-  vert_offset_correction: 0.1501051}[m
+[31m-- {dist_correction: 1.3425783999999998, dist_correction_x: 1.3483524, dist_correction_y: 1.3818097,[m
+[31m-  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[31m-  rot_correction: 0.16284451104936298, vert_correction: -0.23979553322706634, vert_offset_correction: 0.14934298000000001}[m
+[31m-- {dist_correction: 1.4382911999999999, dist_correction_x: 1.4900905, dist_correction_y: 1.4804431,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 54, rot_correction: 0.08525729890601516, vert_correction: -0.30499605989320633,[m
+[31m-  vert_offset_correction: 0.15371249}[m
+[31m-- {dist_correction: 1.2974651, dist_correction_x: 1.3356235, dist_correction_y: 1.342494,[m
+[31m-  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 55,[m
+[31m-  rot_correction: 0.14474094026605314, vert_correction: -0.29379823685192097, vert_offset_correction: 0.15295037}[m
+[31m-- {dist_correction: 1.500197, dist_correction_x: 1.5058761999999999, dist_correction_y: 1.5183740000000001,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.4, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[31m-  rot_correction: -0.1271355405564693, vert_correction: -0.1783966652843279, vert_offset_correction: 0.14535453}[m
+[31m-- {dist_correction: 1.3739523, dist_correction_x: 1.3909152, dist_correction_y: 1.4026927,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 57, rot_correction: -0.06914267741301003, vert_correction: -0.17006926832673774,[m
+[31m-  vert_offset_correction: 0.14482104}[m
+[31m-- {dist_correction: 1.5294423000000001, dist_correction_x: 1.5526985, dist_correction_y: 1.5286189,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.6, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[31m-  rot_correction: -0.14952992127533238, vert_correction: -0.23167847811493877, vert_offset_correction: 0.14880949}[m
+[31m-- {dist_correction: 1.356432, dist_correction_x: 1.3750079, dist_correction_y: 1.3956981,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.5, horiz_offset_correction: -0.025999999, laser_id: 59,[m
+[31m-  rot_correction: -0.08941942047983109, vert_correction: -0.22430756871133128, vert_offset_correction: 0.14832681}[m
+[31m-- {dist_correction: 1.4812624, dist_correction_x: 1.5439316, dist_correction_y: 1.5051659000000002,[m
+[32m+[m[32m  laser_id: 49, rot_correction: 0.05046789701743674, vert_correction: -0.2601368046069921,[m
+[32m+[m[32m  vert_offset_correction: 0.1506894}[m
+[32m+[m[32m- {dist_correction: 1.2635911, dist_correction_x: 1.3508514, dist_correction_y: 1.3295909000000001,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 50, rot_correction: -0.03103305540321719, vert_correction: -0.32109314431788744,[m
+[32m+[m[32m  vert_offset_correction: 0.15481757000000002}[m
+[32m+[m[32m- {dist_correction: 1.0956693, dist_correction_x: 1.1582519, dist_correction_y: 1.1591959,[m
+[32m+[m[32m  focal_distance: 10.5, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 51, rot_correction: 0.029237828933237592, vert_correction: -0.3140828722976195,[m
+[32m+[m[32m  vert_offset_correction: 0.15433489}[m
+[32m+[m[32m- {dist_correction: 1.2680698, dist_correction_x: 1.3010519, dist_correction_y: 1.3118181999999998,[m
+   focal_distance: 0.25, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 60, rot_correction: -0.012020974421732715, vert_correction: -0.16291245497181386,[m
+[31m-  vert_offset_correction: 0.14436376}[m
+[31m-- {dist_correction: 1.3555016, dist_correction_x: 1.3739404, dist_correction_y: 1.3961284,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 61,[m
+[31m-  rot_correction: 0.045806682836049765, vert_correction: -0.154741111393303, vert_offset_correction: 0.14384298}[m
+[31m-- {dist_correction: 1.5067404, dist_correction_x: 1.5184990999999999, dist_correction_y: 1.5367628,[m
+[31m-  focal_distance: 5.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 62, rot_correction: -0.03255746436915258, vert_correction: -0.21418087168528735,[m
+[31m-  vert_offset_correction: 0.1476663}[m
+[31m-- {dist_correction: 1.3463322, dist_correction_x: 1.356904, dist_correction_y: 1.3849588,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 63, rot_correction: 0.02613443455565695, vert_correction: -0.2063605225459988,[m
+[31m-  vert_offset_correction: 0.14715822}[m
+[32m+[m[32m  laser_id: 52, rot_correction: 0.10784944462775096, vert_correction: -0.2509518697920318,[m
+[32m+[m[32m  vert_offset_correction: 0.1500797}[m
+[32m+[m[32m- {dist_correction: 1.3034142, dist_correction_x: 1.3091043, dist_correction_y: 1.3535146,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[32m+[m[32m  rot_correction: 0.16523614619534635, vert_correction: -0.23940972819591302, vert_offset_correction: 0.14931756999999998}[m
+[32m+[m[32m- {dist_correction: 1.3151974000000002, dist_correction_x: 1.3637082, dist_correction_y: 1.3533908,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 54, rot_correction: 0.0869574695089434, vert_correction: -0.30294892830695713,[m
+[32m+[m[32m  vert_offset_correction: 0.15357277}[m
+[32m+[m[32m- {dist_correction: 1.2776234, dist_correction_x: 1.289026, dist_correction_y: 1.3073460000000001,[m
+[32m+[m[32m  focal_distance: 11.5, focal_slope: 1.85, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 55, rot_correction: 0.1464806513031853, vert_correction: -0.29229936554360075,[m
+[32m+[m[32m  vert_offset_correction: 0.15284875}[m
+[32m+[m[32m- {dist_correction: 1.3890512000000002, dist_correction_x: 1.3877768000000001, dist_correction_y: 1.3785843,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[32m+[m[32m  rot_correction: -0.1252743738020201, vert_correction: -0.17582174613227564, vert_offset_correction: 0.1451894}[m
+[32m+[m[32m- {dist_correction: 1.3896303, dist_correction_x: 1.4135710000000001, dist_correction_y: 1.4434415999999999,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 57, rot_correction: -0.0668689252953649, vert_correction: -0.16848034151967312,[m
+[32m+[m[32m  vert_offset_correction: 0.14471942000000002}[m
+[32m+[m[32m- {dist_correction: 1.4813303, dist_correction_x: 1.5015753, dist_correction_y: 1.5009795,[m
+[32m+[m[32m  focal_distance: 7.0, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[32m+[m[32m  rot_correction: -0.14694131176062744, vert_correction: -0.230128800272093, vert_offset_correction: 0.14870787}[m
+[32m+[m[32m- {dist_correction: 1.3051801, dist_correction_x: 1.3334875, dist_correction_y: 1.356346,[m
+[32m+[m[32m  focal_distance: 4.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 59, rot_correction: -0.08817857864812571, vert_correction: -0.2219747092732381,[m
+[32m+[m[32m  vert_offset_correction: 0.14817439000000002}[m
+[32m+[m[32m- {dist_correction: 1.300378, dist_correction_x: 1.3379957999999998, dist_correction_y: 1.3313292,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 60, rot_correction: -0.0084572566097885, vert_correction: -0.16012465801089584,[m
+[32m+[m[32m  vert_offset_correction: 0.14418593}[m
+[32m+[m[32m- {dist_correction: 1.2581644, dist_correction_x: 1.3149522, dist_correction_y: 1.2930194000000002,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.89999998, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 61, rot_correction: 0.048843297425790605, vert_correction: -0.1511470421311337,[m
+[32m+[m[32m  vert_offset_correction: 0.14361434}[m
+[32m+[m[32m- {dist_correction: 1.2993362, dist_correction_x: 1.3299077, dist_correction_y: 1.324184,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 62, rot_correction: -0.030143852037228126, vert_correction: -0.21457119711920336,[m
+[32m+[m[32m  vert_offset_correction: 0.14769171}[m
+[32m+[m[32m- {dist_correction: 1.3722379, dist_correction_x: 1.3900346, dist_correction_y: 1.4076549,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 63, rot_correction: 0.02800567535054865, vert_correction: -0.20577295745331492,[m
+[32m+[m[32m  vert_offset_correction: 0.14712011}[m
+ num_lasers: 64[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/params/velodyne64_height.yaml b/modules/drivers/lidar/velodyne/params/velodyne64_height.yaml[m
+[1mindex 6b12459411..d8cc580be8 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/params/velodyne64_height.yaml[m
+[1m+++ b/modules/drivers/lidar/velodyne/params/velodyne64_height.yaml[m
+[36m@@ -1,4 +1,4 @@[m
+ vehicle:[m
+   parameters:[m
+[31m-    height: 1.91[m
+[31m-    height_var: 0.0047[m
+[32m+[m[32m    height: 1.89[m
+[32m+[m[32m    height_var: 0.0045[m
+[1mdiff --git a/modules/drivers/lidar/velodyne/params/velodyne64_novatel_extrinsics_example.yaml b/modules/drivers/lidar/velodyne/params/velodyne64_novatel_extrinsics_example.yaml[m
+[1mindex 379bcc13df..9dc281bc51 100644[m
+[1m--- a/modules/drivers/lidar/velodyne/params/velodyne64_novatel_extrinsics_example.yaml[m
+[1m+++ b/modules/drivers/lidar/velodyne/params/velodyne64_novatel_extrinsics_example.yaml[m
+[36m@@ -1,18 +1,17 @@[m
+[32m+[m[32mchild_frame_id: velodyne64[m
+[32m+[m[32mtransform:[m
+[32m+[m[32m  rotation:[m
+[32m+[m[32m    x: 0.0178712428342356[m
+[32m+[m[32m    y: -0.01105483165178439[m
+[32m+[m[32m    z: 0.7086047865380262[m
+[32m+[m[32m    w: 0.7052926101074[m
+[32m+[m[32m  translation:[m
+[32m+[m[32m    x: -0.0008540722033043019[m
+[32m+[m[32m    y: 1.410303305307884[m
+[32m+[m[32m    z: 1.397[m
+ header:[m
+   seq: 0[m
+   stamp:[m
+[31m-    secs: 0[m
+[32m+[m[32m    secs: 1502870042[m
+     nsecs: 0[m
+   frame_id: novatel[m
+[31m-child_frame_id: velodyne64[m
+[31m-transform:[m
+[31m-  translation:[m
+[31m-    x: 0[m
+[31m-    y: 0.9807289[m
+[31m-    z: 2.312[m
+[31m-  rotation:[m
+[31m-    x: 0[m
+[31m-    y: 0[m
+[31m-    z: 0.7071068[m
+[31m-    w: 0.7071068[m
+[31m-[m
+[1mdiff --git a/modules/drivers/video/conf/video_front_12mm.pb.txt b/modules/drivers/video/conf/video_front_12mm.pb.txt[m
+[1mindex b6e5c5cdbb..20f2b1d06c 100644[m
+[1m--- a/modules/drivers/video/conf/video_front_12mm.pb.txt[m
+[1m+++ b/modules/drivers/video/conf/video_front_12mm.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ [m
+[31m-udp_port: 2001[m
+[32m+[m[32mudp_port: 2003[m
+ frame_id: "video_front_12mm"[m
+ pixel_format: "yuyv"[m
+ trigger_param: "f2ff"[m
+[36m@@ -7,7 +7,7 @@[m [mmetric_error_code: 17[m
+ record:0[m
+ width: 1920[m
+ height: 1080[m
+[31m-frame_rate: 15[m
+[32m+[m[32mframe_rate: 20[m
+ monochrome: false[m
+ brightness: -1[m
+ contrast: -1[m
+[36m@@ -25,6 +25,6 @@[m [mfpga_dev_number: 0[m
+ camera_seq_number: 2[m
+ [m
+ compress_conf {[m
+[31m-    output_channel: "/apollo/sensor/camera/front_12mm/image/compressed"[m
+[32m+[m[32m    output_channel: "/apollo/sensor/camera/front_12mm/video/compressed"[m
+     image_pool_size: 100[m
+ }[m
+[1mdiff --git a/modules/drivers/video/conf/video_front_6mm.pb.txt b/modules/drivers/video/conf/video_front_6mm.pb.txt[m
+[1mindex 36fa799e59..c9c880a234 100644[m
+[1m--- a/modules/drivers/video/conf/video_front_6mm.pb.txt[m
+[1m+++ b/modules/drivers/video/conf/video_front_6mm.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ [m
+[31m-udp_port: 2000[m
+[32m+[m[32mudp_port: 2004[m
+ frame_id: "video_front_6mm"[m
+ pixel_format: "yuyv"[m
+ trigger_param: "f2ff"[m
+[36m@@ -7,7 +7,7 @@[m [mmetric_error_code: 18[m
+ record:0[m
+ width: 1920[m
+ height: 1080[m
+[31m-frame_rate: 15[m
+[32m+[m[32mframe_rate: 20[m
+ monochrome: false[m
+ brightness: -1[m
+ contrast: -1[m
+[36m@@ -25,6 +25,6 @@[m [mfpga_dev_number: 0[m
+ camera_seq_number: 3[m
+ [m
+ compress_conf {[m
+[31m-    output_channel: "/apollo/sensor/camera/front_6mm/image/compressed"[m
+[32m+[m[32m    output_channel: "/apollo/sensor/camera/front_6mm/video/compressed"[m
+     image_pool_size: 100[m
+ }[m
+[1mdiff --git a/modules/drivers/video/conf/video_left_fisheye.pb.txt b/modules/drivers/video/conf/video_left_fisheye.pb.txt[m
+[1mindex a049a3c604..862b58bc88 100644[m
+[1m--- a/modules/drivers/video/conf/video_left_fisheye.pb.txt[m
+[1m+++ b/modules/drivers/video/conf/video_left_fisheye.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ [m
+[31m-udp_port: 2005[m
+[32m+[m[32mudp_port: 2000[m
+ frame_id: "video_left_fisheye"[m
+ pixel_format: "yuyv"[m
+ trigger_param: "f2ff"[m
+[36m@@ -7,7 +7,7 @@[m [mmetric_error_code: 32[m
+ record:0[m
+ width: 1920[m
+ height: 1080[m
+[31m-frame_rate: 5[m
+[32m+[m[32mframe_rate: 20[m
+ monochrome: false[m
+ brightness: -1[m
+ contrast: -1[m
+[36m@@ -25,6 +25,6 @@[m [mfpga_dev_number: 0[m
+ camera_seq_number: 6[m
+ [m
+ compress_conf {[m
+[31m-    output_channel: "/apollo/sensor/camera/left_fisheye/image/compressed"[m
+[32m+[m[32m    output_channel: "/apollo/sensor/camera/left_fisheye/video/compressed"[m
+     image_pool_size: 100[m
+ }[m
+[1mdiff --git a/modules/drivers/video/conf/video_rear_6mm.pb.txt b/modules/drivers/video/conf/video_rear_6mm.pb.txt[m
+[1mindex c530a8f654..a1467eb6e5 100644[m
+[1m--- a/modules/drivers/video/conf/video_rear_6mm.pb.txt[m
+[1m+++ b/modules/drivers/video/conf/video_rear_6mm.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ [m
+[31m-udp_port: 2009[m
+[32m+[m[32mudp_port: 2002[m
+ frame_id: "video_rear_6mm"[m
+ pixel_format: "yuyv"[m
+ trigger_param: "f2ff"[m
+[36m@@ -7,7 +7,7 @@[m [mmetric_error_code: 18[m
+ record:0[m
+ width: 1920[m
+ height: 1080[m
+[31m-frame_rate: 15[m
+[32m+[m[32mframe_rate: 20[m
+ monochrome: false[m
+ brightness: -1[m
+ contrast: -1[m
+[36m@@ -25,6 +25,6 @@[m [mfpga_dev_number: 0[m
+ camera_seq_number: 3[m
+ [m
+ compress_conf {[m
+[31m-    output_channel: "/apollo/sensor/camera/rear_6mm/image/compressed"[m
+[32m+[m[32m    output_channel: "/apollo/sensor/camera/rear_6mm/video/compressed"[m
+     image_pool_size: 100[m
+ }[m
+[1mdiff --git a/modules/drivers/video/conf/video_right_fisheye.pb.txt b/modules/drivers/video/conf/video_right_fisheye.pb.txt[m
+[1mindex 72341f16f1..0f84029d07 100644[m
+[1m--- a/modules/drivers/video/conf/video_right_fisheye.pb.txt[m
+[1m+++ b/modules/drivers/video/conf/video_right_fisheye.pb.txt[m
+[36m@@ -1,5 +1,5 @@[m
+ [m
+[31m-udp_port: 2008[m
+[32m+[m[32mudp_port: 2001[m
+ frame_id: "video_right_fisheye"[m
+ pixel_format: "yuyv"[m
+ trigger_param: "f2ff"[m
+[36m@@ -7,7 +7,7 @@[m [mmetric_error_code: 33[m
+ record:0[m
+ width: 1920[m
+ height: 1080[m
+[31m-frame_rate: 5[m
+[32m+[m[32mframe_rate: 20[m
+ monochrome: false[m
+ brightness: -1[m
+ contrast: -1[m
+[36m@@ -25,6 +25,6 @@[m [mfpga_dev_number: 0[m
+ camera_seq_number: 7[m
+ [m
+ compress_conf {[m
+[31m-    output_channel: "/apollo/sensor/camera/right_fisheye/image/compressed"[m
+[32m+[m[32m    output_channel: "/apollo/sensor/camera/right_fisheye/video/compressed"[m
+     image_pool_size: 100[m
+ }[m
+[1mdiff --git a/modules/localization/msf/params/gnss_params/ant_imu_leverarm.yaml b/modules/localization/msf/params/gnss_params/ant_imu_leverarm.yaml[m
+[1mindex 2d15f6f94e..13e8ab7cdc 100644[m
+[1m--- a/modules/localization/msf/params/gnss_params/ant_imu_leverarm.yaml[m
+[1m+++ b/modules/localization/msf/params/gnss_params/ant_imu_leverarm.yaml[m
+[36m@@ -1,21 +1,21 @@[m
+[31m-#carid:mkz058[m
+[31m-#set primary if single-antenna;set both primary and secondary if dual-antenna.[m
+[31m-leverarm:[m
+[31m-  primary:[m
+[31m-    offset:[m
+[31m-      x: 0.00[m
+[31m-      y: 1.10866[m
+[31m-      z: 1.14165[m
+[31m-    uncertainty:[m
+[31m-      x: 0.05[m
+[31m-      y: 0.05[m
+[31m-      z: 0.08[m
+[31m-  secondary:[m
+[31m-    offset:[m
+[31m-      x: 0.00[m
+[31m-      y: 1.10866[m
+[31m-      z: 1.14165[m
+[31m-    uncertainty:[m
+[31m-      x: 0.05[m
+[31m-      y: 0.05[m
+[31m-      z: 0.08[m
+[32m+[m[32m#carid:mkz058[m
+[32m+[m[32m#set primary if single-antenna;set both primary and secondary if dual-antenna.[m
+[32m+[m[32mleverarm:[m
+[32m+[m[32m  primary:[m
+[32m+[m[32m    offset:[m
+[32m+[m[32m      x: -0.5016[m
+[32m+[m[32m      y: 0.5334[m
+[32m+[m[32m      z: 0.8763[m
+[32m+[m[32m    uncertainty:[m
+[32m+[m[32m      x: 0.05[m
+[32m+[m[32m      y: 0.05[m
+[32m+[m[32m      z: 0.05[m
+[32m+[m[32m  secondary:[m
+[32m+[m[32m    offset:[m
+[32m+[m[32m      x: 0.5461[m
+[32m+[m[32m      y: 0.5334[m
+[32m+[m[32m      z: 0.8763[m
+[32m+[m[32m    uncertainty:[m
+[32m+[m[32m      x: 0.05[m
+[32m+[m[32m      y: 0.05[m
+[32m+[m[32m      z: 0.05[m
+[1mdiff --git a/modules/localization/msf/params/velodyne_params/64E_S3_calibration_example.yaml b/modules/localization/msf/params/velodyne_params/64E_S3_calibration_example.yaml[m
+[1mindex a02c68421c..a84564e054 100644[m
+[1m--- a/modules/localization/msf/params/velodyne_params/64E_S3_calibration_example.yaml[m
+[1m+++ b/modules/localization/msf/params/velodyne_params/64E_S3_calibration_example.yaml[m
+[36m@@ -1,243 +1,246 @@[m
+ lasers:[m
+[31m-- {dist_correction: 1.3280478, dist_correction_x: 1.3733278999999998, dist_correction_y: 1.3565268000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 0.75, horiz_offset_correction: 0.025999999, laser_id: 0,[m
+[31m-  min_intensity: 5, rot_correction: -0.08042396035379652, vert_correction: -0.12376696608832838,[m
+[31m-  vert_offset_correction: 0.21551828}[m
+[31m-- {dist_correction: 1.4387065, dist_correction_x: 1.4772083, dist_correction_y: 1.4930743000000002,[m
+[31m-  focal_distance: 18.5, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[31m-  min_intensity: 40, rot_correction: -0.043931143295210404, vert_correction: -0.11852979325378328,[m
+[31m-  vert_offset_correction: 0.21513613}[m
+[31m-- {dist_correction: 1.4198532000000001, dist_correction_x: 1.4513388, dist_correction_y: 1.4459473,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 2,[m
+[31m-  min_intensity: 40, rot_correction: 0.05671893510512383, vert_correction: 0.006831742116548479,[m
+[32m+[m[32m- {dist_correction: 1.2752063, dist_correction_x: 1.3139189, dist_correction_y: 1.3201204000000002,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 0, min_intensity: 40, rot_correction: -0.07883297231288532, vert_correction: -0.1225589730984748,[m
+[32m+[m[32m  vert_offset_correction: 0.21543011}[m
+[32m+[m[32m- {dist_correction: 1.354117, dist_correction_x: 1.3893244999999999, dist_correction_y: 1.3824525,[m
+[32m+[m[32m  focal_distance: 11.1, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.04257169063286875, vert_correction: -0.11732028531813898,[m
+[32m+[m[32m  vert_offset_correction: 0.21504793}[m
+[32m+[m[32m- {dist_correction: 1.3552602999999999, dist_correction_x: 1.4380073999999998, dist_correction_y: 1.4320663,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 2, min_intensity: 40, rot_correction: 0.0576001797697238, vert_correction: 0.006831742116548479,[m
+   vert_offset_correction: 0.20608189}[m
+[31m-- {dist_correction: 1.432045, dist_correction_x: 1.4576363, dist_correction_y: 1.5053079,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 3, min_intensity: 40, rot_correction: 0.09507418428186684, vert_correction: 0.011737269755557637,[m
+[32m+[m[32m- {dist_correction: 1.3331795, dist_correction_x: 1.3594026, dist_correction_y: 1.3993605,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 3, min_intensity: 40, rot_correction: 0.09708671122503676, vert_correction: 0.011737269755557637,[m
+   vert_offset_correction: 0.2057291}[m
+[31m-- {dist_correction: 1.3768561, dist_correction_x: 1.4095345000000001, dist_correction_y: 1.4140973,[m
+[32m+[m[32m- {dist_correction: 1.272046, dist_correction_x: 1.3137018, dist_correction_y: 1.2978722,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 4, min_intensity: 40, rot_correction: -0.004134042716809833, vert_correction: -0.11106570246674108,[m
+[32m+[m[32m  vert_offset_correction: 0.21459229000000002}[m
+[32m+[m[32m- {dist_correction: 1.1886112, dist_correction_x: 1.2300569000000001, dist_correction_y: 1.2463203,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 5,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.03539678170426023, vert_correction: -0.1054088809215172,[m
+[32m+[m[32m  vert_offset_correction: 0.21418074}[m
+[32m+[m[32m- {dist_correction: 1.2976839000000002, dist_correction_x: 1.3396898, dist_correction_y: 1.3132230999999999,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 6, min_intensity: 40, rot_correction: -0.01812813105654391, vert_correction: -0.14704592330533348,[m
+[32m+[m[32m  vert_offset_correction: 0.2172233}[m
+[32m+[m[32m- {dist_correction: 1.2863681, dist_correction_x: 1.3238104000000002, dist_correction_y: 1.3377951,[m
+[32m+[m[32m  focal_distance: 14.0, focal_slope: 1.25, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 7, min_intensity: 40, rot_correction: 0.020696316728341994, vert_correction: -0.14023825084996633,[m
+[32m+[m[32m  vert_offset_correction: 0.21672356}[m
+[32m+[m[32m- {dist_correction: 1.2849046000000002, dist_correction_x: 1.3267589000000002, dist_correction_y: 1.3180791,[m
+   focal_distance: 24.0, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 4, min_intensity: 40, rot_correction: -0.0052020566354620415, vert_correction: -0.11207511538496126,[m
+[31m-  vert_offset_correction: 0.21466578}[m
+[31m-- {dist_correction: 1.4579066, dist_correction_x: 1.5030013, dist_correction_y: 1.5402745,[m
+[31m-  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 5, min_intensity: 40, rot_correction: 0.034271327080062704, vert_correction: -0.10662164389621649,[m
+[31m-  vert_offset_correction: 0.21426891}[m
+[31m-- {dist_correction: 1.4042904999999999, dist_correction_x: 1.4512584000000002, dist_correction_y: 1.4358795000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 6, min_intensity: 40, rot_correction: -0.019350118096339984, vert_correction: -0.14744596324186607,[m
+[31m-  vert_offset_correction: 0.21725271}[m
+[31m-- {dist_correction: 1.4530759, dist_correction_x: 1.4934110999999999, dist_correction_y: 1.4934732,[m
+[31m-  focal_distance: 16.5, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 7, min_intensity: 40, rot_correction: 0.019696635766030937, vert_correction: -0.1420415773930044,[m
+[31m-  vert_offset_correction: 0.21685585}[m
+[31m-- {dist_correction: 1.3928452999999998, dist_correction_x: 1.4412779, dist_correction_y: 1.4351759000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 8, min_intensity: 10, rot_correction: 0.06977400140069993, vert_correction: -0.10055477120587059,[m
+[31m-  vert_offset_correction: 0.21382797}[m
+[31m-- {dist_correction: 1.4649026, dist_correction_x: 1.4811482, dist_correction_y: 1.5390858,[m
+[31m-  focal_distance: 16.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[31m-  min_intensity: 40, rot_correction: 0.10867481606700684, vert_correction: -0.09508820800240662,[m
+[31m-  vert_offset_correction: 0.21343111}[m
+[31m-- {dist_correction: 1.3307669000000002, dist_correction_x: 1.3797191000000002, dist_correction_y: 1.3716772000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 10, min_intensity: 40, rot_correction: 0.05614793318704137, vert_correction: -0.13622757149534595,[m
+[31m-  vert_offset_correction: 0.2164296}[m
+[31m-- {dist_correction: 1.3771700999999998, dist_correction_x: 1.4101131, dist_correction_y: 1.4538571,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.35, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 11, min_intensity: 40, rot_correction: 0.09458836664858647, vert_correction: -0.13060523940147076,[m
+[31m-  vert_offset_correction: 0.21601805}[m
+[31m-- {dist_correction: 1.3797005, dist_correction_x: 1.4142267000000002, dist_correction_y: 1.4085233,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[31m-  min_intensity: 10, rot_correction: -0.08058553944528767, vert_correction: -0.05321597901122562,[m
+[31m-  vert_offset_correction: 0.21040320999999998}[m
+[31m-- {dist_correction: 1.3646324, dist_correction_x: 1.3887102, dist_correction_y: 1.4070561000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[31m-  min_intensity: 40, rot_correction: -0.04053784798354424, vert_correction: -0.04669103069605979,[m
+[31m-  vert_offset_correction: 0.20993286000000003}[m
+[31m-- {dist_correction: 1.3809781, dist_correction_x: 1.4282532000000001, dist_correction_y: 1.4207353,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[31m-  min_intensity: 40, rot_correction: -0.09419900463641756, vert_correction: -0.08758781436692292,[m
+[31m-  vert_offset_correction: 0.21288727000000002}[m
+[31m-- {dist_correction: 1.3950202999999999, dist_correction_x: 1.4285829, dist_correction_y: 1.4621552,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 15,[m
+[31m-  min_intensity: 40, rot_correction: -0.054354701628396805, vert_correction: -0.08292035016148458,[m
+[31m-  vert_offset_correction: 0.21254919000000003}[m
+[31m-- {dist_correction: 1.2988774, dist_correction_x: 1.3749954, dist_correction_y: 1.3734656,[m
+[32m+[m[32m  laser_id: 8, min_intensity: 40, rot_correction: 0.0709183561953673, vert_correction: -0.09954287817478333,[m
+[32m+[m[32m  vert_offset_correction: 0.21375446}[m
+[32m+[m[32m- {dist_correction: 1.3211784, dist_correction_x: 1.3745055, dist_correction_y: 1.3908893,[m
+[32m+[m[32m  focal_distance: 17.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.11014432221066224, vert_correction: -0.09387264202892864,[m
+[32m+[m[32m  vert_offset_correction: 0.21334291}[m
+[32m+[m[32m- {dist_correction: 1.2667397, dist_correction_x: 1.3151773, dist_correction_y: 1.3144638000000002,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 1.8, horiz_offset_correction: 0.025999999, laser_id: 10,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.05752680089198221, vert_correction: -0.1352242183602887,[m
+[32m+[m[32m  vert_offset_correction: 0.21635611000000002}[m
+[32m+[m[32m- {dist_correction: 1.2552061, dist_correction_x: 1.2864645, dist_correction_y: 1.313914,[m
+[32m+[m[32m  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 11,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.09560686749622178, vert_correction: -0.12939936000534133,[m
+[32m+[m[32m  vert_offset_correction: 0.21592983000000002}[m
+[32m+[m[32m- {dist_correction: 1.2950737, dist_correction_x: 1.3264038, dist_correction_y: 1.3272704,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07894119668914298, vert_correction: -0.05117740128364046,[m
+[32m+[m[32m  vert_offset_correction: 0.21025623}[m
+[32m+[m[32m- {dist_correction: 1.3314511, dist_correction_x: 1.3439276000000002, dist_correction_y: 1.3750456,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.039590087075821526, vert_correction: -0.04567113183969363,[m
+[32m+[m[32m  vert_offset_correction: 0.20985937}[m
+[32m+[m[32m- {dist_correction: 1.2853152, dist_correction_x: 1.3545485, dist_correction_y: 1.32582,[m
+[32m+[m[32m  focal_distance: 20.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09264152866247388, vert_correction: -0.08697921631142325,[m
+[32m+[m[32m  vert_offset_correction: 0.21284317000000003}[m
+[32m+[m[32m- {dist_correction: 1.1956883999999999, dist_correction_x: 1.2309952, dist_correction_y: 1.2384804,[m
+[32m+[m[32m  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 15, min_intensity: 40, rot_correction: -0.053828922936562766, vert_correction: -0.08088988123360417,[m
+[32m+[m[32m  vert_offset_correction: 0.21240220999999998}[m
+[32m+[m[32m- {dist_correction: 1.2622006000000001, dist_correction_x: 1.3391359, dist_correction_y: 1.3450137000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 16,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.004196640695761861, vert_correction: -0.040366165181013325,[m
+[32m+[m[32m  vert_offset_correction: 0.20947721000000002}[m
+[32m+[m[32m- {dist_correction: 1.3882208, dist_correction_x: 1.4129477, dist_correction_y: 1.4390656000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: 0.035191251731545366, vert_correction: -0.03485476621439488,[m
+[32m+[m[32m  vert_offset_correction: 0.20908035000000003}[m
+[32m+[m[32m- {dist_correction: 1.270416, dist_correction_x: 1.3805045999999999, dist_correction_y: 1.3587926,[m
+   focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 16, min_intensity: 40, rot_correction: -0.005133124856654525, vert_correction: -0.04077432787988471,[m
+[31m-  vert_offset_correction: 0.20950663}[m
+[31m-- {dist_correction: 1.4723137, dist_correction_x: 1.5056056000000002, dist_correction_y: 1.5041873000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[31m-  min_intensity: 20, rot_correction: 0.033464606229193644, vert_correction: -0.03526310344619148,[m
+[31m-  vert_offset_correction: 0.20910976000000003}[m
+[31m-- {dist_correction: 1.3093359000000002, dist_correction_x: 1.4065028000000002, dist_correction_y: 1.3988147000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 18,[m
+[31m-  min_intensity: 20, rot_correction: -0.01912024950720607, vert_correction: -0.07662373803636939,[m
+[31m-  vert_offset_correction: 0.21209354000000002}[m
+[31m-- {dist_correction: 1.4292241, dist_correction_x: 1.4580751, dist_correction_y: 1.4810971000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 19,[m
+[31m-  min_intensity: 15, rot_correction: 0.0202102704569296, vert_correction: -0.07052442491121666,[m
+[32m+[m[32m  laser_id: 18, min_intensity: 40, rot_correction: -0.01796702320395082, vert_correction: -0.07621729099615271,[m
+[32m+[m[32m  vert_offset_correction: 0.21206415}[m
+[32m+[m[32m- {dist_correction: 1.4391471999999998, dist_correction_x: 1.4701469, dist_correction_y: 1.4810228,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 19, min_intensity: 10, rot_correction: 0.021402925493316658, vert_correction: -0.07052442491121666,[m
+   vert_offset_correction: 0.21165258}[m
+[31m-- {dist_correction: 1.3831145, dist_correction_x: 1.4038123999999998, dist_correction_y: 1.3966234,[m
+[32m+[m[32m- {dist_correction: 1.3115741, dist_correction_x: 1.4043790000000003, dist_correction_y: 1.3746985,[m
+   focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 20,[m
+[31m-  min_intensity: 30, rot_correction: 0.06874179273711946, vert_correction: -0.029137015224983895,[m
+[31m-  vert_offset_correction: 0.2086688}[m
+[31m-- {dist_correction: 1.402925, dist_correction_x: 1.4443744, dist_correction_y: 1.471532,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[31m-  min_intensity: 5, rot_correction: 0.10747970535236223, vert_correction: -0.02341734437339572,[m
+[31m-  vert_offset_correction: 0.20825726}[m
+[31m-- {dist_correction: 1.4234489, dist_correction_x: 1.4673076, dist_correction_y: 1.4543761000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 22, min_intensity: 5, rot_correction: 0.05514045060297391, vert_correction: -0.0642162831410628,[m
+[31m-  vert_offset_correction: 0.21119694}[m
+[31m-- {dist_correction: 1.470387, dist_correction_x: 1.4879053, dist_correction_y: 1.5217740000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 23,[m
+[31m-  min_intensity: 30, rot_correction: 0.09433926976708334, vert_correction: -0.05892161916095702,[m
+[31m-  vert_offset_correction: 0.21081478}[m
+[31m-- {dist_correction: 1.3722501, dist_correction_x: 1.4119496, dist_correction_y: 1.4214716,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[31m-  min_intensity: 20, rot_correction: -0.08011834622045531, vert_correction: 0.01868575851656834,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.07015680097488135, vert_correction: -0.02893277679591552,[m
+[32m+[m[32m  vert_offset_correction: 0.20865412}[m
+[32m+[m[32m- {dist_correction: 1.3147861, dist_correction_x: 1.3458926, dist_correction_y: 1.3786374000000001,[m
+[32m+[m[32m  focal_distance: 22.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[32m+[m[32m  min_intensity: 15, rot_correction: 0.10896112162283324, vert_correction: -0.022600128857734412,[m
+[32m+[m[32m  vert_offset_correction: 0.20819845}[m
+[32m+[m[32m- {dist_correction: 1.2870654, dist_correction_x: 1.3318181000000002, dist_correction_y: 1.3219449,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 22, min_intensity: 5, rot_correction: 0.056491201053665105, vert_correction: -0.06441985659968617,[m
+[32m+[m[32m  vert_offset_correction: 0.21121164}[m
+[32m+[m[32m- {dist_correction: 1.3116136, dist_correction_x: 1.3367073, dist_correction_y: 1.3722873999999998,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 23, min_intensity: 5, rot_correction: 0.09605195612607761, vert_correction: -0.058717920038627504,[m
+[32m+[m[32m  vert_offset_correction: 0.21080008}[m
+[32m+[m[32m- {dist_correction: 1.334183, dist_correction_x: 1.3770262, dist_correction_y: 1.3650365,[m
+[32m+[m[32m  focal_distance: 15.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07814212387105615, vert_correction: 0.01868575851656834,[m
+   vert_offset_correction: 0.20522938000000002}[m
+[31m-- {dist_correction: 1.4577922, dist_correction_x: 1.4821321, dist_correction_y: 1.4774638,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 25, min_intensity: 10, rot_correction: -0.0415592740030059, vert_correction: 0.023180922072920565,[m
+[31m-  vert_offset_correction: 0.20490601000000003}[m
+[31m-- {dist_correction: 1.4175369, dist_correction_x: 1.4441992, dist_correction_y: 1.4484555000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[31m-  min_intensity: 20, rot_correction: -0.09469728915654493, vert_correction: -0.01647002637924725,[m
+[31m-  vert_offset_correction: 0.20775749000000002}[m
+[31m-- {dist_correction: 1.4383292, dist_correction_x: 1.4573476, dist_correction_y: 1.4790007,[m
+[31m-  focal_distance: 7.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 27,[m
+[31m-  min_intensity: 10, rot_correction: -0.055555304894197445, vert_correction: -0.011156249123969949,[m
+[31m-  vert_offset_correction: 0.20737534000000002}[m
+[31m-- {dist_correction: 1.3976639, dist_correction_x: 1.434787, dist_correction_y: 1.4289362,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 28, min_intensity: 40, rot_correction: -0.0056653665027087, vert_correction: 0.030126075858796564,[m
+[31m-  vert_offset_correction: 0.20440624}[m
+[31m-- {dist_correction: 1.5147818000000002, dist_correction_x: 1.5457281, dist_correction_y: 1.5337862000000002,[m
+[31m-  focal_distance: 16.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 29,[m
+[31m-  min_intensity: 10, rot_correction: 0.032454556265796485, vert_correction: 0.03461850099355241,[m
+[31m-  vert_offset_correction: 0.20408289000000002}[m
+[31m-- {dist_correction: 1.4410570999999999, dist_correction_x: 1.4812628, dist_correction_y: 1.4802063,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[31m-  min_intensity: 20, rot_correction: -0.019155442326243284, vert_correction: -0.004819796717085346,[m
+[31m-  vert_offset_correction: 0.20691969000000002}[m
+[31m-- {dist_correction: 1.5121419, dist_correction_x: 1.525024, dist_correction_y: 1.5161595,[m
+[31m-  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 31, rot_correction: 0.019031284839244163, vert_correction: 0.0006993883727657528,[m
+[31m-  vert_offset_correction: 0.20652283000000002}[m
+[31m-- {dist_correction: 1.4162563000000001, dist_correction_x: 1.4498225, dist_correction_y: 1.4345399,[m
+[31m-  focal_distance: 8.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 32,[m
+[31m-  rot_correction: -0.1322630822793796, vert_correction: -0.39265743814277154, vert_offset_correction: 0.1598857}[m
+[31m-- {dist_correction: 1.3670056, dist_correction_x: 1.3952693, dist_correction_y: 1.4121672,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 33, rot_correction: -0.07110342218260252, vert_correction: -0.38671040324952605,[m
+[31m-  vert_offset_correction: 0.15945383}[m
+[31m-- {dist_correction: 1.4511356000000002, dist_correction_x: 1.4689107000000001, dist_correction_y: 1.4972537,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 34, rot_correction: 0.08401589158763215, vert_correction: -0.1973354249839361,[m
+[32m+[m[32m- {dist_correction: 1.3277109999999999, dist_correction_x: 1.3308896, dist_correction_y: 1.3380003,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 25,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: -0.04068591124530794, vert_correction: 0.02481530248969487,[m
+[32m+[m[32m  vert_offset_correction: 0.20478842}[m
+[32m+[m[32m- {dist_correction: 1.3784187, dist_correction_x: 1.4020284, dist_correction_y: 1.4110085,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09248550146333334, vert_correction: -0.015856927119606682,[m
+[32m+[m[32m  vert_offset_correction: 0.20771341}[m
+[32m+[m[32m- {dist_correction: 1.3299843000000002, dist_correction_x: 1.3475424, dist_correction_y: 1.3875761,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 27, rot_correction: -0.05342781834918644, vert_correction: -0.01033868471699117,[m
+[32m+[m[32m  vert_offset_correction: 0.20731655000000002}[m
+[32m+[m[32m- {dist_correction: 1.3601752, dist_correction_x: 1.4000146000000002, dist_correction_y: 1.3781789,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 28, rot_correction: -0.004424292891278668, vert_correction: 0.029513378024883952,[m
+[32m+[m[32m  vert_offset_correction: 0.20445036000000003}[m
+[32m+[m[32m- {dist_correction: 1.3607886, dist_correction_x: 1.4001455999999999, dist_correction_y: 1.4214912000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 29, rot_correction: 0.03487417427567706, vert_correction: 0.03625176439960543,[m
+[32m+[m[32m  vert_offset_correction: 0.2039653}[m
+[32m+[m[32m- {dist_correction: 1.3876024000000002, dist_correction_x: 1.4266457, dist_correction_y: 1.3987584000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[32m+[m[32m  rot_correction: -0.018163875399624756, vert_correction: -0.004615383580558845, vert_offset_correction: 0.20690498000000002}[m
+[32m+[m[32m- {dist_correction: 1.3872712999999999, dist_correction_x: 1.409449, dist_correction_y: 1.4333896,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 31, rot_correction: 0.020882827848197862, vert_correction: 0.001312627241293188,[m
+[32m+[m[32m  vert_offset_correction: 0.20647875}[m
+[32m+[m[32m- {dist_correction: 1.3152968000000003, dist_correction_x: 1.3551462, dist_correction_y: 1.3403419,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 32, rot_correction: -0.12998286720751434, vert_correction: -0.3917846862503118,[m
+[32m+[m[32m  vert_offset_correction: 0.15982219}[m
+[32m+[m[32m- {dist_correction: 1.1306184000000001, dist_correction_x: 1.1613448, dist_correction_y: 1.1695766,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 33,[m
+[32m+[m[32m  rot_correction: -0.06963576259729572, vert_correction: -0.38355018793281753, vert_offset_correction: 0.15922519}[m
+[32m+[m[32m- {dist_correction: 1.2786647, dist_correction_x: 1.3059875, dist_correction_y: 1.3299147,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 34, rot_correction: 0.08608836360929105, vert_correction: -0.1973354249839361,[m
+   vert_offset_correction: 0.14657393000000002}[m
+[31m-- {dist_correction: 1.3593520000000001, dist_correction_x: 1.3602931, dist_correction_y: 1.3982458,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.75, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 35, rot_correction: 0.14363965670666648, vert_correction: -0.19024942312742418,[m
+[31m-  vert_offset_correction: 0.14611665000000001}[m
+[31m-- {dist_correction: 1.4114377, dist_correction_x: 1.4772849, dist_correction_y: 1.4348904,[m
+[31m-  focal_distance: 17.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 36, rot_correction: -0.011690171347560868, vert_correction: -0.376852242582194,[m
+[31m-  vert_offset_correction: 0.15874252}[m
+[31m-- {dist_correction: 1.307847, dist_correction_x: 1.3645581000000002, dist_correction_y: 1.376617,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 37,[m
+[31m-  rot_correction: 0.049492148009829026, vert_correction: -0.3699409132772216, vert_offset_correction: 0.15824712999999999}[m
+[31m-- {dist_correction: 1.4213585, dist_correction_x: 1.4421179000000002, dist_correction_y: 1.4552965,[m
+[32m+[m[32m- {dist_correction: 1.3474704, dist_correction_x: 1.3588457, dist_correction_y: 1.3945218,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 35,[m
+[32m+[m[32m  rot_correction: 0.14181459383312406, vert_correction: -0.18432959791721729, vert_offset_correction: 0.14573559}[m
+[32m+[m[32m- {dist_correction: 1.2310821, dist_correction_x: 1.2938965, dist_correction_y: 1.2814186,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 36, rot_correction: -0.009213370242732586, vert_correction: -0.37561450743655717,[m
+[32m+[m[32m  vert_offset_correction: 0.1586536}[m
+[32m+[m[32m- {dist_correction: 1.2136781, dist_correction_x: 1.2622253, dist_correction_y: 1.2666883,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 0.44999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 37, rot_correction: 0.05153091946896116, vert_correction: -0.36709468269294687,[m
+[32m+[m[32m  vert_offset_correction: 0.1580439}[m
+[32m+[m[32m- {dist_correction: 1.3207919000000001, dist_correction_x: 1.3694466, dist_correction_y: 1.3758972,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.43000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 38, rot_correction: -0.032988304130995134, vert_correction: -0.42738242167398816,[m
+[32m+[m[32m  vert_offset_correction: 0.16245152000000002}[m
+[32m+[m[32m- {dist_correction: 1.254662, dist_correction_x: 1.2655572, dist_correction_y: 1.2925728,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 39,[m
+[32m+[m[32m  rot_correction: 0.02996149305566275, vert_correction: -0.4197376875640353, vert_offset_correction: 0.16187992}[m
+[32m+[m[32m- {dist_correction: 1.2326976, dist_correction_x: 1.2977957, dist_correction_y: 1.2959807,[m
+   focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 38, rot_correction: -0.03418474478652977, vert_correction: -0.4311006362058518,[m
+[31m-  vert_offset_correction: 0.16273095999999998}[m
+[31m-- {dist_correction: 1.3356409, dist_correction_x: 1.3397028, dist_correction_y: 1.3601659000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 39, rot_correction: 0.026626332916051272, vert_correction: -0.4231418824568801,[m
+[31m-  vert_offset_correction: 0.16213396}[m
+[31m-- {dist_correction: 1.3662766, dist_correction_x: 1.4298528, dist_correction_y: 1.4232704,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 40, rot_correction: 0.1092471200007113, vert_correction: -0.35798081768512774,[m
+[31m-  vert_offset_correction: 0.15739609}[m
+[31m-- {dist_correction: 1.2853244000000001, dist_correction_x: 1.3026004, dist_correction_y: 1.3116373,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.5, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[31m-  rot_correction: 0.16893982038921165, vert_correction: -0.3493458884773484, vert_offset_correction: 0.1567864}[m
+[31m-- {dist_correction: 1.4113557, dist_correction_x: 1.4361624000000002, dist_correction_y: 1.4260374,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 42,[m
+[31m-  rot_correction: 0.08876389924739155, vert_correction: -0.41221208962882355, vert_offset_correction: 0.16132105}[m
+[31m-- {dist_correction: 1.3126003, dist_correction_x: 1.3216837000000001, dist_correction_y: 1.3253735,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 43, rot_correction: 0.15014050027953305, vert_correction: -0.40135006793562183,[m
+[31m-  vert_offset_correction: 0.1605208}[m
+[31m-- {dist_correction: 1.4849261000000002, dist_correction_x: 1.5387573, dist_correction_y: 1.5140117000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.45, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[31m-  rot_correction: -0.1289198918798797, vert_correction: -0.285349621541792, vert_offset_correction: 0.15237877}[m
+[31m-- {dist_correction: 1.3467159000000002, dist_correction_x: 1.385616, dist_correction_y: 1.398739,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999, laser_id: 45,[m
+[31m-  rot_correction: -0.06875650237205527, vert_correction: -0.27837142867317577, vert_offset_correction: 0.1519088}[m
+[31m-- {dist_correction: 1.4548677, dist_correction_x: 1.5237317, dist_correction_y: 1.4852321000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[31m-  rot_correction: -0.15456063213134205, vert_correction: -0.3373837683033222, vert_offset_correction: 0.15594806}[m
+[31m-- {dist_correction: 1.2609565999999999, dist_correction_x: 1.3084103, dist_correction_y: 1.3194104,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 47, rot_correction: -0.0921635423215472, vert_correction: -0.329718648747706,[m
+[31m-  vert_offset_correction: 0.15541457}[m
+[31m-- {dist_correction: 1.2807050000000002, dist_correction_x: 1.3367023, dist_correction_y: 1.3303235000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 48, rot_correction: -0.01087391977724544, vert_correction: -0.2702265530127714,[m
+[31m-  vert_offset_correction: 0.15136261}[m
+[31m-- {dist_correction: 1.3420832999999999, dist_correction_x: 1.3902283, dist_correction_y: 1.3959544,[m
+[32m+[m[32m  laser_id: 40, rot_correction: 0.11124875259869024, vert_correction: -0.35546799734786144,[m
+[32m+[m[32m  vert_offset_correction: 0.15721827}[m
+[32m+[m[32m- {dist_correction: 1.2586923, dist_correction_x: 1.2898768999999999, dist_correction_y: 1.2877043000000001,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[32m+[m[32m  rot_correction: 0.17148979704092368, vert_correction: -0.34319637793757907, vert_offset_correction: 0.15635452000000002}[m
+[32m+[m[32m- {dist_correction: 1.2951652999999999, dist_correction_x: 1.3469331, dist_correction_y: 1.3253401,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 42, rot_correction: 0.08973073485850933, vert_correction: -0.4113537192494002,[m
+[32m+[m[32m  vert_offset_correction: 0.16125753}[m
+[32m+[m[32m- {dist_correction: 1.2491970000000001, dist_correction_x: 1.2513244000000001, dist_correction_y: 1.2672708000000001,[m
+[32m+[m[32m  focal_distance: 6.0, focal_slope: 1.45, horiz_offset_correction: -0.025999999, laser_id: 43,[m
+[32m+[m[32m  rot_correction: 0.15193096025532546, vert_correction: -0.398922524385608, vert_offset_correction: 0.16034298}[m
+[32m+[m[32m- {dist_correction: 1.3504793000000002, dist_correction_x: 1.3742923, dist_correction_y: 1.3776834,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[32m+[m[32m  rot_correction: -0.12746921783885332, vert_correction: -0.2851614052352569, vert_offset_correction: 0.15236607}[m
+[32m+[m[32m- {dist_correction: 1.3194353, dist_correction_x: 1.3555048, dist_correction_y: 1.3676692,[m
+[32m+[m[32m  focal_distance: 5.0, focal_slope: 0.55000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 45, rot_correction: -0.0670297922925212, vert_correction: -0.27515581660600885,[m
+[32m+[m[32m  vert_offset_correction: 0.15169286}[m
+[32m+[m[32m- {dist_correction: 1.2517572, dist_correction_x: 1.3298462000000002, dist_correction_y: 1.2881517,[m
+[32m+[m[32m  focal_distance: 9.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[32m+[m[32m  rot_correction: -0.1522074465887801, vert_correction: -0.33538020013520276, vert_offset_correction: 0.15580834}[m
+[32m+[m[32m- {dist_correction: 1.214207, dist_correction_x: 1.2622674, dist_correction_y: 1.2687372000000001,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 47, rot_correction: -0.08983663794686182, vert_correction: -0.3282540382526024,[m
+[32m+[m[32m  vert_offset_correction: 0.15531295}[m
+[32m+[m[32m- {dist_correction: 1.1414406, dist_correction_x: 1.2080206, dist_correction_y: 1.1919655,[m
+[32m+[m[32m  focal_distance: 8.5, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 48,[m
+[32m+[m[32m  rot_correction: -0.008088342700603029, vert_correction: -0.26946698572230343, vert_offset_correction: 0.1513118}[m
+[32m+[m[32m- {dist_correction: 1.1837295, dist_correction_x: 1.2247887, dist_correction_y: 1.2112551,[m
+   focal_distance: 15.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 49, rot_correction: 0.04819382026855073, vert_correction: -0.2603276912672828,[m
+[31m-  vert_offset_correction: 0.1507021}[m
+[31m-- {dist_correction: 1.4451799, dist_correction_x: 1.5144832, dist_correction_y: 1.4737889000000002,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.5, horiz_offset_correction: 0.025999999, laser_id: 50,[m
+[31m-  rot_correction: -0.033916384706072375, vert_correction: -0.3244024456593014, vert_offset_correction: 0.15504621000000002}[m
+[31m-- {dist_correction: 1.2771001, dist_correction_x: 1.3374065, dist_correction_y: 1.339816,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 51,[m
+[31m-  rot_correction: 0.027376620290886354, vert_correction: -0.3166693629826125, vert_offset_correction: 0.15451272}[m
+[31m-- {dist_correction: 1.3977615, dist_correction_x: 1.4442108, dist_correction_y: 1.4371663000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 52, rot_correction: 0.10492072454703917, vert_correction: -0.25133544080174264,[m
+[31m-  vert_offset_correction: 0.1501051}[m
+[31m-- {dist_correction: 1.3425783999999998, dist_correction_x: 1.3483524, dist_correction_y: 1.3818097,[m
+[31m-  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[31m-  rot_correction: 0.16284451104936298, vert_correction: -0.23979553322706634, vert_offset_correction: 0.14934298000000001}[m
+[31m-- {dist_correction: 1.4382911999999999, dist_correction_x: 1.4900905, dist_correction_y: 1.4804431,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 54, rot_correction: 0.08525729890601516, vert_correction: -0.30499605989320633,[m
+[31m-  vert_offset_correction: 0.15371249}[m
+[31m-- {dist_correction: 1.2974651, dist_correction_x: 1.3356235, dist_correction_y: 1.342494,[m
+[31m-  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 55,[m
+[31m-  rot_correction: 0.14474094026605314, vert_correction: -0.29379823685192097, vert_offset_correction: 0.15295037}[m
+[31m-- {dist_correction: 1.500197, dist_correction_x: 1.5058761999999999, dist_correction_y: 1.5183740000000001,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.4, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[31m-  rot_correction: -0.1271355405564693, vert_correction: -0.1783966652843279, vert_offset_correction: 0.14535453}[m
+[31m-- {dist_correction: 1.3739523, dist_correction_x: 1.3909152, dist_correction_y: 1.4026927,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 57, rot_correction: -0.06914267741301003, vert_correction: -0.17006926832673774,[m
+[31m-  vert_offset_correction: 0.14482104}[m
+[31m-- {dist_correction: 1.5294423000000001, dist_correction_x: 1.5526985, dist_correction_y: 1.5286189,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.6, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[31m-  rot_correction: -0.14952992127533238, vert_correction: -0.23167847811493877, vert_offset_correction: 0.14880949}[m
+[31m-- {dist_correction: 1.356432, dist_correction_x: 1.3750079, dist_correction_y: 1.3956981,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.5, horiz_offset_correction: -0.025999999, laser_id: 59,[m
+[31m-  rot_correction: -0.08941942047983109, vert_correction: -0.22430756871133128, vert_offset_correction: 0.14832681}[m
+[31m-- {dist_correction: 1.4812624, dist_correction_x: 1.5439316, dist_correction_y: 1.5051659000000002,[m
+[32m+[m[32m  laser_id: 49, rot_correction: 0.05046789701743674, vert_correction: -0.2601368046069921,[m
+[32m+[m[32m  vert_offset_correction: 0.1506894}[m
+[32m+[m[32m- {dist_correction: 1.2635911, dist_correction_x: 1.3508514, dist_correction_y: 1.3295909000000001,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 50, rot_correction: -0.03103305540321719, vert_correction: -0.32109314431788744,[m
+[32m+[m[32m  vert_offset_correction: 0.15481757000000002}[m
+[32m+[m[32m- {dist_correction: 1.0956693, dist_correction_x: 1.1582519, dist_correction_y: 1.1591959,[m
+[32m+[m[32m  focal_distance: 10.5, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 51, rot_correction: 0.029237828933237592, vert_correction: -0.3140828722976195,[m
+[32m+[m[32m  vert_offset_correction: 0.15433489}[m
+[32m+[m[32m- {dist_correction: 1.2680698, dist_correction_x: 1.3010519, dist_correction_y: 1.3118181999999998,[m
+   focal_distance: 0.25, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 60, rot_correction: -0.012020974421732715, vert_correction: -0.16291245497181386,[m
+[31m-  vert_offset_correction: 0.14436376}[m
+[31m-- {dist_correction: 1.3555016, dist_correction_x: 1.3739404, dist_correction_y: 1.3961284,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 61,[m
+[31m-  rot_correction: 0.045806682836049765, vert_correction: -0.154741111393303, vert_offset_correction: 0.14384298}[m
+[31m-- {dist_correction: 1.5067404, dist_correction_x: 1.5184990999999999, dist_correction_y: 1.5367628,[m
+[31m-  focal_distance: 5.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 62, rot_correction: -0.03255746436915258, vert_correction: -0.21418087168528735,[m
+[31m-  vert_offset_correction: 0.1476663}[m
+[31m-- {dist_correction: 1.3463322, dist_correction_x: 1.356904, dist_correction_y: 1.3849588,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 63, rot_correction: 0.02613443455565695, vert_correction: -0.2063605225459988,[m
+[31m-  vert_offset_correction: 0.14715822}[m
+[32m+[m[32m  laser_id: 52, rot_correction: 0.10784944462775096, vert_correction: -0.2509518697920318,[m
+[32m+[m[32m  vert_offset_correction: 0.1500797}[m
+[32m+[m[32m- {dist_correction: 1.3034142, dist_correction_x: 1.3091043, dist_correction_y: 1.3535146,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[32m+[m[32m  rot_correction: 0.16523614619534635, vert_correction: -0.23940972819591302, vert_offset_correction: 0.14931756999999998}[m
+[32m+[m[32m- {dist_correction: 1.3151974000000002, dist_correction_x: 1.3637082, dist_correction_y: 1.3533908,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 54, rot_correction: 0.0869574695089434, vert_correction: -0.30294892830695713,[m
+[32m+[m[32m  vert_offset_correction: 0.15357277}[m
+[32m+[m[32m- {dist_correction: 1.2776234, dist_correction_x: 1.289026, dist_correction_y: 1.3073460000000001,[m
+[32m+[m[32m  focal_distance: 11.5, focal_slope: 1.85, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 55, rot_correction: 0.1464806513031853, vert_correction: -0.29229936554360075,[m
+[32m+[m[32m  vert_offset_correction: 0.15284875}[m
+[32m+[m[32m- {dist_correction: 1.3890512000000002, dist_correction_x: 1.3877768000000001, dist_correction_y: 1.3785843,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[32m+[m[32m  rot_correction: -0.1252743738020201, vert_correction: -0.17582174613227564, vert_offset_correction: 0.1451894}[m
+[32m+[m[32m- {dist_correction: 1.3896303, dist_correction_x: 1.4135710000000001, dist_correction_y: 1.4434415999999999,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 57, rot_correction: -0.0668689252953649, vert_correction: -0.16848034151967312,[m
+[32m+[m[32m  vert_offset_correction: 0.14471942000000002}[m
+[32m+[m[32m- {dist_correction: 1.4813303, dist_correction_x: 1.5015753, dist_correction_y: 1.5009795,[m
+[32m+[m[32m  focal_distance: 7.0, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[32m+[m[32m  rot_correction: -0.14694131176062744, vert_correction: -0.230128800272093, vert_offset_correction: 0.14870787}[m
+[32m+[m[32m- {dist_correction: 1.3051801, dist_correction_x: 1.3334875, dist_correction_y: 1.356346,[m
+[32m+[m[32m  focal_distance: 4.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 59, rot_correction: -0.08817857864812571, vert_correction: -0.2219747092732381,[m
+[32m+[m[32m  vert_offset_correction: 0.14817439000000002}[m
+[32m+[m[32m- {dist_correction: 1.300378, dist_correction_x: 1.3379957999999998, dist_correction_y: 1.3313292,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 60, rot_correction: -0.0084572566097885, vert_correction: -0.16012465801089584,[m
+[32m+[m[32m  vert_offset_correction: 0.14418593}[m
+[32m+[m[32m- {dist_correction: 1.2581644, dist_correction_x: 1.3149522, dist_correction_y: 1.2930194000000002,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.89999998, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 61, rot_correction: 0.048843297425790605, vert_correction: -0.1511470421311337,[m
+[32m+[m[32m  vert_offset_correction: 0.14361434}[m
+[32m+[m[32m- {dist_correction: 1.2993362, dist_correction_x: 1.3299077, dist_correction_y: 1.324184,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 62, rot_correction: -0.030143852037228126, vert_correction: -0.21457119711920336,[m
+[32m+[m[32m  vert_offset_correction: 0.14769171}[m
+[32m+[m[32m- {dist_correction: 1.3722379, dist_correction_x: 1.3900346, dist_correction_y: 1.4076549,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 63, rot_correction: 0.02800567535054865, vert_correction: -0.20577295745331492,[m
+[32m+[m[32m  vert_offset_correction: 0.14712011}[m
+ num_lasers: 64[m
+[1mdiff --git a/modules/localization/msf/params/velodyne_params/velodyne64_height.yaml b/modules/localization/msf/params/velodyne_params/velodyne64_height.yaml[m
+[1mindex 6b12459411..d8cc580be8 100644[m
+[1m--- a/modules/localization/msf/params/velodyne_params/velodyne64_height.yaml[m
+[1m+++ b/modules/localization/msf/params/velodyne_params/velodyne64_height.yaml[m
+[36m@@ -1,4 +1,4 @@[m
+ vehicle:[m
+   parameters:[m
+[31m-    height: 1.91[m
+[31m-    height_var: 0.0047[m
+[32m+[m[32m    height: 1.89[m
+[32m+[m[32m    height_var: 0.0045[m
+[1mdiff --git a/modules/localization/msf/params/velodyne_params/velodyne64_novatel_extrinsics_example.yaml b/modules/localization/msf/params/velodyne_params/velodyne64_novatel_extrinsics_example.yaml[m
+[1mindex 379bcc13df..9dc281bc51 100644[m
+[1m--- a/modules/localization/msf/params/velodyne_params/velodyne64_novatel_extrinsics_example.yaml[m
+[1m+++ b/modules/localization/msf/params/velodyne_params/velodyne64_novatel_extrinsics_example.yaml[m
+[36m@@ -1,18 +1,17 @@[m
+[32m+[m[32mchild_frame_id: velodyne64[m
+[32m+[m[32mtransform:[m
+[32m+[m[32m  rotation:[m
+[32m+[m[32m    x: 0.0178712428342356[m
+[32m+[m[32m    y: -0.01105483165178439[m
+[32m+[m[32m    z: 0.7086047865380262[m
+[32m+[m[32m    w: 0.7052926101074[m
+[32m+[m[32m  translation:[m
+[32m+[m[32m    x: -0.0008540722033043019[m
+[32m+[m[32m    y: 1.410303305307884[m
+[32m+[m[32m    z: 1.397[m
+ header:[m
+   seq: 0[m
+   stamp:[m
+[31m-    secs: 0[m
+[32m+[m[32m    secs: 1502870042[m
+     nsecs: 0[m
+   frame_id: novatel[m
+[31m-child_frame_id: velodyne64[m
+[31m-transform:[m
+[31m-  translation:[m
+[31m-    x: 0[m
+[31m-    y: 0.9807289[m
+[31m-    z: 2.312[m
+[31m-  rotation:[m
+[31m-    x: 0[m
+[31m-    y: 0[m
+[31m-    z: 0.7071068[m
+[31m-    w: 0.7071068[m
+[31m-[m
+[1mdiff --git a/modules/perception/data/params/64E_S3_calibration_example.yaml b/modules/perception/data/params/64E_S3_calibration_example.yaml[m
+[1mindex a02c68421c..a84564e054 100644[m
+[1m--- a/modules/perception/data/params/64E_S3_calibration_example.yaml[m
+[1m+++ b/modules/perception/data/params/64E_S3_calibration_example.yaml[m
+[36m@@ -1,243 +1,246 @@[m
+ lasers:[m
+[31m-- {dist_correction: 1.3280478, dist_correction_x: 1.3733278999999998, dist_correction_y: 1.3565268000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 0.75, horiz_offset_correction: 0.025999999, laser_id: 0,[m
+[31m-  min_intensity: 5, rot_correction: -0.08042396035379652, vert_correction: -0.12376696608832838,[m
+[31m-  vert_offset_correction: 0.21551828}[m
+[31m-- {dist_correction: 1.4387065, dist_correction_x: 1.4772083, dist_correction_y: 1.4930743000000002,[m
+[31m-  focal_distance: 18.5, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[31m-  min_intensity: 40, rot_correction: -0.043931143295210404, vert_correction: -0.11852979325378328,[m
+[31m-  vert_offset_correction: 0.21513613}[m
+[31m-- {dist_correction: 1.4198532000000001, dist_correction_x: 1.4513388, dist_correction_y: 1.4459473,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 2,[m
+[31m-  min_intensity: 40, rot_correction: 0.05671893510512383, vert_correction: 0.006831742116548479,[m
+[32m+[m[32m- {dist_correction: 1.2752063, dist_correction_x: 1.3139189, dist_correction_y: 1.3201204000000002,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 0, min_intensity: 40, rot_correction: -0.07883297231288532, vert_correction: -0.1225589730984748,[m
+[32m+[m[32m  vert_offset_correction: 0.21543011}[m
+[32m+[m[32m- {dist_correction: 1.354117, dist_correction_x: 1.3893244999999999, dist_correction_y: 1.3824525,[m
+[32m+[m[32m  focal_distance: 11.1, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 1,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.04257169063286875, vert_correction: -0.11732028531813898,[m
+[32m+[m[32m  vert_offset_correction: 0.21504793}[m
+[32m+[m[32m- {dist_correction: 1.3552602999999999, dist_correction_x: 1.4380073999999998, dist_correction_y: 1.4320663,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 2, min_intensity: 40, rot_correction: 0.0576001797697238, vert_correction: 0.006831742116548479,[m
+   vert_offset_correction: 0.20608189}[m
+[31m-- {dist_correction: 1.432045, dist_correction_x: 1.4576363, dist_correction_y: 1.5053079,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 3, min_intensity: 40, rot_correction: 0.09507418428186684, vert_correction: 0.011737269755557637,[m
+[32m+[m[32m- {dist_correction: 1.3331795, dist_correction_x: 1.3594026, dist_correction_y: 1.3993605,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 3, min_intensity: 40, rot_correction: 0.09708671122503676, vert_correction: 0.011737269755557637,[m
+   vert_offset_correction: 0.2057291}[m
+[31m-- {dist_correction: 1.3768561, dist_correction_x: 1.4095345000000001, dist_correction_y: 1.4140973,[m
+[32m+[m[32m- {dist_correction: 1.272046, dist_correction_x: 1.3137018, dist_correction_y: 1.2978722,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 4, min_intensity: 40, rot_correction: -0.004134042716809833, vert_correction: -0.11106570246674108,[m
+[32m+[m[32m  vert_offset_correction: 0.21459229000000002}[m
+[32m+[m[32m- {dist_correction: 1.1886112, dist_correction_x: 1.2300569000000001, dist_correction_y: 1.2463203,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 5,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.03539678170426023, vert_correction: -0.1054088809215172,[m
+[32m+[m[32m  vert_offset_correction: 0.21418074}[m
+[32m+[m[32m- {dist_correction: 1.2976839000000002, dist_correction_x: 1.3396898, dist_correction_y: 1.3132230999999999,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 6, min_intensity: 40, rot_correction: -0.01812813105654391, vert_correction: -0.14704592330533348,[m
+[32m+[m[32m  vert_offset_correction: 0.2172233}[m
+[32m+[m[32m- {dist_correction: 1.2863681, dist_correction_x: 1.3238104000000002, dist_correction_y: 1.3377951,[m
+[32m+[m[32m  focal_distance: 14.0, focal_slope: 1.25, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 7, min_intensity: 40, rot_correction: 0.020696316728341994, vert_correction: -0.14023825084996633,[m
+[32m+[m[32m  vert_offset_correction: 0.21672356}[m
+[32m+[m[32m- {dist_correction: 1.2849046000000002, dist_correction_x: 1.3267589000000002, dist_correction_y: 1.3180791,[m
+   focal_distance: 24.0, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 4, min_intensity: 40, rot_correction: -0.0052020566354620415, vert_correction: -0.11207511538496126,[m
+[31m-  vert_offset_correction: 0.21466578}[m
+[31m-- {dist_correction: 1.4579066, dist_correction_x: 1.5030013, dist_correction_y: 1.5402745,[m
+[31m-  focal_distance: 23.0, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 5, min_intensity: 40, rot_correction: 0.034271327080062704, vert_correction: -0.10662164389621649,[m
+[31m-  vert_offset_correction: 0.21426891}[m
+[31m-- {dist_correction: 1.4042904999999999, dist_correction_x: 1.4512584000000002, dist_correction_y: 1.4358795000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 6, min_intensity: 40, rot_correction: -0.019350118096339984, vert_correction: -0.14744596324186607,[m
+[31m-  vert_offset_correction: 0.21725271}[m
+[31m-- {dist_correction: 1.4530759, dist_correction_x: 1.4934110999999999, dist_correction_y: 1.4934732,[m
+[31m-  focal_distance: 16.5, focal_slope: 0.80000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 7, min_intensity: 40, rot_correction: 0.019696635766030937, vert_correction: -0.1420415773930044,[m
+[31m-  vert_offset_correction: 0.21685585}[m
+[31m-- {dist_correction: 1.3928452999999998, dist_correction_x: 1.4412779, dist_correction_y: 1.4351759000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 8, min_intensity: 10, rot_correction: 0.06977400140069993, vert_correction: -0.10055477120587059,[m
+[31m-  vert_offset_correction: 0.21382797}[m
+[31m-- {dist_correction: 1.4649026, dist_correction_x: 1.4811482, dist_correction_y: 1.5390858,[m
+[31m-  focal_distance: 16.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[31m-  min_intensity: 40, rot_correction: 0.10867481606700684, vert_correction: -0.09508820800240662,[m
+[31m-  vert_offset_correction: 0.21343111}[m
+[31m-- {dist_correction: 1.3307669000000002, dist_correction_x: 1.3797191000000002, dist_correction_y: 1.3716772000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 10, min_intensity: 40, rot_correction: 0.05614793318704137, vert_correction: -0.13622757149534595,[m
+[31m-  vert_offset_correction: 0.2164296}[m
+[31m-- {dist_correction: 1.3771700999999998, dist_correction_x: 1.4101131, dist_correction_y: 1.4538571,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.35, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 11, min_intensity: 40, rot_correction: 0.09458836664858647, vert_correction: -0.13060523940147076,[m
+[31m-  vert_offset_correction: 0.21601805}[m
+[31m-- {dist_correction: 1.3797005, dist_correction_x: 1.4142267000000002, dist_correction_y: 1.4085233,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[31m-  min_intensity: 10, rot_correction: -0.08058553944528767, vert_correction: -0.05321597901122562,[m
+[31m-  vert_offset_correction: 0.21040320999999998}[m
+[31m-- {dist_correction: 1.3646324, dist_correction_x: 1.3887102, dist_correction_y: 1.4070561000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[31m-  min_intensity: 40, rot_correction: -0.04053784798354424, vert_correction: -0.04669103069605979,[m
+[31m-  vert_offset_correction: 0.20993286000000003}[m
+[31m-- {dist_correction: 1.3809781, dist_correction_x: 1.4282532000000001, dist_correction_y: 1.4207353,[m
+[31m-  focal_distance: 15.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[31m-  min_intensity: 40, rot_correction: -0.09419900463641756, vert_correction: -0.08758781436692292,[m
+[31m-  vert_offset_correction: 0.21288727000000002}[m
+[31m-- {dist_correction: 1.3950202999999999, dist_correction_x: 1.4285829, dist_correction_y: 1.4621552,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 15,[m
+[31m-  min_intensity: 40, rot_correction: -0.054354701628396805, vert_correction: -0.08292035016148458,[m
+[31m-  vert_offset_correction: 0.21254919000000003}[m
+[31m-- {dist_correction: 1.2988774, dist_correction_x: 1.3749954, dist_correction_y: 1.3734656,[m
+[32m+[m[32m  laser_id: 8, min_intensity: 40, rot_correction: 0.0709183561953673, vert_correction: -0.09954287817478333,[m
+[32m+[m[32m  vert_offset_correction: 0.21375446}[m
+[32m+[m[32m- {dist_correction: 1.3211784, dist_correction_x: 1.3745055, dist_correction_y: 1.3908893,[m
+[32m+[m[32m  focal_distance: 17.5, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 9,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.11014432221066224, vert_correction: -0.09387264202892864,[m
+[32m+[m[32m  vert_offset_correction: 0.21334291}[m
+[32m+[m[32m- {dist_correction: 1.2667397, dist_correction_x: 1.3151773, dist_correction_y: 1.3144638000000002,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 1.8, horiz_offset_correction: 0.025999999, laser_id: 10,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.05752680089198221, vert_correction: -0.1352242183602887,[m
+[32m+[m[32m  vert_offset_correction: 0.21635611000000002}[m
+[32m+[m[32m- {dist_correction: 1.2552061, dist_correction_x: 1.2864645, dist_correction_y: 1.313914,[m
+[32m+[m[32m  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 11,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.09560686749622178, vert_correction: -0.12939936000534133,[m
+[32m+[m[32m  vert_offset_correction: 0.21592983000000002}[m
+[32m+[m[32m- {dist_correction: 1.2950737, dist_correction_x: 1.3264038, dist_correction_y: 1.3272704,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 12,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07894119668914298, vert_correction: -0.05117740128364046,[m
+[32m+[m[32m  vert_offset_correction: 0.21025623}[m
+[32m+[m[32m- {dist_correction: 1.3314511, dist_correction_x: 1.3439276000000002, dist_correction_y: 1.3750456,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 13,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.039590087075821526, vert_correction: -0.04567113183969363,[m
+[32m+[m[32m  vert_offset_correction: 0.20985937}[m
+[32m+[m[32m- {dist_correction: 1.2853152, dist_correction_x: 1.3545485, dist_correction_y: 1.32582,[m
+[32m+[m[32m  focal_distance: 20.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 14,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09264152866247388, vert_correction: -0.08697921631142325,[m
+[32m+[m[32m  vert_offset_correction: 0.21284317000000003}[m
+[32m+[m[32m- {dist_correction: 1.1956883999999999, dist_correction_x: 1.2309952, dist_correction_y: 1.2384804,[m
+[32m+[m[32m  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 15, min_intensity: 40, rot_correction: -0.053828922936562766, vert_correction: -0.08088988123360417,[m
+[32m+[m[32m  vert_offset_correction: 0.21240220999999998}[m
+[32m+[m[32m- {dist_correction: 1.2622006000000001, dist_correction_x: 1.3391359, dist_correction_y: 1.3450137000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 16,[m
+[32m+[m[32m  min_intensity: 25, rot_correction: -0.004196640695761861, vert_correction: -0.040366165181013325,[m
+[32m+[m[32m  vert_offset_correction: 0.20947721000000002}[m
+[32m+[m[32m- {dist_correction: 1.3882208, dist_correction_x: 1.4129477, dist_correction_y: 1.4390656000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: 0.035191251731545366, vert_correction: -0.03485476621439488,[m
+[32m+[m[32m  vert_offset_correction: 0.20908035000000003}[m
+[32m+[m[32m- {dist_correction: 1.270416, dist_correction_x: 1.3805045999999999, dist_correction_y: 1.3587926,[m
+   focal_distance: 24.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 16, min_intensity: 40, rot_correction: -0.005133124856654525, vert_correction: -0.04077432787988471,[m
+[31m-  vert_offset_correction: 0.20950663}[m
+[31m-- {dist_correction: 1.4723137, dist_correction_x: 1.5056056000000002, dist_correction_y: 1.5041873000000001,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 17,[m
+[31m-  min_intensity: 20, rot_correction: 0.033464606229193644, vert_correction: -0.03526310344619148,[m
+[31m-  vert_offset_correction: 0.20910976000000003}[m
+[31m-- {dist_correction: 1.3093359000000002, dist_correction_x: 1.4065028000000002, dist_correction_y: 1.3988147000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 18,[m
+[31m-  min_intensity: 20, rot_correction: -0.01912024950720607, vert_correction: -0.07662373803636939,[m
+[31m-  vert_offset_correction: 0.21209354000000002}[m
+[31m-- {dist_correction: 1.4292241, dist_correction_x: 1.4580751, dist_correction_y: 1.4810971000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.2, horiz_offset_correction: -0.025999999, laser_id: 19,[m
+[31m-  min_intensity: 15, rot_correction: 0.0202102704569296, vert_correction: -0.07052442491121666,[m
+[32m+[m[32m  laser_id: 18, min_intensity: 40, rot_correction: -0.01796702320395082, vert_correction: -0.07621729099615271,[m
+[32m+[m[32m  vert_offset_correction: 0.21206415}[m
+[32m+[m[32m- {dist_correction: 1.4391471999999998, dist_correction_x: 1.4701469, dist_correction_y: 1.4810228,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 19, min_intensity: 10, rot_correction: 0.021402925493316658, vert_correction: -0.07052442491121666,[m
+   vert_offset_correction: 0.21165258}[m
+[31m-- {dist_correction: 1.3831145, dist_correction_x: 1.4038123999999998, dist_correction_y: 1.3966234,[m
+[32m+[m[32m- {dist_correction: 1.3115741, dist_correction_x: 1.4043790000000003, dist_correction_y: 1.3746985,[m
+   focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 20,[m
+[31m-  min_intensity: 30, rot_correction: 0.06874179273711946, vert_correction: -0.029137015224983895,[m
+[31m-  vert_offset_correction: 0.2086688}[m
+[31m-- {dist_correction: 1.402925, dist_correction_x: 1.4443744, dist_correction_y: 1.471532,[m
+[31m-  focal_distance: 17.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[31m-  min_intensity: 5, rot_correction: 0.10747970535236223, vert_correction: -0.02341734437339572,[m
+[31m-  vert_offset_correction: 0.20825726}[m
+[31m-- {dist_correction: 1.4234489, dist_correction_x: 1.4673076, dist_correction_y: 1.4543761000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 22, min_intensity: 5, rot_correction: 0.05514045060297391, vert_correction: -0.0642162831410628,[m
+[31m-  vert_offset_correction: 0.21119694}[m
+[31m-- {dist_correction: 1.470387, dist_correction_x: 1.4879053, dist_correction_y: 1.5217740000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 23,[m
+[31m-  min_intensity: 30, rot_correction: 0.09433926976708334, vert_correction: -0.05892161916095702,[m
+[31m-  vert_offset_correction: 0.21081478}[m
+[31m-- {dist_correction: 1.3722501, dist_correction_x: 1.4119496, dist_correction_y: 1.4214716,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.0, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[31m-  min_intensity: 20, rot_correction: -0.08011834622045531, vert_correction: 0.01868575851656834,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: 0.07015680097488135, vert_correction: -0.02893277679591552,[m
+[32m+[m[32m  vert_offset_correction: 0.20865412}[m
+[32m+[m[32m- {dist_correction: 1.3147861, dist_correction_x: 1.3458926, dist_correction_y: 1.3786374000000001,[m
+[32m+[m[32m  focal_distance: 22.0, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 21,[m
+[32m+[m[32m  min_intensity: 15, rot_correction: 0.10896112162283324, vert_correction: -0.022600128857734412,[m
+[32m+[m[32m  vert_offset_correction: 0.20819845}[m
+[32m+[m[32m- {dist_correction: 1.2870654, dist_correction_x: 1.3318181000000002, dist_correction_y: 1.3219449,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 0.89999998, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 22, min_intensity: 5, rot_correction: 0.056491201053665105, vert_correction: -0.06441985659968617,[m
+[32m+[m[32m  vert_offset_correction: 0.21121164}[m
+[32m+[m[32m- {dist_correction: 1.3116136, dist_correction_x: 1.3367073, dist_correction_y: 1.3722873999999998,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 23, min_intensity: 5, rot_correction: 0.09605195612607761, vert_correction: -0.058717920038627504,[m
+[32m+[m[32m  vert_offset_correction: 0.21080008}[m
+[32m+[m[32m- {dist_correction: 1.334183, dist_correction_x: 1.3770262, dist_correction_y: 1.3650365,[m
+[32m+[m[32m  focal_distance: 15.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 24,[m
+[32m+[m[32m  min_intensity: 10, rot_correction: -0.07814212387105615, vert_correction: 0.01868575851656834,[m
+   vert_offset_correction: 0.20522938000000002}[m
+[31m-- {dist_correction: 1.4577922, dist_correction_x: 1.4821321, dist_correction_y: 1.4774638,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 25, min_intensity: 10, rot_correction: -0.0415592740030059, vert_correction: 0.023180922072920565,[m
+[31m-  vert_offset_correction: 0.20490601000000003}[m
+[31m-- {dist_correction: 1.4175369, dist_correction_x: 1.4441992, dist_correction_y: 1.4484555000000001,[m
+[31m-  focal_distance: 12.0, focal_slope: 1.5, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[31m-  min_intensity: 20, rot_correction: -0.09469728915654493, vert_correction: -0.01647002637924725,[m
+[31m-  vert_offset_correction: 0.20775749000000002}[m
+[31m-- {dist_correction: 1.4383292, dist_correction_x: 1.4573476, dist_correction_y: 1.4790007,[m
+[31m-  focal_distance: 7.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 27,[m
+[31m-  min_intensity: 10, rot_correction: -0.055555304894197445, vert_correction: -0.011156249123969949,[m
+[31m-  vert_offset_correction: 0.20737534000000002}[m
+[31m-- {dist_correction: 1.3976639, dist_correction_x: 1.434787, dist_correction_y: 1.4289362,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 28, min_intensity: 40, rot_correction: -0.0056653665027087, vert_correction: 0.030126075858796564,[m
+[31m-  vert_offset_correction: 0.20440624}[m
+[31m-- {dist_correction: 1.5147818000000002, dist_correction_x: 1.5457281, dist_correction_y: 1.5337862000000002,[m
+[31m-  focal_distance: 16.0, focal_slope: 1.4, horiz_offset_correction: -0.025999999, laser_id: 29,[m
+[31m-  min_intensity: 10, rot_correction: 0.032454556265796485, vert_correction: 0.03461850099355241,[m
+[31m-  vert_offset_correction: 0.20408289000000002}[m
+[31m-- {dist_correction: 1.4410570999999999, dist_correction_x: 1.4812628, dist_correction_y: 1.4802063,[m
+[31m-  focal_distance: 24.0, focal_slope: 1.1, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[31m-  min_intensity: 20, rot_correction: -0.019155442326243284, vert_correction: -0.004819796717085346,[m
+[31m-  vert_offset_correction: 0.20691969000000002}[m
+[31m-- {dist_correction: 1.5121419, dist_correction_x: 1.525024, dist_correction_y: 1.5161595,[m
+[31m-  focal_distance: 19.5, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 31, rot_correction: 0.019031284839244163, vert_correction: 0.0006993883727657528,[m
+[31m-  vert_offset_correction: 0.20652283000000002}[m
+[31m-- {dist_correction: 1.4162563000000001, dist_correction_x: 1.4498225, dist_correction_y: 1.4345399,[m
+[31m-  focal_distance: 8.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 32,[m
+[31m-  rot_correction: -0.1322630822793796, vert_correction: -0.39265743814277154, vert_offset_correction: 0.1598857}[m
+[31m-- {dist_correction: 1.3670056, dist_correction_x: 1.3952693, dist_correction_y: 1.4121672,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 33, rot_correction: -0.07110342218260252, vert_correction: -0.38671040324952605,[m
+[31m-  vert_offset_correction: 0.15945383}[m
+[31m-- {dist_correction: 1.4511356000000002, dist_correction_x: 1.4689107000000001, dist_correction_y: 1.4972537,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.64999998, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 34, rot_correction: 0.08401589158763215, vert_correction: -0.1973354249839361,[m
+[32m+[m[32m- {dist_correction: 1.3277109999999999, dist_correction_x: 1.3308896, dist_correction_y: 1.3380003,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 25,[m
+[32m+[m[32m  min_intensity: 20, rot_correction: -0.04068591124530794, vert_correction: 0.02481530248969487,[m
+[32m+[m[32m  vert_offset_correction: 0.20478842}[m
+[32m+[m[32m- {dist_correction: 1.3784187, dist_correction_x: 1.4020284, dist_correction_y: 1.4110085,[m
+[32m+[m[32m  focal_distance: 21.0, focal_slope: 1.15, horiz_offset_correction: 0.025999999, laser_id: 26,[m
+[32m+[m[32m  min_intensity: 40, rot_correction: -0.09248550146333334, vert_correction: -0.015856927119606682,[m
+[32m+[m[32m  vert_offset_correction: 0.20771341}[m
+[32m+[m[32m- {dist_correction: 1.3299843000000002, dist_correction_x: 1.3475424, dist_correction_y: 1.3875761,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 27, rot_correction: -0.05342781834918644, vert_correction: -0.01033868471699117,[m
+[32m+[m[32m  vert_offset_correction: 0.20731655000000002}[m
+[32m+[m[32m- {dist_correction: 1.3601752, dist_correction_x: 1.4000146000000002, dist_correction_y: 1.3781789,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 28, rot_correction: -0.004424292891278668, vert_correction: 0.029513378024883952,[m
+[32m+[m[32m  vert_offset_correction: 0.20445036000000003}[m
+[32m+[m[32m- {dist_correction: 1.3607886, dist_correction_x: 1.4001455999999999, dist_correction_y: 1.4214912000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 29, rot_correction: 0.03487417427567706, vert_correction: 0.03625176439960543,[m
+[32m+[m[32m  vert_offset_correction: 0.2039653}[m
+[32m+[m[32m- {dist_correction: 1.3876024000000002, dist_correction_x: 1.4266457, dist_correction_y: 1.3987584000000002,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 1.25, horiz_offset_correction: 0.025999999, laser_id: 30,[m
+[32m+[m[32m  rot_correction: -0.018163875399624756, vert_correction: -0.004615383580558845, vert_offset_correction: 0.20690498000000002}[m
+[32m+[m[32m- {dist_correction: 1.3872712999999999, dist_correction_x: 1.409449, dist_correction_y: 1.4333896,[m
+[32m+[m[32m  focal_distance: 23.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 31, rot_correction: 0.020882827848197862, vert_correction: 0.001312627241293188,[m
+[32m+[m[32m  vert_offset_correction: 0.20647875}[m
+[32m+[m[32m- {dist_correction: 1.3152968000000003, dist_correction_x: 1.3551462, dist_correction_y: 1.3403419,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 32, rot_correction: -0.12998286720751434, vert_correction: -0.3917846862503118,[m
+[32m+[m[32m  vert_offset_correction: 0.15982219}[m
+[32m+[m[32m- {dist_correction: 1.1306184000000001, dist_correction_x: 1.1613448, dist_correction_y: 1.1695766,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.0, horiz_offset_correction: -0.025999999, laser_id: 33,[m
+[32m+[m[32m  rot_correction: -0.06963576259729572, vert_correction: -0.38355018793281753, vert_offset_correction: 0.15922519}[m
+[32m+[m[32m- {dist_correction: 1.2786647, dist_correction_x: 1.3059875, dist_correction_y: 1.3299147,[m
+[32m+[m[32m  focal_distance: 24.0, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 34, rot_correction: 0.08608836360929105, vert_correction: -0.1973354249839361,[m
+   vert_offset_correction: 0.14657393000000002}[m
+[31m-- {dist_correction: 1.3593520000000001, dist_correction_x: 1.3602931, dist_correction_y: 1.3982458,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.75, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 35, rot_correction: 0.14363965670666648, vert_correction: -0.19024942312742418,[m
+[31m-  vert_offset_correction: 0.14611665000000001}[m
+[31m-- {dist_correction: 1.4114377, dist_correction_x: 1.4772849, dist_correction_y: 1.4348904,[m
+[31m-  focal_distance: 17.0, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 36, rot_correction: -0.011690171347560868, vert_correction: -0.376852242582194,[m
+[31m-  vert_offset_correction: 0.15874252}[m
+[31m-- {dist_correction: 1.307847, dist_correction_x: 1.3645581000000002, dist_correction_y: 1.376617,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 37,[m
+[31m-  rot_correction: 0.049492148009829026, vert_correction: -0.3699409132772216, vert_offset_correction: 0.15824712999999999}[m
+[31m-- {dist_correction: 1.4213585, dist_correction_x: 1.4421179000000002, dist_correction_y: 1.4552965,[m
+[32m+[m[32m- {dist_correction: 1.3474704, dist_correction_x: 1.3588457, dist_correction_y: 1.3945218,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 35,[m
+[32m+[m[32m  rot_correction: 0.14181459383312406, vert_correction: -0.18432959791721729, vert_offset_correction: 0.14573559}[m
+[32m+[m[32m- {dist_correction: 1.2310821, dist_correction_x: 1.2938965, dist_correction_y: 1.2814186,[m
+[32m+[m[32m  focal_distance: 16.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 36, rot_correction: -0.009213370242732586, vert_correction: -0.37561450743655717,[m
+[32m+[m[32m  vert_offset_correction: 0.1586536}[m
+[32m+[m[32m- {dist_correction: 1.2136781, dist_correction_x: 1.2622253, dist_correction_y: 1.2666883,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 0.44999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 37, rot_correction: 0.05153091946896116, vert_correction: -0.36709468269294687,[m
+[32m+[m[32m  vert_offset_correction: 0.1580439}[m
+[32m+[m[32m- {dist_correction: 1.3207919000000001, dist_correction_x: 1.3694466, dist_correction_y: 1.3758972,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.43000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 38, rot_correction: -0.032988304130995134, vert_correction: -0.42738242167398816,[m
+[32m+[m[32m  vert_offset_correction: 0.16245152000000002}[m
+[32m+[m[32m- {dist_correction: 1.254662, dist_correction_x: 1.2655572, dist_correction_y: 1.2925728,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 39,[m
+[32m+[m[32m  rot_correction: 0.02996149305566275, vert_correction: -0.4197376875640353, vert_offset_correction: 0.16187992}[m
+[32m+[m[32m- {dist_correction: 1.2326976, dist_correction_x: 1.2977957, dist_correction_y: 1.2959807,[m
+   focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 38, rot_correction: -0.03418474478652977, vert_correction: -0.4311006362058518,[m
+[31m-  vert_offset_correction: 0.16273095999999998}[m
+[31m-- {dist_correction: 1.3356409, dist_correction_x: 1.3397028, dist_correction_y: 1.3601659000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 39, rot_correction: 0.026626332916051272, vert_correction: -0.4231418824568801,[m
+[31m-  vert_offset_correction: 0.16213396}[m
+[31m-- {dist_correction: 1.3662766, dist_correction_x: 1.4298528, dist_correction_y: 1.4232704,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 40, rot_correction: 0.1092471200007113, vert_correction: -0.35798081768512774,[m
+[31m-  vert_offset_correction: 0.15739609}[m
+[31m-- {dist_correction: 1.2853244000000001, dist_correction_x: 1.3026004, dist_correction_y: 1.3116373,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.5, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[31m-  rot_correction: 0.16893982038921165, vert_correction: -0.3493458884773484, vert_offset_correction: 0.1567864}[m
+[31m-- {dist_correction: 1.4113557, dist_correction_x: 1.4361624000000002, dist_correction_y: 1.4260374,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: 0.025999999, laser_id: 42,[m
+[31m-  rot_correction: 0.08876389924739155, vert_correction: -0.41221208962882355, vert_offset_correction: 0.16132105}[m
+[31m-- {dist_correction: 1.3126003, dist_correction_x: 1.3216837000000001, dist_correction_y: 1.3253735,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.15, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 43, rot_correction: 0.15014050027953305, vert_correction: -0.40135006793562183,[m
+[31m-  vert_offset_correction: 0.1605208}[m
+[31m-- {dist_correction: 1.4849261000000002, dist_correction_x: 1.5387573, dist_correction_y: 1.5140117000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.45, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[31m-  rot_correction: -0.1289198918798797, vert_correction: -0.285349621541792, vert_offset_correction: 0.15237877}[m
+[31m-- {dist_correction: 1.3467159000000002, dist_correction_x: 1.385616, dist_correction_y: 1.398739,[m
+[31m-  focal_distance: 4.0, focal_slope: 0.75, horiz_offset_correction: -0.025999999, laser_id: 45,[m
+[31m-  rot_correction: -0.06875650237205527, vert_correction: -0.27837142867317577, vert_offset_correction: 0.1519088}[m
+[31m-- {dist_correction: 1.4548677, dist_correction_x: 1.5237317, dist_correction_y: 1.4852321000000002,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[31m-  rot_correction: -0.15456063213134205, vert_correction: -0.3373837683033222, vert_offset_correction: 0.15594806}[m
+[31m-- {dist_correction: 1.2609565999999999, dist_correction_x: 1.3084103, dist_correction_y: 1.3194104,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 47, rot_correction: -0.0921635423215472, vert_correction: -0.329718648747706,[m
+[31m-  vert_offset_correction: 0.15541457}[m
+[31m-- {dist_correction: 1.2807050000000002, dist_correction_x: 1.3367023, dist_correction_y: 1.3303235000000002,[m
+[31m-  focal_distance: 24.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 48, rot_correction: -0.01087391977724544, vert_correction: -0.2702265530127714,[m
+[31m-  vert_offset_correction: 0.15136261}[m
+[31m-- {dist_correction: 1.3420832999999999, dist_correction_x: 1.3902283, dist_correction_y: 1.3959544,[m
+[32m+[m[32m  laser_id: 40, rot_correction: 0.11124875259869024, vert_correction: -0.35546799734786144,[m
+[32m+[m[32m  vert_offset_correction: 0.15721827}[m
+[32m+[m[32m- {dist_correction: 1.2586923, dist_correction_x: 1.2898768999999999, dist_correction_y: 1.2877043000000001,[m
+[32m+[m[32m  focal_distance: 8.0, focal_slope: 1.55, horiz_offset_correction: -0.025999999, laser_id: 41,[m
+[32m+[m[32m  rot_correction: 0.17148979704092368, vert_correction: -0.34319637793757907, vert_offset_correction: 0.15635452000000002}[m
+[32m+[m[32m- {dist_correction: 1.2951652999999999, dist_correction_x: 1.3469331, dist_correction_y: 1.3253401,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 42, rot_correction: 0.08973073485850933, vert_correction: -0.4113537192494002,[m
+[32m+[m[32m  vert_offset_correction: 0.16125753}[m
+[32m+[m[32m- {dist_correction: 1.2491970000000001, dist_correction_x: 1.2513244000000001, dist_correction_y: 1.2672708000000001,[m
+[32m+[m[32m  focal_distance: 6.0, focal_slope: 1.45, horiz_offset_correction: -0.025999999, laser_id: 43,[m
+[32m+[m[32m  rot_correction: 0.15193096025532546, vert_correction: -0.398922524385608, vert_offset_correction: 0.16034298}[m
+[32m+[m[32m- {dist_correction: 1.3504793000000002, dist_correction_x: 1.3742923, dist_correction_y: 1.3776834,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: 0.025999999, laser_id: 44,[m
+[32m+[m[32m  rot_correction: -0.12746921783885332, vert_correction: -0.2851614052352569, vert_offset_correction: 0.15236607}[m
+[32m+[m[32m- {dist_correction: 1.3194353, dist_correction_x: 1.3555048, dist_correction_y: 1.3676692,[m
+[32m+[m[32m  focal_distance: 5.0, focal_slope: 0.55000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 45, rot_correction: -0.0670297922925212, vert_correction: -0.27515581660600885,[m
+[32m+[m[32m  vert_offset_correction: 0.15169286}[m
+[32m+[m[32m- {dist_correction: 1.2517572, dist_correction_x: 1.3298462000000002, dist_correction_y: 1.2881517,[m
+[32m+[m[32m  focal_distance: 9.5, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 46,[m
+[32m+[m[32m  rot_correction: -0.1522074465887801, vert_correction: -0.33538020013520276, vert_offset_correction: 0.15580834}[m
+[32m+[m[32m- {dist_correction: 1.214207, dist_correction_x: 1.2622674, dist_correction_y: 1.2687372000000001,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.75, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 47, rot_correction: -0.08983663794686182, vert_correction: -0.3282540382526024,[m
+[32m+[m[32m  vert_offset_correction: 0.15531295}[m
+[32m+[m[32m- {dist_correction: 1.1414406, dist_correction_x: 1.2080206, dist_correction_y: 1.1919655,[m
+[32m+[m[32m  focal_distance: 8.5, focal_slope: 1.3, horiz_offset_correction: 0.025999999, laser_id: 48,[m
+[32m+[m[32m  rot_correction: -0.008088342700603029, vert_correction: -0.26946698572230343, vert_offset_correction: 0.1513118}[m
+[32m+[m[32m- {dist_correction: 1.1837295, dist_correction_x: 1.2247887, dist_correction_y: 1.2112551,[m
+   focal_distance: 15.0, focal_slope: 0.69999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 49, rot_correction: 0.04819382026855073, vert_correction: -0.2603276912672828,[m
+[31m-  vert_offset_correction: 0.1507021}[m
+[31m-- {dist_correction: 1.4451799, dist_correction_x: 1.5144832, dist_correction_y: 1.4737889000000002,[m
+[31m-  focal_distance: 20.0, focal_slope: 0.5, horiz_offset_correction: 0.025999999, laser_id: 50,[m
+[31m-  rot_correction: -0.033916384706072375, vert_correction: -0.3244024456593014, vert_offset_correction: 0.15504621000000002}[m
+[31m-- {dist_correction: 1.2771001, dist_correction_x: 1.3374065, dist_correction_y: 1.339816,[m
+[31m-  focal_distance: 8.0, focal_slope: 1.3, horiz_offset_correction: -0.025999999, laser_id: 51,[m
+[31m-  rot_correction: 0.027376620290886354, vert_correction: -0.3166693629826125, vert_offset_correction: 0.15451272}[m
+[31m-- {dist_correction: 1.3977615, dist_correction_x: 1.4442108, dist_correction_y: 1.4371663000000001,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.44999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 52, rot_correction: 0.10492072454703917, vert_correction: -0.25133544080174264,[m
+[31m-  vert_offset_correction: 0.1501051}[m
+[31m-- {dist_correction: 1.3425783999999998, dist_correction_x: 1.3483524, dist_correction_y: 1.3818097,[m
+[31m-  focal_distance: 11.0, focal_slope: 1.9, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[31m-  rot_correction: 0.16284451104936298, vert_correction: -0.23979553322706634, vert_offset_correction: 0.14934298000000001}[m
+[31m-- {dist_correction: 1.4382911999999999, dist_correction_x: 1.4900905, dist_correction_y: 1.4804431,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 54, rot_correction: 0.08525729890601516, vert_correction: -0.30499605989320633,[m
+[31m-  vert_offset_correction: 0.15371249}[m
+[31m-- {dist_correction: 1.2974651, dist_correction_x: 1.3356235, dist_correction_y: 1.342494,[m
+[31m-  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 55,[m
+[31m-  rot_correction: 0.14474094026605314, vert_correction: -0.29379823685192097, vert_offset_correction: 0.15295037}[m
+[31m-- {dist_correction: 1.500197, dist_correction_x: 1.5058761999999999, dist_correction_y: 1.5183740000000001,[m
+[31m-  focal_distance: 6.0, focal_slope: 1.4, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[31m-  rot_correction: -0.1271355405564693, vert_correction: -0.1783966652843279, vert_offset_correction: 0.14535453}[m
+[31m-- {dist_correction: 1.3739523, dist_correction_x: 1.3909152, dist_correction_y: 1.4026927,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 57, rot_correction: -0.06914267741301003, vert_correction: -0.17006926832673774,[m
+[31m-  vert_offset_correction: 0.14482104}[m
+[31m-- {dist_correction: 1.5294423000000001, dist_correction_x: 1.5526985, dist_correction_y: 1.5286189,[m
+[31m-  focal_distance: 10.0, focal_slope: 1.6, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[31m-  rot_correction: -0.14952992127533238, vert_correction: -0.23167847811493877, vert_offset_correction: 0.14880949}[m
+[31m-- {dist_correction: 1.356432, dist_correction_x: 1.3750079, dist_correction_y: 1.3956981,[m
+[31m-  focal_distance: 0.25, focal_slope: 0.5, horiz_offset_correction: -0.025999999, laser_id: 59,[m
+[31m-  rot_correction: -0.08941942047983109, vert_correction: -0.22430756871133128, vert_offset_correction: 0.14832681}[m
+[31m-- {dist_correction: 1.4812624, dist_correction_x: 1.5439316, dist_correction_y: 1.5051659000000002,[m
+[32m+[m[32m  laser_id: 49, rot_correction: 0.05046789701743674, vert_correction: -0.2601368046069921,[m
+[32m+[m[32m  vert_offset_correction: 0.1506894}[m
+[32m+[m[32m- {dist_correction: 1.2635911, dist_correction_x: 1.3508514, dist_correction_y: 1.3295909000000001,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.55000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 50, rot_correction: -0.03103305540321719, vert_correction: -0.32109314431788744,[m
+[32m+[m[32m  vert_offset_correction: 0.15481757000000002}[m
+[32m+[m[32m- {dist_correction: 1.0956693, dist_correction_x: 1.1582519, dist_correction_y: 1.1591959,[m
+[32m+[m[32m  focal_distance: 10.5, focal_slope: 0.85000002, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 51, rot_correction: 0.029237828933237592, vert_correction: -0.3140828722976195,[m
+[32m+[m[32m  vert_offset_correction: 0.15433489}[m
+[32m+[m[32m- {dist_correction: 1.2680698, dist_correction_x: 1.3010519, dist_correction_y: 1.3118181999999998,[m
+   focal_distance: 0.25, focal_slope: 0.69999999, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 60, rot_correction: -0.012020974421732715, vert_correction: -0.16291245497181386,[m
+[31m-  vert_offset_correction: 0.14436376}[m
+[31m-- {dist_correction: 1.3555016, dist_correction_x: 1.3739404, dist_correction_y: 1.3961284,[m
+[31m-  focal_distance: 0.25, focal_slope: 1.1, horiz_offset_correction: -0.025999999, laser_id: 61,[m
+[31m-  rot_correction: 0.045806682836049765, vert_correction: -0.154741111393303, vert_offset_correction: 0.14384298}[m
+[31m-- {dist_correction: 1.5067404, dist_correction_x: 1.5184990999999999, dist_correction_y: 1.5367628,[m
+[31m-  focal_distance: 5.0, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[31m-  laser_id: 62, rot_correction: -0.03255746436915258, vert_correction: -0.21418087168528735,[m
+[31m-  vert_offset_correction: 0.1476663}[m
+[31m-- {dist_correction: 1.3463322, dist_correction_x: 1.356904, dist_correction_y: 1.3849588,[m
+[31m-  focal_distance: 8.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[31m-  laser_id: 63, rot_correction: 0.02613443455565695, vert_correction: -0.2063605225459988,[m
+[31m-  vert_offset_correction: 0.14715822}[m
+[32m+[m[32m  laser_id: 52, rot_correction: 0.10784944462775096, vert_correction: -0.2509518697920318,[m
+[32m+[m[32m  vert_offset_correction: 0.1500797}[m
+[32m+[m[32m- {dist_correction: 1.3034142, dist_correction_x: 1.3091043, dist_correction_y: 1.3535146,[m
+[32m+[m[32m  focal_distance: 11.0, focal_slope: 2.0, horiz_offset_correction: -0.025999999, laser_id: 53,[m
+[32m+[m[32m  rot_correction: 0.16523614619534635, vert_correction: -0.23940972819591302, vert_offset_correction: 0.14931756999999998}[m
+[32m+[m[32m- {dist_correction: 1.3151974000000002, dist_correction_x: 1.3637082, dist_correction_y: 1.3533908,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.40000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 54, rot_correction: 0.0869574695089434, vert_correction: -0.30294892830695713,[m
+[32m+[m[32m  vert_offset_correction: 0.15357277}[m
+[32m+[m[32m- {dist_correction: 1.2776234, dist_correction_x: 1.289026, dist_correction_y: 1.3073460000000001,[m
+[32m+[m[32m  focal_distance: 11.5, focal_slope: 1.85, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 55, rot_correction: 0.1464806513031853, vert_correction: -0.29229936554360075,[m
+[32m+[m[32m  vert_offset_correction: 0.15284875}[m
+[32m+[m[32m- {dist_correction: 1.3890512000000002, dist_correction_x: 1.3877768000000001, dist_correction_y: 1.3785843,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.2, horiz_offset_correction: 0.025999999, laser_id: 56,[m
+[32m+[m[32m  rot_correction: -0.1252743738020201, vert_correction: -0.17582174613227564, vert_offset_correction: 0.1451894}[m
+[32m+[m[32m- {dist_correction: 1.3896303, dist_correction_x: 1.4135710000000001, dist_correction_y: 1.4434415999999999,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 1.05, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 57, rot_correction: -0.0668689252953649, vert_correction: -0.16848034151967312,[m
+[32m+[m[32m  vert_offset_correction: 0.14471942000000002}[m
+[32m+[m[32m- {dist_correction: 1.4813303, dist_correction_x: 1.5015753, dist_correction_y: 1.5009795,[m
+[32m+[m[32m  focal_distance: 7.0, focal_slope: 1.65, horiz_offset_correction: 0.025999999, laser_id: 58,[m
+[32m+[m[32m  rot_correction: -0.14694131176062744, vert_correction: -0.230128800272093, vert_offset_correction: 0.14870787}[m
+[32m+[m[32m- {dist_correction: 1.3051801, dist_correction_x: 1.3334875, dist_correction_y: 1.356346,[m
+[32m+[m[32m  focal_distance: 4.0, focal_slope: 0.94999999, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 59, rot_correction: -0.08817857864812571, vert_correction: -0.2219747092732381,[m
+[32m+[m[32m  vert_offset_correction: 0.14817439000000002}[m
+[32m+[m[32m- {dist_correction: 1.300378, dist_correction_x: 1.3379957999999998, dist_correction_y: 1.3313292,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.60000002, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 60, rot_correction: -0.0084572566097885, vert_correction: -0.16012465801089584,[m
+[32m+[m[32m  vert_offset_correction: 0.14418593}[m
+[32m+[m[32m- {dist_correction: 1.2581644, dist_correction_x: 1.3149522, dist_correction_y: 1.2930194000000002,[m
+[32m+[m[32m  focal_distance: 0.25, focal_slope: 0.89999998, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 61, rot_correction: 0.048843297425790605, vert_correction: -0.1511470421311337,[m
+[32m+[m[32m  vert_offset_correction: 0.14361434}[m
+[32m+[m[32m- {dist_correction: 1.2993362, dist_correction_x: 1.3299077, dist_correction_y: 1.324184,[m
+[32m+[m[32m  focal_distance: 10.0, focal_slope: 0.80000001, horiz_offset_correction: 0.025999999,[m
+[32m+[m[32m  laser_id: 62, rot_correction: -0.030143852037228126, vert_correction: -0.21457119711920336,[m
+[32m+[m[32m  vert_offset_correction: 0.14769171}[m
+[32m+[m[32m- {dist_correction: 1.3722379, dist_correction_x: 1.3900346, dist_correction_y: 1.4076549,[m
+[32m+[m[32m  focal_distance: 13.0, focal_slope: 0.40000001, horiz_offset_correction: -0.025999999,[m
+[32m+[m[32m  laser_id: 63, rot_correction: 0.02800567535054865, vert_correction: -0.20577295745331492,[m
+[32m+[m[32m  vert_offset_correction: 0.14712011}[m
+ num_lasers: 64[m
+[1mdiff --git a/modules/perception/data/params/radar_extrinsics.yaml b/modules/perception/data/params/radar_extrinsics.yaml[m
+[1mindex c0349501c3..a2da7fe912 100644[m
+[1m--- a/modules/perception/data/params/radar_extrinsics.yaml[m
+[1m+++ b/modules/perception/data/params/radar_extrinsics.yaml[m
+[36m@@ -3,15 +3,15 @@[m [mheader:[m
+   stamp:[m
+     secs: 0[m
+     nsecs: 0[m
+[31m-  frame_id: front_6mm[m
+[32m+[m[32m  frame_id: short_camera[m
+ child_frame_id: radar[m
+ transform:[m
+[31m-  translation:[m
+[31m-    x: 0.0[m
+[31m-    y: 1.0110000371933034[m
+[31m-    z: 2.4720000773668316[m
+   rotation:[m
+[31m-    x: 0.5[m
+[31m-    y: -0.4999999999999999[m
+[31m-    z: 0.5[m
+[31m-    w: 0.5000000000000001[m
+[32m+[m[32m    x: 0.5370174871300957[m
+[32m+[m[32m    y: 0.5197173008295932[m
+[32m+[m[32m    z: 0.4623163722908032[m
+[32m+[m[32m    w: -0.4772522578749639[m
+[32m+[m[32m  translation:[m
+[32m+[m[32m    x: 0.04894393984902981[m
+[32m+[m[32m    y: 1.168500489918554[m
+[32m+[m[32m    z: 1.371936986822701[m
+\ No newline at end of file[m
+[1mdiff --git a/modules/perception/data/params/radar_front_extrinsics.yaml b/modules/perception/data/params/radar_front_extrinsics.yaml[m
+[1mindex 8e26da1034..f29f1b3b03 100644[m
+[1m--- a/modules/perception/data/params/radar_front_extrinsics.yaml[m
+[1m+++ b/modules/perception/data/params/radar_front_extrinsics.yaml[m
+[36m@@ -4,14 +4,14 @@[m [mheader:[m
+     secs: 0[m
+     nsecs: 0[m
+   frame_id: velodyne128[m
+[31m-child_frame_id: radar_front[m
+ transform:[m
+[31m-  translation:[m
+[31m-    x: 2.6399201750755337[m
+[31m-    y: 5.271220001122807e-16[m
+[31m-    z: -1.623000025749203[m
+   rotation:[m
+[31m-    x: 0.0[m
+[31m-    y: 0.0[m
+[31m-    z: 0.0[m
+[31m-    w: 1.0[m
+[32m+[m[32m    x: 0.001157270061175516[m
+[32m+[m[32m    y: -0.002570299059995321[m
+[32m+[m[32m    z: 0.002244856861040311[m
+[32m+[m[32m    w: 0.9999935074321339[m
+[32m+[m[32m  translation:[m
+[32m+[m[32m    x: 2.174618901328785[m
+[32m+[m[32m    y: 0.08853404186055373[m
+[32m+[m[32m    z: -1.206228759485085[m
+[32m+[m[32mchild_frame_id: radar_front[m
+[1mdiff --git a/modules/perception/data/params/velodyne64_height.yaml b/modules/perception/data/params/velodyne64_height.yaml[m
+[1mindex 6b12459411..d8cc580be8 100644[m
+[1m--- a/modules/perception/data/params/velodyne64_height.yaml[m
+[1m+++ b/modules/perception/data/params/velodyne64_height.yaml[m
+[36m@@ -1,4 +1,4 @@[m
+ vehicle:[m
+   parameters:[m
+[31m-    height: 1.91[m
+[31m-    height_var: 0.0047[m
+[32m+[m[32m    height: 1.89[m
+[32m+[m[32m    height_var: 0.0045[m
+[1mdiff --git a/modules/perception/data/params/velodyne64_novatel_extrinsics_example.yaml b/modules/perception/data/params/velodyne64_novatel_extrinsics_example.yaml[m
+[1mindex 379bcc13df..9dc281bc51 100644[m
+[1m--- a/modules/perception/data/params/velodyne64_novatel_extrinsics_example.yaml[m
+[1m+++ b/modules/perception/data/params/velodyne64_novatel_extrinsics_example.yaml[m
+[36m@@ -1,18 +1,17 @@[m
+[32m+[m[32mchild_frame_id: velodyne64[m
+[32m+[m[32mtransform:[m
+[32m+[m[32m  rotation:[m
+[32m+[m[32m    x: 0.0178712428342356[m
+[32m+[m[32m    y: -0.01105483165178439[m
+[32m+[m[32m    z: 0.7086047865380262[m
+[32m+[m[32m    w: 0.7052926101074[m
+[32m+[m[32m  translation:[m
+[32m+[m[32m    x: -0.0008540722033043019[m
+[32m+[m[32m    y: 1.410303305307884[m
+[32m+[m[32m    z: 1.397[m
+ header:[m
+   seq: 0[m
+   stamp:[m
+[31m-    secs: 0[m
+[32m+[m[32m    secs: 1502870042[m
+     nsecs: 0[m
+   frame_id: novatel[m
+[31m-child_frame_id: velodyne64[m
+[31m-transform:[m
+[31m-  translation:[m
+[31m-    x: 0[m
+[31m-    y: 0.9807289[m
+[31m-    z: 2.312[m
+[31m-  rotation:[m
+[31m-    x: 0[m
+[31m-    y: 0[m
+[31m-    z: 0.7071068[m
+[31m-    w: 0.7071068[m
+[31m-[m
+[1mdiff --git a/modules/prediction/dag/prediction_lego.dag b/modules/prediction/dag/prediction_lego.dag[m
+[1mindex 8506053afb..ccbd90fe99 100644[m
+[1m--- a/modules/prediction/dag/prediction_lego.dag[m
+[1m+++ b/modules/prediction/dag/prediction_lego.dag[m
+[36m@@ -25,6 +25,12 @@[m [mmodule_config {[m
+             config_file_path: "/apollo/modules/prediction/conf/prediction_conf.pb.txt"[m
+             flag_file_path: "/apollo/modules/prediction/conf/prediction.conf"[m
+             readers: [[m
+[32m+[m[32m                {[m
+[32m+[m[32m                    channel:"/apollo/prediction/adccontainer"[m
+[32m+[m[32m                    qos_profile: {[m
+[32m+[m[32m                        depth : 1[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                },[m
+                 {[m
+                     channel:"/apollo/prediction/container"[m
+                     qos_profile: {[m
+[1mdiff --git a/um_dev/profiling/result_writer.cc b/um_dev/profiling/result_writer.cc[m
+[1mindex 76a818dfb2..27a1395c4b 100644[m
+[1m--- a/um_dev/profiling/result_writer.cc[m
+[1m+++ b/um_dev/profiling/result_writer.cc[m
+[36m@@ -18,7 +18,7 @@[m [mProfilingResultWriter* ProfilingResultWriter::instance_ =[m
+     new ProfilingResultWriter();[m
+ [m
+ ProfilingResultWriter::ProfilingResultWriter()[m
+[31m-    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_radar") {[m
+[32m+[m[32m    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_2022_3_29") {[m
+   // Make profiling output directory for this time[m
+   apollo::cyber::Time now = apollo::cyber::Time::Now();[m
+   const std::string result_dir =[m

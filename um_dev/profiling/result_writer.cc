@@ -18,7 +18,7 @@ ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
 ProfilingResultWriter::ProfilingResultWriter()
-    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_radar") {
+    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_2022_3_29") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir =
