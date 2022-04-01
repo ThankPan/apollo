@@ -46,7 +46,7 @@ def plot_data(results):
     # data = np.log(data)
     plt.plot(range(len(data_list)), data,
              # color=COLORS[idx % len(COLORS)],
-             label=task_name,
+             # label=task_name,
              # marker=MARKERS[idx % len(MARKERS)],
              # linewidth=0.8,
              # markersize=0.8
@@ -55,10 +55,10 @@ def plot_data(results):
     plt.xlabel("No.")
     idx += 1
   plt.legend()
-  plt.axis([0, 100, 0, 80])
+  plt.axis([0, 100, 0, 300])
   plt.savefig("result.png")
   plt.show()
 
 if __name__ == "__main__":
-  results = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_radar")
+  results = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_3_30")
   plot_data(results)
