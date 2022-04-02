@@ -18,7 +18,7 @@ ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
 ProfilingResultWriter::ProfilingResultWriter()
-    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_4_1") {
+    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_4_2") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir =
@@ -62,7 +62,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
   switch (profiling_type) {
     case TIMING: {
       std::lock_guard<std::mutex> lock(mutex_result_file_);
-      fout_ << "[Timing]: " << content << std::endl;
+      fout_ << '[' << apollo::cyber::Time::Now().ToMicrosecond() / 1000 << ']' << " [Timing]: " << content << std::endl;
       break;
     }
     default:
