@@ -1,7 +1,16 @@
+#!/bin/bash
+# Launch task graph of apollo, for imcoming sensor data from LgSVL
+# Yuting Xie
+# 2022.3.31
+
 source cyber/setup.bash
 
-# Directly launch .dag files
+# First write current ts as result directory suffix
+S1=`date -I | awk -v OFS='' '{split($0,a,"-" ); print a[1], "_", a[2], "_", a[3]}'`
+S2=`date +"%T" | awk -v OFS='' '{split($0,a,":" ); print a[1], "_", a[2], "_", a[3]}'`
+echo -n profiling_result_suffix ${S1}_${S2} > /apollo/um_dev/profiling/conf/result_writer_conf.txt
 
+# Then directly launch .dag files
 # Transform
 nohup mainboard -d modules/transform/dag/static_transform.dag &
 

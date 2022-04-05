@@ -18,11 +18,19 @@ ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
 ProfilingResultWriter::ProfilingResultWriter()
-    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_4_5") {
+    : throttle_threshold_(1.f), profiling_suffix_("default") {
+
+  if (Init()) {
+    if (confs_.count("profiling_result_suffix") > 0) {
+      profiling_suffix_ = confs_["profiling_result_suffix"];
+    }
+  } else {
+    std::cout << "[um_dev] unable to open conf file for result writer.\n";
+  }
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir =
-      "/apollo/um_dev/profiling/results/" + profiling_scenario_;
+      "/apollo/um_dev/profiling/results/" + profiling_suffix_;
   um_dev::utils::um_mkdir(result_dir);
   std::cout << "[um_dev] Profiling result writes to: " + result_dir << std::endl;
 
@@ -38,6 +46,19 @@ ProfilingResultWriter::~ProfilingResultWriter() {
   if (fout_.is_open()) {
     fout_.close();
   }
+}
+
+bool ProfilingResultWriter::Init() {
+  std::ifstream conf_fin("/apollo/um_dev/profiling/conf/result_writer_conf.txt");
+  if (!conf_fin.is_open()) {
+    return false;
+  }
+  std::string conf_name, conf_value;
+  while (!conf_fin.eof()) {
+    conf_fin >> conf_name >> conf_value;
+    confs_[conf_name] = conf_value;
+  }
+  return true;
 }
 
 ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }

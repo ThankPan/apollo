@@ -6,7 +6,7 @@
 #define RESULT_WRITER_H
 
 #include <fstream>
-#include <map>
+#include <unordered_map>
 #include <mutex>
 #include <string>
 
@@ -31,15 +31,18 @@ class ProfilingResultWriter {
 
  private:
   ProfilingResultWriter();
+  bool Init();
 
  private:
   static ProfilingResultWriter* instance_;
   static std::mutex mutex_instance_;
 
-  const float throttle_threshold_;  // throttle threshold in second
-  std::string profiling_scenario_;
+  std::unordered_map<std::string, std::string> confs_;
 
-  std::map<std::string, apollo::cyber::Time> task_to_timestamp_;
+  const float throttle_threshold_;  // throttle threshold in second
+  std::string profiling_suffix_;
+
+  std::unordered_map<std::string, apollo::cyber::Time> task_to_timestamp_;
 
   std::mutex mutex_result_file_;
   std::mutex mutex_map_;
