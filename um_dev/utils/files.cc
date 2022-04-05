@@ -19,7 +19,7 @@ bool um_mkdir(const std::string &path) {
     }
     return true;
   }
-  return false;
+  return true;
 }
 
 bool um_rmdir(const std::string &path) {

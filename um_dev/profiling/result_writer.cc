@@ -18,20 +18,20 @@ ProfilingResultWriter* ProfilingResultWriter::instance_ =
     new ProfilingResultWriter();
 
 ProfilingResultWriter::ProfilingResultWriter()
-    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_4_2") {
+    : throttle_threshold_(1.f), profiling_scenario_("lgsvl_4_5") {
   // Make profiling output directory for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
   const std::string result_dir =
       "/apollo/um_dev/profiling/results/" + profiling_scenario_;
-  // FIXME: (yuting) unable to mkdir
-  // assert(um_dev::utils::um_mkdir(result_dir));
-  // std::cout << "Profiling result path created: " + result_dir << std::endl;
+  um_dev::utils::um_mkdir(result_dir);
+  std::cout << "[um_dev] Profiling result writes to: " + result_dir << std::endl;
 
   auto pid_str = std::to_string(getpid());
 
   // Open result files here
   auto time_str = now.ToString();
   fout_.open(result_dir + "/profiling_" + time_str + '_' + pid_str + ".log");
+  assert(fout_.is_open());
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
