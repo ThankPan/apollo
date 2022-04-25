@@ -1,133 +1,61 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Process the apollo task map, e.g., find key paths.
-    Author: Yuting Xie
-    2022.2.23
-"""
+'''
+Analyse apollo task graph
+Yuting
+2022.4.24
+'''
 
-from enum import Enum
-import graphlib
+import re
 
-TASK_MAP_FILENAME = "um_dev/profiling/task_map/typical_task_map.txt"
+def load_map(map_file):
+  nodes = []
+  channels = set()
+  with open(map_file) as f:
 
-# A node could be a component or a channel
-class GraphNodeType(Enum):
-    COMPONENT = 1
-    CHANNEL = 2
-    
-class GraphNode:
-    def __init__(self, type: GraphNodeType, name):
-        self.type = type
-        self.name = name
-        self.nexts = []
-        self.precedences = []
-    
-    def pointsTo(self, other):
-        self.nexts.append(other.name)
-        other.precedences.append(self.name)
+    for line in f.readlines():
+      node = line.split()[0]
+      nodes.append({
+          "name": node,
+          "in_channels": set(),
+          "out_channels": set(),
+        })
+      pattern = re.compile("({.*?})")
+      in_channels, out_channels = pattern.findall(line)
+      in_channels, out_channels = in_channels.strip('{}'), out_channels.strip('{}')
+      in_channels, out_channels = in_channels.split(',') , out_channels.split(',')
+      for channel in in_channels:
+        channel = channel.strip(" \"")
+        nodes[-1]["in_channels"].add(channel.strip(" \"")) # also strip space!
+        channels.add(channel)
+      for channel in out_channels:
+        channel = channel.strip(" \"")
+        nodes[-1]["out_channels"].add(channel.strip(" \""))
+        channels.add(channel)
 
-class Graph:
-    def __init__(self):
-        self.nodes = dict()
-        self.ts_result = []
+  return nodes, channels
 
-    def __str__(self) -> str:
-        res = ""
-        for name, node in self.nodes.items():
-            res += f"{name}: ["
-            for name_ in node.nexts:
-                res += f"{name_}, "
-            res += "]\n"
-        return res
+def build_graph(nodes):
+  adj_list = []
+  for cur in nodes:
+      adj_list.append({
+        "name": cur["name"],
+        "out": [],
+      })
+      for nxt in nodes:
+        if nxt["name"] == cur["name"]:
+          continue
+        if len(cur["out_channels"]&nxt["in_channels"]) > 0:
+          adj_list[-1]["out"].append(nxt["name"])
+  return adj_list
 
-    
-    def addNode(self, type: GraphNodeType, name):
-        if name not in self.nodes:
-            self.nodes[name] = GraphNode(type=type, name=name)
-    
-    def addDirectedEdge(self, name_from, name_to):
-        assert name_from in self.nodes
-        assert name_to in self.nodes
-        self.nodes[name_from].pointsTo(self.nodes[name_to])
-
-    def buildMapFromText(self, filename):
-        with open(filename, 'r') as f:
-            case = 0
-            channel_name = ""
-            message_type = ""
-            ratio = 0.0
-            for line in f.readlines():
-                if len(line.strip()) == 0:
-                    case = 0
-                    continue
-                if case == 0:
-                    channel_name = line.strip()
-                    self.addNode(type=GraphNodeType.CHANNEL, name=channel_name)
-                elif case == 1:
-                    message_type = line.strip()
-                elif case == 2:
-                    ratio = float(line.strip())
-                elif case == 3:
-                    for reader in line.split():
-                        self.addNode(type=GraphNodeType.COMPONENT, name=reader)
-                        self.addDirectedEdge(channel_name, reader)
-                elif case == 4:
-                    for writer in line.split():
-                        self.addNode(type=GraphNodeType.COMPONENT, name=writer)
-                        self.addDirectedEdge(writer, channel_name)
-                else:
-                    pass
-                case = (case + 1) % 5
-
-    def topologicalSort(self):
-        self.ts_result = []
-        finished = {}
-        for name in self.nodes:
-            finished[name] = False
-
-        def hasNoPrecedence(node):
-            for name in node.precedences:
-                if not finished[name]:
-                    return False
-            return True
-
-        def isFinished():
-            for f in finished.values():
-                if not f:
-                    return False
-            return True
-        
-        while not isFinished():
-            cur = None
-            for name, node in self.nodes.items():
-                if not finished[name] and hasNoPrecedence(node):
-                    cur = name
-                    break
-            if cur == None:
-                print(f"{finished}")
-                print(f"{self.ts_result}")
-                self.ts_result = []
-                return False
-            queue = [cur]
-            finished[cur] = True
-            while len(queue) > 0:
-                cur = queue[0]
-                queue = queue[1:]
-                self.ts_result.append(cur)
-                for next in self.nodes[cur].nexts:
-                    if not finished[next] and hasNoPrecedence(self.nodes[next]):
-                        queue.append(next)
-                        finished[next] = True
-
-        
-        return True
-        
 
 
 if __name__ == "__main__":
-    graph = Graph()
-    graph.buildMapFromText(TASK_MAP_FILENAME)
-    print(graph)
-    # assert graph.topologicalSort()
-    # print(graph.ts_result)
+  nodes, channels = load_map("component_map.txt")
+  adj_list = build_graph(nodes)
+  for each in adj_list:
+    print(f'{each["name"]} -> {each["out"]}')
+
+

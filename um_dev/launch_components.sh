@@ -9,7 +9,7 @@ nohup mainboard -d modules/transform/dag/static_transform.dag &
 nohup mainboard -d modules/localization/dag/dag_streaming_rtk_localization.dag &
 
 # Image decompress
-# nohup mainboard -d modules/drivers/tools/image_decompress/dag/image_decompress.dag &
+nohup mainboard -d modules/drivers/tools/image_decompress/dag/image_decompress.dag &
 # Perception
 nohup mainboard -d modules/perception/production/dag/dag_streaming_perception.dag &
 # Traffic light detection
