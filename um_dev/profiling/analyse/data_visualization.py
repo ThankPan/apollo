@@ -43,19 +43,18 @@ def plot_data(results):
   idx = 0
   for task_name, data_list in results.items():
     data = np.array(data_list)
-    # data = np.log(data)
     plt.plot(range(len(data_list)), data,
-             # color=COLORS[idx % len(COLORS)],
-             # label=task_name,
-             # marker=MARKERS[idx % len(MARKERS)],
-             # linewidth=0.8,
-             # markersize=0.8
+             color=COLORS[idx % len(COLORS)],
+             label=task_name,
+             marker=MARKERS[idx % len(MARKERS)],
+             linewidth=0.8,
+             markersize=0.8
              )
     plt.ylabel("Latency(ms)")
     plt.xlabel("No.")
     idx += 1
   plt.legend()
-  plt.axis([0, 100, 0, 300])
+  plt.axis([0, 60, 0, 20])
   plt.savefig("result.png")
   plt.show()
 
@@ -93,7 +92,8 @@ def plot_comparative(result1, result2):
 
 
 if __name__ == "__main__":
-  result_solo = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_solo_mode")
+  # result_solo = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_solo_mode")
   # plot_data(results)
-  result_whole = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_whole_mode")
-  plot_comparative(result_solo, result_whole)
+  # result_whole = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_whole_mode")
+  tl_result = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/traffic_lights_comparative")
+  plot_data(tl_result)
