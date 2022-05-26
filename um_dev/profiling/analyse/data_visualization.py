@@ -14,6 +14,20 @@ COLORS = ['blue', 'yellowgreen', 'brown',
 
 MARKERS = ['.', '^', '*', 'D', 'o', ',', '_', 's', 'p']
 
+WANTED = [
+  "CameraObstacleDetectionComponent::OnReceiveImage",
+  "FusionCameraDetectionComponent::OnReceiveImage",
+  "DetectionComponent::Proc",
+  "PlanningComponent::Proc",
+]
+
+FUNC_TO_TASK_NAME = {
+  "CameraObstacleDetectionComponent::OnReceiveImage" : "Object Detection",
+  "FusionCameraDetectionComponent::OnReceiveImage" : "Configurable Sensor Fusion",
+  "DetectionComponent::Proc" : "3D Objection Detection",
+  "PlanningComponent::Proc" : "Path Planner",
+}
+
 # Set matplotlib to use SciencePlots
 plt.style.use(['science','ieee'])
 
@@ -42,20 +56,24 @@ def load_data_from_dir(dir_path):
 def plot_data(results):
   idx = 0
   for task_name, data_list in results.items():
+    if task_name not in WANTED:
+      continue
     data = np.array(data_list)
     plt.plot(range(len(data_list)), data,
              color=COLORS[idx % len(COLORS)],
-             label=task_name,
+             label=FUNC_TO_TASK_NAME[task_name],
              marker=MARKERS[idx % len(MARKERS)],
              linewidth=0.8,
              markersize=0.8
              )
-    plt.ylabel("Latency(ms)")
-    plt.xlabel("No.")
+    plt.ylabel("Execution Time(ms)")
+    plt.xlabel("Time(s)")
     idx += 1
   plt.legend()
-  plt.axis([0, 60, 0, 20])
-  plt.savefig("result.png")
+  plt.axis([0, 60, 0, 200])
+  plt.tight_layout()
+  # plt.savefig("result.png")
+  plt.savefig("result.pdf", bbox_inches='tight', pad_inches=0)
   plt.show()
 
 def plot_comparative(result1, result2):
@@ -84,7 +102,7 @@ def plot_comparative(result1, result2):
              markersize=0.8
              )
     plt.ylabel("Latency(ms)")
-    plt.xlabel("No.")
+    plt.xlabel("Time(s)")
     plt.legend()
     plt.axis([0, 60, 0, 200])
     plt.savefig("result_" + task_name.replace('::', "_") + ".png")
@@ -95,5 +113,5 @@ if __name__ == "__main__":
   # result_solo = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_solo_mode")
   # plot_data(results)
   # result_whole = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_whole_mode")
-  tl_result = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/traffic_lights_comparative")
+  tl_result = load_data_from_dir("/home/tt/Codes/apollo/um_dev/profiling/results/lgsvl_4_2_crash_case_whole_mode")
   plot_data(tl_result)
