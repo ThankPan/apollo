@@ -27,28 +27,43 @@ ProfilingResultWriter::ProfilingResultWriter()
   } else {
     std::cout << "[um_dev] unable to open conf file for result writer.\n";
   }
-  // Make profiling output directory for this time
+  // Make profiling output directories for this time
   apollo::cyber::Time now = apollo::cyber::Time::Now();
-  const std::string result_dir =
-      "/apollo/um_dev/profiling/results/" + profiling_suffix_;
-  um_dev::utils::um_mkdir(result_dir);
-  std::cout << "[um_dev] Profiling result writes to: " + result_dir << std::endl;
+  const std::string result_root_dir =
+      "/apollo/um_dev/profiling/results/" + profiling_suffix_ + "/";
+  um_dev::utils::um_mkdir(result_root_dir);
+  for (auto it : metrics_to_names_) {
+    um_dev::utils::um_mkdir(result_root_dir + it.second);
+  }
+  
 
   auto pid_str = std::to_string(getpid());
 
   // Open result files here
   auto time_str = now.ToString();
-  fout_.open(result_dir + "/profiling_" + time_str + '_' + pid_str + ".log");
-  assert(fout_.is_open());
+  std::vector<std::string> fields = {"timestamp", "ts_start", "ts_end", "type", "component", "result"};
+  for (auto it : metrics_to_names_) {
+    metrics_to_files_[it.first].open(result_root_dir + it.second + "/" + time_str + '_' + pid_str + ".csv");
+    assert(metrics_to_files_[it.first].is_open());
+    metrics_to_files_[it.first] << utils::make_csv_header(fields) << std::endl;
+  }
 }
 
 ProfilingResultWriter::~ProfilingResultWriter() {
-  if (fout_.is_open()) {
-    fout_.close();
+  // Can only be referenced
+  for (auto& it : metrics_to_files_) {
+    if (it.second.is_open()) {
+      it.second.close();
+    }
   }
 }
 
 bool ProfilingResultWriter::Init() {
+  metrics_to_names_[PROFILING_METRICS::TIMING] = "Timing";
+  metrics_to_names_[PROFILING_METRICS::LATENCY_CAMERA] = "Lat_Cam";
+  metrics_to_names_[PROFILING_METRICS::LATENCY_RADAR] = "Lat_Rad";
+  metrics_to_names_[PROFILING_METRICS::LATENCY_LIDAR] = "Lat_Lid";
+
   std::ifstream conf_fin("/apollo/um_dev/profiling/conf/result_writer_conf.txt");
   if (!conf_fin.is_open()) {
     return false;
@@ -64,14 +79,18 @@ bool ProfilingResultWriter::Init() {
 ProfilingResultWriter& ProfilingResultWriter::Instance() { return *instance_; }
 
 bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
-                                          const std::string& task_name,
-                                          const std::string& content) {
-  {
+                                          apollo::cyber::Time ts_start,
+                                          apollo::cyber::Time ts_end,
+                                          const std::string& component,
+                                          const std::string& result,
+                                          bool is_throttled) {
+  if (is_throttled) {
     std::lock_guard<std::mutex> lock(mutex_map_);
     apollo::cyber::Time now = apollo::cyber::Time::Now();
-    auto it = task_to_timestamp_.find(task_name);
+    auto throttle_timestamp = component + std::to_string(profiling_type);
+    auto it = task_to_timestamp_.find(throttle_timestamp);
     if (it == task_to_timestamp_.end()) {
-      task_to_timestamp_[task_name] = now;
+      task_to_timestamp_[throttle_timestamp] = now;
     } else if (now - it->second <
                apollo::cyber::Duration(throttle_threshold_)) {
       return true;
@@ -80,14 +99,17 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
     }
   }
 
-  switch (profiling_type) {
-    case TIMING: {
-      std::lock_guard<std::mutex> lock(mutex_result_file_);
-      fout_ << '[' << apollo::cyber::Time::Now().ToMicrosecond() / 1000 << ']' << " [Timing]: " << content << std::endl;
-      break;
-    }
-    default:
-      break;
+  // Yuting@2022.6.15 Now reference metrics by their name strings
+  {
+    std::lock_guard<std::mutex> locker(metrics_to_mutex_[profiling_type]);
+    auto& fout_ = metrics_to_files_[profiling_type];
+    // The CSV header: "timestamp", "ts_start", "ts_end", "type", "component", "result"
+    fout_ << apollo::cyber::Time::Now().ToMicrosecond() << ',' // "timestamp"
+          << ts_start.ToMicrosecond() << ',' // "ts_start"
+          << ts_end.ToMicrosecond() << ',' // "ts_end"
+          << metrics_to_names_[profiling_type] << ',' // "type"
+          << component << ',' // "component"
+          << result << std::endl; // "result"
   }
 
   return true;

@@ -24,6 +24,7 @@
 #include "modules/common/vehicle_state/vehicle_state_provider.h"
 #include "modules/control/common/control_gflags.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace control {
@@ -414,7 +415,21 @@ bool ControlComponent::Proc() {
         local_view_.trajectory().header().lidar_timestamp(), start_time,
         end_time);
   }
-
+  // Yuting: record E2E latency here
+  um_dev::profiling::LatencyRecorder um_latency_recorder("ControlComponent::Proc");
+  if (local_view_.trajectory().header().has_lidar_timestamp()) {
+    cyber::Time ts(local_view_.trajectory().header().lidar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+  }
+  if (local_view_.trajectory().header().has_radar_timestamp()) {
+    cyber::Time ts(local_view_.trajectory().header().radar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+  }
+  if (local_view_.trajectory().header().has_camera_timestamp()) {
+    cyber::Time ts(local_view_.trajectory().header().camera_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
+  }
+  
   control_cmd_writer_->Write(control_command);
   return true;
 }

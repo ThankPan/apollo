@@ -12,16 +12,19 @@ namespace um_dev {
 namespace profiling {
 
 UM_Timing::UM_Timing(std::string taskname) : taskname_(taskname) {
-  inner_time_ = apollo::cyber::Time::Now();
+  ts_start_ = apollo::cyber::Time::Now();
 }
 
 UM_Timing::~UM_Timing() {
-  auto duration = apollo::cyber::Time::Now() - inner_time_;
+  auto ts_end =  apollo::cyber::Time::Now();
+  auto duration = ts_end - ts_start_;
   long long ns = duration.ToNanosecond();
-  double ms = ns * NANO_TO_MICRO * MICRO_TO_MILLI;
-  std::string timing_result = taskname_ + ": " + std::to_string(ms) + "ms";
+  double micro_s = ns / MICRO_TO_NANO;
   ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
-                                                  taskname_, timing_result);
+                                                  ts_start_,
+                                                  ts_end,
+                                                  taskname_,
+                                                  std::to_string(micro_s));
 }
 
 }  // namespace profiling

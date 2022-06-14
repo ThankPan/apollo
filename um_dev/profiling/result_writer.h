@@ -12,6 +12,12 @@
 
 #include "cyber/time/time.h"
 
+
+#define NANO_TO_MICRO 1 / (1000)
+#define MICRO_TO_MILLI 1 / (1000)
+#define MILLI_TO_MICRO (1000)
+#define MICRO_TO_NANO (1000)
+
 namespace um_dev {
 namespace profiling {
 
@@ -19,6 +25,9 @@ enum PROFILING_METRICS {
   TIMING = 0,
   MEMORY,
   GPU,
+  LATENCY_LIDAR,
+  LATENCY_RADAR,
+  LATENCY_CAMERA,
 };
 
 class ProfilingResultWriter {
@@ -27,7 +36,11 @@ class ProfilingResultWriter {
   ~ProfilingResultWriter();
   static ProfilingResultWriter& Instance();
   bool write_to_file(PROFILING_METRICS profiling_type,
-                     const std::string& task_name, const std::string& content);
+                                          apollo::cyber::Time ts_start,
+                                          apollo::cyber::Time ts_end,
+                                          const std::string& component,
+                                          const std::string& result,
+                                          bool is_throttled = false);
 
  private:
   ProfilingResultWriter();
@@ -47,9 +60,14 @@ class ProfilingResultWriter {
   std::mutex mutex_result_file_;
   std::mutex mutex_map_;
 
+  // Result folders
+  std::unordered_map<std::string, std::string> type_to_folders_;
+
   // Result files
-  std::string result_file_;
-  std::ofstream fout_;
+  std::unordered_map<PROFILING_METRICS, std::string> metrics_to_names_;
+  std::unordered_map<PROFILING_METRICS, std::ofstream> metrics_to_files_;
+  std::unordered_map<PROFILING_METRICS, std::mutex> metrics_to_mutex_;
+
 };
 
 }  // namespace profiling

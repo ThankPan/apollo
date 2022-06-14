@@ -5,13 +5,9 @@
 #ifndef TIMING_H
 #define TIMING_H
 
-#include <fstream>
 #include <string>
 
 #include "cyber/time/time.h"
-
-#define NANO_TO_MICRO (0.001)
-#define MICRO_TO_MILLI (0.001)
 
 namespace um_dev {
 namespace profiling {
@@ -25,8 +21,7 @@ class UM_Timing {
 
  private:
   std::string taskname_;
-  apollo::cyber::Time inner_time_;
-  std::ofstream fout;
+  apollo::cyber::Time ts_start_;
 };
 
 }  // namespace profiling

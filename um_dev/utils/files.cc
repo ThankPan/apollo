@@ -33,5 +33,19 @@ bool um_rmdir(const std::string &path) {
   return true;
 }
 
+std::string make_csv_header(const std::vector<std::string>& fields) {
+  std::string header_string;
+
+  for (unsigned int i = 0; i < fields.size(); ++i) {
+    if (i > 0) {
+      header_string += ',';
+    }
+    header_string += fields[i];
+  }
+
+  return header_string;
+  
+}
+
 }  // namespace utils
 }  // namespace um_dev
