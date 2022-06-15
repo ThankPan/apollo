@@ -21,6 +21,7 @@
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/msg_serializer/msg_serializer.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -69,6 +70,19 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
             << fusion_main_sensor_ << ". Skip send.";
     } else {
       // Send("/apollo/perception/obstacles", out_message);
+      um_dev::profiling::LatencyRecorder um_latency_recorder("FusionComponent::Proc");
+      if (out_message->header().has_lidar_timestamp()) {
+        cyber::Time ts(out_message->header().lidar_timestamp());
+        um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+      }
+      if (out_message->header().has_radar_timestamp()) {
+        cyber::Time ts(out_message->header().radar_timestamp());
+        um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+      }
+      if (out_message->header().has_camera_timestamp()) {
+        cyber::Time ts(out_message->header().camera_timestamp());
+        um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
+      }
       writer_->Write(out_message);
       AINFO << "Send fusion processing output message.";
       // send msg for visualization

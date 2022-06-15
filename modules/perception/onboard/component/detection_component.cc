@@ -23,6 +23,7 @@
 #include "modules/perception/lidar/common/lidar_log.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 using ::apollo::cyber::Clock;
 
@@ -68,6 +69,19 @@ bool DetectionComponent::Proc(
 
   bool status = InternalProc(message, out_message);
   if (status) {
+    um_dev::profiling::LatencyRecorder um_latency_recorder("DetectionComponent::Proc");
+    if (message->header().has_lidar_timestamp()) {
+      cyber::Time ts(message->header().lidar_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+    }
+    if (message->header().has_radar_timestamp()) {
+      cyber::Time ts(message->header().radar_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+    }
+    if (message->header().has_camera_timestamp()) {
+      cyber::Time ts(message->header().camera_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
+    }
     writer_->Write(out_message);
     AINFO << "Send lidar detect output message.";
   }

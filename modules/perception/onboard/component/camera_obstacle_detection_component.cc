@@ -31,6 +31,7 @@
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/component/camera_perception_viz_message.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -304,6 +305,23 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
   std::shared_ptr<SensorFrameMessage> prefused_message(new (std::nothrow)
                                                            SensorFrameMessage);
 
+  // @Yuting: record E2E latency
+  auto do_record_latency = [&](){
+    um_dev::profiling::LatencyRecorder um_latency_recorder("ControlComponent::Proc");
+    if (out_message->header().has_lidar_timestamp()) {
+      cyber::Time ts(out_message->header().lidar_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+    }
+    if (out_message->header().has_radar_timestamp()) {
+      cyber::Time ts(out_message->header().radar_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+    }
+    if (out_message->header().has_camera_timestamp()) {
+      cyber::Time ts(out_message->header().camera_timestamp());
+      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
+    }
+  };
+  
   if (InternalProc(message, camera_name, &error_code, prefused_message.get(),
                    out_message.get()) != cyber::SUCC) {
     AERROR << "InternalProc failed, error_code: " << error_code;
@@ -313,6 +331,7 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
       return;
     }
     if (output_final_obstacles_) {
+      do_record_latency();
       writer_->Write(out_message);
     }
     return;
@@ -323,6 +342,7 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
+    do_record_latency();
     writer_->Write(out_message);
   }
   // for e2e lantency statistics

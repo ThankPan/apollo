@@ -39,6 +39,7 @@
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/component/camera_perception_viz_message.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -691,6 +692,19 @@ int LaneDetectionComponent::InternalProc(
                       lanes_msg.get()) != cyber::SUCC) {
     AERROR << "make lanes_msg failed";
     return cyber::FAIL;
+  }
+  um_dev::profiling::LatencyRecorder um_latency_recorder("LaneDetectionComponent::InternalProc");
+  if (lanes_msg->header().has_lidar_timestamp()) {
+    cyber::Time ts(lanes_msg->header().lidar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+  }
+  if (lanes_msg->header().has_radar_timestamp()) {
+    cyber::Time ts(lanes_msg->header().radar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+  }
+  if (lanes_msg->header().has_camera_timestamp()) {
+    cyber::Time ts(lanes_msg->header().camera_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
   }
   writer_->Write(lanes_msg);
 

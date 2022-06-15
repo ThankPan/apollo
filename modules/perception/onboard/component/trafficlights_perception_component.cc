@@ -38,6 +38,7 @@
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -416,6 +417,19 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   }
 
   // send msg
+  um_dev::profiling::LatencyRecorder um_latency_recorder("TrafficLightsPerceptionComponent::OnReceiveImage");
+  if (out_msg->header().has_lidar_timestamp()) {
+    cyber::Time ts(out_msg->header().lidar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+  }
+  if (out_msg->header().has_radar_timestamp()) {
+    cyber::Time ts(out_msg->header().radar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+  }
+  if (out_msg->header().has_camera_timestamp()) {
+    cyber::Time ts(out_msg->header().camera_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
+  }
   writer_->Write(out_msg);
 
   //  SendSimulationMsg();
