@@ -41,7 +41,18 @@ ProfilingResultWriter::ProfilingResultWriter()
 
   // Open result files here
   auto time_str = now.ToString();
-  std::vector<std::string> fields = {"timestamp", "ts_start", "ts_end", "type", "component", "result", "is_finish"};
+  std::vector<std::string> fields = {
+    "timestamp", // The result recorded ts(ns)
+    "ts_start", // The timing starting ts(ns)
+    "ts_end", // The timing ending ts(ns), also the ts it outputs result if is_finish
+    "type", // What type of latency it records
+    "component", // Which component it is
+    "execution_time", // The execution time of this component (ns)
+    "lat_cam", // E2E latency for camera information carried by output result (ns)
+    "lat_lidar", // E2E latency for lidar information carried by output result (ns)
+    "lat_radar", // E2E latency for radar information carried by output result (ns)
+    "is_finish", // Whether the component outputs a valid result this time
+    };
   for (auto it : metrics_to_names_) {
     metrics_to_files_[it.first].open(result_root_dir + it.second + "/" + time_str + '_' + pid_str + ".csv");
     assert(metrics_to_files_[it.first].is_open());
@@ -82,7 +93,10 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           apollo::cyber::Time ts_start,
                                           apollo::cyber::Time ts_end,
                                           const std::string& component,
-                                          const std::string& result,
+                                          apollo::cyber::Duration& execution_time,
+                                          const long long lat_cam,
+                                          const long long lat_lidar,
+                                          const long long lat_radar,
                                           const bool is_finish,
                                           bool is_throttled) {
   if (is_throttled) {
@@ -100,17 +114,21 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
     }
   }
 
-  // Yuting@2022.6.15 Now reference metrics by their name strings
+  // (Deprecated) Yuting@2022.6.15 Now reference metrics by their name strings
+  // Yuting@2022.6.22 Now puts all results in one file (lines)
   {
     std::lock_guard<std::mutex> locker(metrics_to_mutex_[profiling_type]);
     auto& fout_ = metrics_to_files_[profiling_type];
     // The CSV header: "timestamp", "ts_start", "ts_end", "type", "component", "result"
-    fout_ << apollo::cyber::Time::Now().ToMicrosecond() << ',' // "timestamp"
-          << ts_start.ToMicrosecond() << ',' // "ts_start"
-          << ts_end.ToMicrosecond() << ',' // "ts_end"
+    fout_ << apollo::cyber::Time::Now().ToNanosecond() << ',' // "timestamp"
+          << ts_start.ToNanosecond() << ',' // "ts_start"
+          << ts_end.ToNanosecond() << ',' // "ts_end"
           << metrics_to_names_[profiling_type] << ',' // "type"
           << component << ',' // "component"
-          << result << ',' // "result"
+          << execution_time.ToNanosecond() << ',' // "execution_time"
+          << lat_cam << ',' // "lat_cam"
+          << lat_lidar << ',' // "lat_lidar"
+          << lat_radar << ',' // "lat_radar"
           << int(is_finish) << std::endl; // "is_finish"
   }
 

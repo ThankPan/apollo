@@ -31,7 +31,6 @@
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/component/camera_perception_viz_message.h"
 #include "um_dev/profiling/timing/timing.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -304,13 +303,7 @@ void FusionCameraDetectionComponent::OnReceiveImage(
   // prefused msg
   std::shared_ptr<SensorFrameMessage> prefused_message(new (std::nothrow)
                                                            SensorFrameMessage);
-
-    // @Yuting: record E2E latency
-  auto do_record_latency = [&](){
-    um_dev::profiling::LatencyRecorder um_latency_recorder("FusionCameraDetectionComponent::OnReceiveImage");
-    cyber::Time ts(message->measurement_time());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-  };
+  prefused_message->camera_timestamp_ = cyber::Time(message->measurement_time()).ToNanosecond();
 
   if (InternalProc(message, camera_name, &error_code, prefused_message.get(),
                    out_message.get()) != cyber::SUCC) {
@@ -321,21 +314,20 @@ void FusionCameraDetectionComponent::OnReceiveImage(
       return;
     }
     if (output_final_obstacles_) {
-      do_record_latency();
       writer_->Write(out_message);
-      timing.set_finish();
+      timing.set_finish(out_message->header().camera_timestamp(), 0, 0);
     }
     return;
   }
 
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
+  timing.set_finish(prefused_message->camera_timestamp_, 0, 0);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
-    do_record_latency();
     writer_->Write(out_message);
-    timing.set_finish();
+    timing.set_finish(out_message->header().camera_timestamp(), 0, 0);
   }
   // for e2e lantency statistics
   {

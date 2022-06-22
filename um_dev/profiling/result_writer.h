@@ -39,7 +39,10 @@ class ProfilingResultWriter {
                                           apollo::cyber::Time ts_start,
                                           apollo::cyber::Time ts_end,
                                           const std::string& component,
-                                          const std::string& result,
+                                          apollo::cyber::Duration& execution_time,
+                                          const long long lat_cam,
+                                          const long long lat_lidar,
+                                          const long long lat_radar,
                                           const bool is_finish,
                                           bool is_throttled = false);
 

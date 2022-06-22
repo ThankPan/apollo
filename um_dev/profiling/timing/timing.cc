@@ -11,25 +11,45 @@
 namespace um_dev {
 namespace profiling {
 
-UM_Timing::UM_Timing(std::string taskname) : taskname_(taskname) {
+UM_Timing::UM_Timing(std::string taskname) : taskname_(taskname), is_finish_(false) {
   ts_start_ = apollo::cyber::Time::Now();
 }
 
 UM_Timing::~UM_Timing() {
+  // Finished means we already record the result.
+  if (is_finish_) {
+    return; 
+  }
   auto ts_end =  apollo::cyber::Time::Now();
   auto duration = ts_end - ts_start_;
-  long long ns = duration.ToNanosecond();
-  double micro_s = ns / MICRO_TO_NANO;
   ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
                                                   ts_start_,
                                                   ts_end,
                                                   taskname_,
-                                                  std::to_string(micro_s),
-                                                  is_finish_);
+                                                  duration,
+                                                  0, // All zero since the component output nothing this time
+                                                  0,
+                                                  0,
+                                                  false);
 }
 
-void UM_Timing::set_finish() {
+void UM_Timing::set_finish(const long long ts_cam, 
+    const long long ts_lidar, const long long ts_radar) {
   is_finish_ = true;
+  auto ts_end =  apollo::cyber::Time::Now();
+  auto duration = ts_end - ts_start_;
+  auto lat_cam = ts_cam > 0 ? ts_end.ToNanosecond() - ts_cam : 0;
+  auto lat_lidar = ts_lidar > 0 ? ts_end.ToNanosecond() - ts_lidar : 0;
+  auto lat_radar = ts_radar > 0 ? ts_end.ToNanosecond() - ts_radar : 0;
+  ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
+                                                  ts_start_,
+                                                  ts_end,
+                                                  taskname_,
+                                                  duration,
+                                                  lat_cam, // All zero since the component output nothing this time
+                                                  lat_lidar,
+                                                  lat_radar,
+                                                  true);
 }
 
 }  // namespace profiling

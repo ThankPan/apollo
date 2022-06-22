@@ -23,7 +23,6 @@
 #include "modules/perception/lidar/common/lidar_log.h"
 // #include "modules/perception/onboard/component/lidar_common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
 
 using Clock = apollo::cyber::Clock;
 
@@ -58,11 +57,8 @@ bool RecognitionComponent::Proc(
   auto out_message = std::make_shared<SensorFrameMessage>();
 
   if (InternalProc(message, out_message)) {
-    um_dev::profiling::LatencyRecorder um_latency_recorder("RecognitionComponent::Proc");
-    // Yuting@2022.6.15: Recognition processes only perception inner messages related to only Lidar
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, cyber::Time(message->lidar_timestamp_));
     writer_->Write(out_message);
-    timing.set_finish();
+    timing.set_finish(0, cyber::Time(message->lidar_timestamp_).ToNanosecond(), 0);
     AINFO << "Send lidar recognition output message.";
     return true;
   }

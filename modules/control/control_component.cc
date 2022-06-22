@@ -24,7 +24,6 @@
 #include "modules/common/vehicle_state/vehicle_state_provider.h"
 #include "modules/control/common/control_gflags.h"
 #include "um_dev/profiling/timing/timing.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace control {
@@ -279,7 +278,7 @@ Status ControlComponent::ProduceControlCommand(
 }
 
 bool ControlComponent::Proc() {
-  um_dev::profiling::UM_Timing um_timing("ControlComponent::Proc");
+  um_dev::profiling::UM_Timing timing("ControlComponent::Proc");
   const auto start_time = Clock::Now();
 
   chassis_reader_->Observe();
@@ -415,22 +414,14 @@ bool ControlComponent::Proc() {
         local_view_.trajectory().header().lidar_timestamp(), start_time,
         end_time);
   }
-  // Yuting: record E2E latency here
-  um_dev::profiling::LatencyRecorder um_latency_recorder("ControlComponent::Proc");
-  if (local_view_.trajectory().header().has_lidar_timestamp()) {
-    cyber::Time ts(local_view_.trajectory().header().lidar_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
-  }
-  if (local_view_.trajectory().header().has_radar_timestamp()) {
-    cyber::Time ts(local_view_.trajectory().header().radar_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
-  }
-  if (local_view_.trajectory().header().has_camera_timestamp()) {
-    cyber::Time ts(local_view_.trajectory().header().camera_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-  }
+  // Yuting: record E2E latency here, @2022.6.22: all writes to one line
+  auto &header = local_view_.trajectory().header();
+  long long ts_cam = header.has_camera_timestamp() ? header.camera_timestamp() : 0;
+  long long ts_lidar = header.has_lidar_timestamp() ? header.lidar_timestamp() : 0;
+  long long ts_radar = header.has_radar_timestamp() ? header.radar_timestamp() : 0;
   
   control_cmd_writer_->Write(control_command);
+  timing.set_finish(ts_cam, ts_lidar, ts_radar);
   return true;
 }
 

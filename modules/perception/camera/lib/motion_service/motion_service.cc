@@ -93,7 +93,7 @@ void MotionService::OnReceiveImage(const ImageMsgType &message,
 // On reveiving localization input, register it to camera timestamp,
 // compute motion between camera time stamps
 void MotionService::OnLocalization(const LocalizationMsgType &message) {
-  um_dev::profiling::UM_Timing um_timing("MotionService::OnLocalization");
+  um_dev::profiling::UM_Timing timing("MotionService::OnLocalization");
   std::lock_guard<std::mutex> lock(mutex_);
   ADEBUG << "localization received: localization ts: "
          << message->measurement_time();

@@ -19,7 +19,6 @@
 #include "modules/common/util/perf_util.h"
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "um_dev/profiling/timing/timing.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
 
 using Clock = apollo::cyber::Clock;
 
@@ -73,12 +72,9 @@ bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
     return false;
   }
 
-  out_message->radar_timestamp_ = message->header().timestamp_sec() * 1e9;
-  um_dev::profiling::LatencyRecorder um_latency_recorder("RadarDetectionComponent::Proc");
-  cyber::Time ts(message->header().timestamp_sec());
-  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+  out_message->radar_timestamp_ = cyber::Time(message->header().timestamp_sec()).ToNanosecond();
+  timing.set_finish(0, 0, out_message->radar_timestamp_);
   writer_->Write(out_message);
-  timing.set_finish();
   AINFO << "Send radar processing output message.";
   return true;
 }

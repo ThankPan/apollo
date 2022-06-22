@@ -97,7 +97,7 @@ bool RTKLocalizationComponent::Proc(
     PublishPoseBroadcastTF(localization);
     PublishLocalizationStatus(localization_status);
     ADEBUG << "[OnTimer]: Localization message publish success!";
-    timing.set_finish();
+    timing.set_finish(0, 0, 0);
   }
 
   return true;

@@ -81,7 +81,6 @@ cc_library(
         "//modules/v2x/common:v2x_proxy_gflags",
         "//modules/v2x/proto:v2x_traffic_light_cc_proto",
         "//um_dev/profiling/timing:timing",
-        "//um_dev/profiling/latency:latency",
         "@eigen",
         "@opencv//:highgui",
     ],
@@ -147,7 +146,6 @@ cc_library(
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
         "//modules/perception/onboard/transform_wrapper",
         "//um_dev/profiling/timing:timing",
-        "//um_dev/profiling/latency:latency",
         "@eigen",
     ],
 )
@@ -174,7 +172,6 @@ cc_library(
         "//modules/perception/onboard/msg_serializer",
         "//modules/perception/onboard/proto:fusion_component_config_cc_proto",
         "//um_dev/profiling/timing:timing",
-        "//um_dev/profiling/latency:latency",
         "@eigen",
     ],
     alwayslink = True,
@@ -219,7 +216,6 @@ cc_library(
         "//modules/perception/radar/lib/tracker/filter:adaptive_kalman_filter",
         "//modules/perception/radar/lib/tracker/matcher:hm_matcher",
         "//um_dev/profiling/timing:timing",
-        "//um_dev/profiling/latency:latency",
     ],
     alwayslink = True,
 )
@@ -247,7 +243,6 @@ cc_library(
         "//modules/perception/lidar/lib/tracker/multi_lidar_fusion:mlf_tracker",
         "//modules/perception/onboard/proto:lidar_component_config_cc_proto",
         "//um_dev/profiling/timing:timing",
-        "//um_dev/profiling/latency:latency",
     ],
     alwayslink = True,
 )

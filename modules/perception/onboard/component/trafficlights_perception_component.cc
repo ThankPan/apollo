@@ -38,7 +38,6 @@
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace perception {
@@ -417,13 +416,8 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   }
 
   // send msg
-  um_dev::profiling::LatencyRecorder um_latency_recorder("TrafficLightsPerceptionComponent::OnReceiveImage");
-  if (out_msg->header().has_camera_timestamp()) {
-    cyber::Time ts(out_msg->header().camera_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-  }
   writer_->Write(out_msg);
-  timing.set_finish();
+  timing.set_finish(cyber::Time(msg->measurement_time()).ToNanosecond(), 0, 0);
 
   //  SendSimulationMsg();
 

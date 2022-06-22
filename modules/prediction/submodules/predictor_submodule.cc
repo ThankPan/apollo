@@ -23,7 +23,7 @@
 #include "modules/common/adapters/proto/adapter_config.pb.h"
 #include "modules/common/util/message_util.h"
 #include "modules/prediction/common/prediction_system_gflags.h"
-#include "um_dev/profiling/latency/latency_recorder.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace prediction {
@@ -59,6 +59,7 @@ bool PredictorSubmodule::Proc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles,
     const std::shared_ptr<ADCTrajectoryContainer>& adc_trajectory_container,
     const std::shared_ptr<SubmoduleOutput>& submodule_output) {
+  um_dev::profiling::UM_Timing timing("PredictorSubmodule::Proc");
   const apollo::common::Header& perception_header =
       perception_obstacles->header();
   const apollo::common::ErrorCode& perception_error_code =
@@ -82,12 +83,7 @@ bool PredictorSubmodule::Proc(
 
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
 
-  // Yuting: record E2E latency here
-  um_dev::profiling::LatencyRecorder um_latency_recorder("PredictionComponent::ContainerSubmoduleProcess");
-  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, cyber::Time(prediction_obstacles.header().lidar_timestamp()));
-  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, cyber::Time(prediction_obstacles.header().radar_timestamp()));
-  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, cyber::Time(prediction_obstacles.header().camera_timestamp()));
-
+  timing.set_finish(prediction_obstacles.header().camera_timestamp(), prediction_obstacles.header().lidar_timestamp(), prediction_obstacles.header().radar_timestamp());
   predictor_writer_->Write(prediction_obstacles);
 
   const apollo::cyber::Time& end_time = Clock::Now();
