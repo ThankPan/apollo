@@ -34,6 +34,7 @@
 #include "modules/prediction/scenario/scenario_manager.h"
 #include "modules/prediction/util/data_extraction.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace prediction {
@@ -114,7 +115,6 @@ bool PredictionComponent::Init() {
 
 bool PredictionComponent::Proc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles) {
-  um_dev::profiling::UM_Timing um_timing("PredictionComponent::Proc");
   if (FLAGS_use_lego) {
     return ContainerSubmoduleProcess(perception_obstacles);
   }
@@ -123,6 +123,7 @@ bool PredictionComponent::Proc(
 
 bool PredictionComponent::ContainerSubmoduleProcess(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles) {
+  um_dev::profiling::UM_Timing um_timing("PredictionComponent::ContainerSubmoduleProcess");
   constexpr static size_t kHistorySize = 10;
   const auto frame_start_time = Clock::Now();
   // Read localization info. and call OnLocalization to update
@@ -172,7 +173,7 @@ bool PredictionComponent::ContainerSubmoduleProcess(
   submodule_output.set_curr_scenario(scenario_manager_->scenario());
   container_writer_->Write(submodule_output);
   adc_container_writer_->Write(*adc_trajectory_container_ptr);
-  perception_obstacles_writer_->Write(*perception_obstacles);
+  perception_obstacles_writer_->Write(*perception_obstacles); // Yuting@2022.6.16: Why output it again? See predicator_module.cc
   return true;
 }
 
@@ -275,6 +276,13 @@ bool PredictionComponent::PredictionEndToEndProc(
   // Publish output
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
   prediction_writer_->Write(prediction_obstacles);
+
+  // Yuting: record E2E latency here
+  um_dev::profiling::LatencyRecorder um_latency_recorder("PredictionComponent::PredictionEndToEndProc");
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, cyber::Time(prediction_obstacles.header().lidar_timestamp()));
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, cyber::Time(prediction_obstacles.header().radar_timestamp()));
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, cyber::Time(prediction_obstacles.header().camera_timestamp()));
+  
   return true;
 }
 

@@ -23,6 +23,7 @@
 #include "modules/common/adapters/proto/adapter_config.pb.h"
 #include "modules/common/util/message_util.h"
 #include "modules/prediction/common/prediction_system_gflags.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace prediction {
@@ -80,6 +81,13 @@ bool PredictorSubmodule::Proc(
   prediction_obstacles.set_perception_error_code(perception_error_code);
 
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
+
+  // Yuting: record E2E latency here
+  um_dev::profiling::LatencyRecorder um_latency_recorder("PredictionComponent::ContainerSubmoduleProcess");
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, cyber::Time(prediction_obstacles.header().lidar_timestamp()));
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, cyber::Time(prediction_obstacles.header().radar_timestamp()));
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, cyber::Time(prediction_obstacles.header().camera_timestamp()));
+
   predictor_writer_->Write(prediction_obstacles);
 
   const apollo::cyber::Time& end_time = Clock::Now();

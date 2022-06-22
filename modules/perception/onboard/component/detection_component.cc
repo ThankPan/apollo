@@ -70,19 +70,10 @@ bool DetectionComponent::Proc(
   bool status = InternalProc(message, out_message);
   if (status) {
     um_dev::profiling::LatencyRecorder um_latency_recorder("DetectionComponent::Proc");
-    if (message->header().has_lidar_timestamp()) {
-      cyber::Time ts(message->header().lidar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
-    }
-    if (message->header().has_radar_timestamp()) {
-      cyber::Time ts(message->header().radar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
-    }
-    if (message->header().has_camera_timestamp()) {
-      cyber::Time ts(message->header().camera_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-    }
+    cyber::Time ts(message->measurement_time());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
     writer_->Write(out_message);
+    timing.set_finish();
     AINFO << "Send lidar detect output message.";
   }
   return status;

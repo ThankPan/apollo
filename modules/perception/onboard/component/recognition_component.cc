@@ -62,6 +62,7 @@ bool RecognitionComponent::Proc(
     // Yuting@2022.6.15: Recognition processes only perception inner messages related to only Lidar
     um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, cyber::Time(message->lidar_timestamp_));
     writer_->Write(out_message);
+    timing.set_finish();
     AINFO << "Send lidar recognition output message.";
     return true;
   }

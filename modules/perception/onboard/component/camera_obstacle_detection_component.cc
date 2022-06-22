@@ -307,19 +307,9 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
 
   // @Yuting: record E2E latency
   auto do_record_latency = [&](){
-    um_dev::profiling::LatencyRecorder um_latency_recorder("ControlComponent::Proc");
-    if (out_message->header().has_lidar_timestamp()) {
-      cyber::Time ts(out_message->header().lidar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
-    }
-    if (out_message->header().has_radar_timestamp()) {
-      cyber::Time ts(out_message->header().radar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
-    }
-    if (out_message->header().has_camera_timestamp()) {
-      cyber::Time ts(out_message->header().camera_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-    }
+    um_dev::profiling::LatencyRecorder um_latency_recorder("CameraObstacleDetectionComponent::OnReceiveImage");
+    cyber::Time ts(message->measurement_time());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
   };
   
   if (InternalProc(message, camera_name, &error_code, prefused_message.get(),
@@ -333,10 +323,13 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
     if (output_final_obstacles_) {
       do_record_latency();
       writer_->Write(out_message);
+      timing.set_finish();
     }
     return;
   }
 
+  // Yuting@2022.6.16: set camera timestamp for prefused
+  prefused_message->camera_timestamp_ = message->measurement_time() * 1e9;
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;
@@ -344,6 +337,7 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
   if (output_final_obstacles_) {
     do_record_latency();
     writer_->Write(out_message);
+    timing.set_finish();
   }
   // for e2e lantency statistics
   {
@@ -788,7 +782,7 @@ int CameraObstacleDetectionComponent::InternalProc(
         prefused_message->frame_->camera_frame_supplement.image_blob.get());
   }
 
-  //  Determine CIPV
+  //  Determine CIPV (Closest In-Path Vehicle)
   if (enable_cipv_) {
     camera::CipvOptions cipv_options;
     if (motion_buffer_ != nullptr) {

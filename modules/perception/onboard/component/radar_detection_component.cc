@@ -72,20 +72,13 @@ bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
   if (!InternalProc(message, out_message)) {
     return false;
   }
+
+  out_message->radar_timestamp_ = message->header().timestamp_sec() * 1e9;
   um_dev::profiling::LatencyRecorder um_latency_recorder("RadarDetectionComponent::Proc");
-  if (message->header().has_lidar_timestamp()) {
-    cyber::Time ts(message->header().lidar_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
-  }
-  if (message->header().has_radar_timestamp()) {
-    cyber::Time ts(message->header().radar_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
-  }
-  if (message->header().has_camera_timestamp()) {
-    cyber::Time ts(message->header().camera_timestamp());
-    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-  }
+  cyber::Time ts(message->header().timestamp_sec());
+  um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
   writer_->Write(out_message);
+  timing.set_finish();
   AINFO << "Send radar processing output message.";
   return true;
 }

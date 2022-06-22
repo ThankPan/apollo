@@ -33,6 +33,7 @@ cc_library(
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
         "//modules/storytelling/proto:story_cc_proto",
         "//um_dev/profiling/timing:timing",
+        "//um_dev/profiling/latency:latency",
     ],
 )
 

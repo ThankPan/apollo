@@ -24,7 +24,12 @@ UM_Timing::~UM_Timing() {
                                                   ts_start_,
                                                   ts_end,
                                                   taskname_,
-                                                  std::to_string(micro_s));
+                                                  std::to_string(micro_s),
+                                                  is_finish_);
+}
+
+void UM_Timing::set_finish() {
+  is_finish_ = true;
 }
 
 }  // namespace profiling

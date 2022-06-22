@@ -31,6 +31,7 @@ cc_library(
         "//modules/prediction/common:message_process",
         "//modules/prediction/common:prediction_gflags",
         "//modules/prediction/evaluator:evaluator_manager",
+        "//um_dev/profiling/latency:latency",
     ],
     alwayslink = True,
 )
@@ -59,6 +60,7 @@ cc_library(
         "//modules/prediction/container/adc_trajectory:adc_trajectory_container",
         "//modules/prediction/predictor:predictor_manager",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
+        "//um_dev/profiling/latency:latency",
     ],
     alwayslink = True,
 )

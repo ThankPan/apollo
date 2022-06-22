@@ -41,7 +41,7 @@ ProfilingResultWriter::ProfilingResultWriter()
 
   // Open result files here
   auto time_str = now.ToString();
-  std::vector<std::string> fields = {"timestamp", "ts_start", "ts_end", "type", "component", "result"};
+  std::vector<std::string> fields = {"timestamp", "ts_start", "ts_end", "type", "component", "result", "is_finish"};
   for (auto it : metrics_to_names_) {
     metrics_to_files_[it.first].open(result_root_dir + it.second + "/" + time_str + '_' + pid_str + ".csv");
     assert(metrics_to_files_[it.first].is_open());
@@ -83,6 +83,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           apollo::cyber::Time ts_end,
                                           const std::string& component,
                                           const std::string& result,
+                                          const bool is_finish,
                                           bool is_throttled) {
   if (is_throttled) {
     std::lock_guard<std::mutex> lock(mutex_map_);
@@ -109,7 +110,8 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
           << ts_end.ToMicrosecond() << ',' // "ts_end"
           << metrics_to_names_[profiling_type] << ',' // "type"
           << component << ',' // "component"
-          << result << std::endl; // "result"
+          << result << ',' // "result"
+          << int(is_finish) << std::endl; // "is_finish"
   }
 
   return true;

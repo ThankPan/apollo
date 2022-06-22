@@ -40,6 +40,7 @@ class ProfilingResultWriter {
                                           apollo::cyber::Time ts_end,
                                           const std::string& component,
                                           const std::string& result,
+                                          const bool is_finish,
                                           bool is_throttled = false);
 
  private:

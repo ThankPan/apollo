@@ -308,18 +308,8 @@ void FusionCameraDetectionComponent::OnReceiveImage(
     // @Yuting: record E2E latency
   auto do_record_latency = [&](){
     um_dev::profiling::LatencyRecorder um_latency_recorder("FusionCameraDetectionComponent::OnReceiveImage");
-    if (message->header().has_lidar_timestamp()) {
-      cyber::Time ts(message->header().lidar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
-    }
-    if (message->header().has_radar_timestamp()) {
-      cyber::Time ts(message->header().radar_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
-    }
-    if (message->header().has_camera_timestamp()) {
-      cyber::Time ts(message->header().camera_timestamp());
-      um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
-    }
+    cyber::Time ts(message->measurement_time());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
   };
 
   if (InternalProc(message, camera_name, &error_code, prefused_message.get(),
@@ -333,6 +323,7 @@ void FusionCameraDetectionComponent::OnReceiveImage(
     if (output_final_obstacles_) {
       do_record_latency();
       writer_->Write(out_message);
+      timing.set_finish();
     }
     return;
   }
@@ -344,6 +335,7 @@ void FusionCameraDetectionComponent::OnReceiveImage(
   if (output_final_obstacles_) {
     do_record_latency();
     writer_->Write(out_message);
+    timing.set_finish();
   }
   // for e2e lantency statistics
   {

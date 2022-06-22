@@ -18,10 +18,12 @@ class UM_Timing {
   UM_Timing(UM_Timing&) = delete;
   UM_Timing(std::string taskname);
   ~UM_Timing();
+  void set_finish();
 
  private:
   std::string taskname_;
   apollo::cyber::Time ts_start_;
+  bool is_finish_;
 };
 
 }  // namespace profiling

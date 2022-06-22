@@ -315,6 +315,7 @@ void LaneDetectionComponent::OnReceiveImage(
     AERROR << "InternalProc failed, error_code: " << error_code;
     return;
   }
+  timing.set_finish();
 
   // for e2e lantency statistics
   {

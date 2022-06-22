@@ -38,7 +38,8 @@ void LatencyRecorder::record_latency(LatencyType type, apollo::cyber::Time senso
                                                     apollo::cyber::Time(0),
                                                     apollo::cyber::Time(0),
                                                     taskname_,
-                                                    std::to_string(micro_s));
+                                                    std::to_string(micro_s),
+                                                    true);
 }
 
 // void LatencyRecorder::stop_record_latency(LatencyType type, apollo::cyber::Time sensor_input_time) {}

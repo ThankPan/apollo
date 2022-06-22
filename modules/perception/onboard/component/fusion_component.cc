@@ -63,6 +63,13 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
   std::shared_ptr<SensorFrameMessage> viz_message(new (std::nothrow)
                                                       SensorFrameMessage);
   bool status = InternalProc(message, out_message, viz_message);
+  // Yuting@2022.6.16: Complete radar and camera timestamp here
+  if (message->radar_timestamp_ > 0.0f) {
+    out_message->mutable_header()->set_radar_timestamp(message->radar_timestamp_);
+  }
+  if (message->camera_timestamp_ > 0.0f) {
+    out_message->mutable_header()->set_camera_timestamp(message->camera_timestamp_);
+  }
   if (status) {
     // TODO(conver sensor id)
     if (message->sensor_id_ != fusion_main_sensor_) {
@@ -84,6 +91,7 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
         um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
       }
       writer_->Write(out_message);
+      timing.set_finish();
       AINFO << "Send fusion processing output message.";
       // send msg for visualization
       if (FLAGS_obs_enable_visualization) {

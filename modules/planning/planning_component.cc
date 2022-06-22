@@ -27,6 +27,7 @@
 #include "modules/planning/navi_planning.h"
 #include "modules/planning/on_lane_planning.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/latency/latency_recorder.h"
 
 namespace apollo {
 namespace planning {
@@ -196,6 +197,24 @@ bool PlanningComponent::Proc(
   const double dt = start_time - adc_trajectory_pb.header().timestamp_sec();
   for (auto& p : *adc_trajectory_pb.mutable_trajectory_point()) {
     p.set_relative_time(p.relative_time() + dt);
+  }
+
+  // Yuting: record E2E latency here
+  um_dev::profiling::LatencyRecorder um_latency_recorder("PlanningComponent::Proc");
+  if (adc_trajectory_pb.header().has_lidar_timestamp()) {
+    adc_trajectory_pb.mutable_header()->set_lidar_timestamp(prediction_obstacles->header().lidar_timestamp());
+    cyber::Time ts(prediction_obstacles->header().lidar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_LIDAR, ts);
+  }
+  if (adc_trajectory_pb.header().has_radar_timestamp()) {
+    adc_trajectory_pb.mutable_header()->set_radar_timestamp(prediction_obstacles->header().radar_timestamp());
+    cyber::Time ts(prediction_obstacles->header().radar_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_RADAR, ts);
+  }
+  if (adc_trajectory_pb.header().has_camera_timestamp()) {
+    adc_trajectory_pb.mutable_header()->set_camera_timestamp(prediction_obstacles->header().camera_timestamp());
+    cyber::Time ts(prediction_obstacles->header().camera_timestamp());
+    um_latency_recorder.record_latency(um_dev::profiling::LATENCY_TYPE_CAMERA, ts);
   }
   planning_writer_->Write(adc_trajectory_pb);
 
