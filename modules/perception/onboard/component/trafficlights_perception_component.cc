@@ -313,6 +313,8 @@ int TrafficLightsPerceptionComponent::InitCameraFrame() {
 void TrafficLightsPerceptionComponent::OnReceiveImage(
     const std::shared_ptr<apollo::drivers::Image> msg,
     const std::string& camera_name) {
+  // Yuting@2022.6.23: now sets ts when sensor goes into system
+  auto enter_ts = cyber::Time::Now();
   um_dev::profiling::UM_Timing timing("TrafficLightsPerceptionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lck(mutex_);
   double receive_img_timestamp = Clock::NowInSeconds();
@@ -416,8 +418,9 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   }
 
   // send msg
+  out_msg->mutable_header()->set_camera_timestamp(enter_ts.ToNanosecond());
   writer_->Write(out_msg);
-  timing.set_finish(cyber::Time(msg->measurement_time()).ToNanosecond(), 0, 0);
+  timing.set_finish(out_msg->header().camera_timestamp(), 0, 0);
 
   //  SendSimulationMsg();
 

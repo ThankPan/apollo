@@ -16,6 +16,7 @@
 
 #include "modules/localization/rtk/rtk_localization_component.h"
 #include "cyber/time/clock.h"
+#include "cyber/time/time.h"
 #include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
@@ -83,6 +84,7 @@ bool RTKLocalizationComponent::InitIO() {
 
 bool RTKLocalizationComponent::Proc(
     const std::shared_ptr<localization::Gps>& gps_msg) {
+  gps_msg->mutable_header()->set_radar_timestamp(cyber::Time::Now().ToNanosecond());
   um_dev::profiling::UM_Timing timing("RTKLocalizationComponent::Proc");
   localization_->GpsCallback(gps_msg);
 

@@ -35,6 +35,9 @@ UM_Timing::~UM_Timing() {
 
 void UM_Timing::set_finish(const long long ts_cam, 
     const long long ts_lidar, const long long ts_radar) {
+  if (is_finish_) {
+    return;
+  }
   is_finish_ = true;
   auto ts_end =  apollo::cyber::Time::Now();
   auto duration = ts_end - ts_start_;
@@ -50,6 +53,19 @@ void UM_Timing::set_finish(const long long ts_cam,
                                                   lat_lidar,
                                                   lat_radar,
                                                   true);
+}
+
+void UM_Timing::add_checkpoint(std::string name, const long long ts_cam, 
+  const long long ts_lidar, const long long ts_radar) {
+    auto ns_now =  apollo::cyber::Time::Now().ToNanosecond();
+    std::cout << taskname_ + "-" + name << ": " << "ts_ns=" << ns_now
+              << ", ts_cam=" << ts_cam
+              << ", ts_lidar=" << ts_lidar
+              << ", ts_radar=" << ts_radar
+              << ", lat_cam=" << ns_now - ts_cam
+              << ", lat_lidar=" << ns_now - ts_lidar
+              << ", lat_radar=" << ns_now - ts_radar
+              << std::endl;
 }
 
 }  // namespace profiling

@@ -73,8 +73,8 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
             << fusion_main_sensor_ << ". Skip send.";
     } else {
       // Send("/apollo/perception/obstacles", out_message);
-      writer_->Write(out_message);
       timing.set_finish(out_message->header().camera_timestamp(), out_message->header().lidar_timestamp(), out_message->header().radar_timestamp());
+      writer_->Write(out_message);
       AINFO << "Send fusion processing output message.";
       // send msg for visualization
       if (FLAGS_obs_enable_visualization) {

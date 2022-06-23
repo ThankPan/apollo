@@ -270,6 +270,8 @@ bool CameraObstacleDetectionComponent::Init() {
 void CameraObstacleDetectionComponent::OnReceiveImage(
     const std::shared_ptr<apollo::drivers::Image> &message,
     const std::string &camera_name) {
+  // Yuting@2022.6.23: now sets ts when sensor goes into system
+  auto enter_ts = cyber::Time::Now();
   um_dev::profiling::UM_Timing timing("CameraObstacleDetectionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
@@ -313,21 +315,22 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
       return;
     }
     if (output_final_obstacles_) {
+      out_message->mutable_header()->set_camera_timestamp(enter_ts.ToNanosecond());
+      timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
       writer_->Write(out_message);
-      timing.set_finish((long long)message->measurement_time() * 1e9, 0, 0);
     }
     return;
   }
 
   // Yuting@2022.6.16: set camera timestamp for prefused
-  prefused_message->camera_timestamp_ = (long long)message->measurement_time() * 1e9;
+  prefused_message->camera_timestamp_ = enter_ts.ToNanosecond();
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
-    writer_->Write(out_message);
     timing.set_finish(prefused_message->camera_timestamp_, 0, 0);
+    writer_->Write(out_message);
   }
   // for e2e lantency statistics
   {

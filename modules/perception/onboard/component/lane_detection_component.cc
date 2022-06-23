@@ -276,6 +276,8 @@ void LaneDetectionComponent::OnMotionService(
 void LaneDetectionComponent::OnReceiveImage(
     const std::shared_ptr<apollo::drivers::Image> &message,
     const std::string &camera_name) {
+  // Yuting@2022.6.23: now sets ts when sensor goes into system
+  auto enter_ts = cyber::Time::Now();
   um_dev::profiling::UM_Timing timing("LaneDetectionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
@@ -314,7 +316,7 @@ void LaneDetectionComponent::OnReceiveImage(
     AERROR << "InternalProc failed, error_code: " << error_code;
     return;
   }
-  timing.set_finish(cyber::Time(message->measurement_time()).ToNanosecond(), 0, 0);
+  timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
 
   // for e2e lantency statistics
   {

@@ -170,10 +170,10 @@ bool PredictionComponent::ContainerSubmoduleProcess(
       obstacles_container_ptr->GetSubmoduleOutput(kHistorySize,
                                                   frame_start_time);
   submodule_output.set_curr_scenario(scenario_manager_->scenario());
+  timing.set_finish(perception_obstacles->header().camera_timestamp(), perception_obstacles->header().lidar_timestamp(), perception_obstacles->header().radar_timestamp());
   container_writer_->Write(submodule_output);
   adc_container_writer_->Write(*adc_trajectory_container_ptr);
   perception_obstacles_writer_->Write(*perception_obstacles); // Yuting@2022.6.16: Why output it again? See predicator_module.cc
-  timing.set_finish(perception_obstacles->header().camera_timestamp(), perception_obstacles->header().lidar_timestamp(), perception_obstacles->header().radar_timestamp());
   return true;
 }
 
@@ -276,9 +276,8 @@ bool PredictionComponent::PredictionEndToEndProc(
 
   // Publish output
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
-  prediction_writer_->Write(prediction_obstacles);
   timing.set_finish(perception_msg.header().camera_timestamp(), perception_msg.header().lidar_timestamp(), perception_msg.header().radar_timestamp());
-  
+  prediction_writer_->Write(prediction_obstacles);  
   return true;
 }
 

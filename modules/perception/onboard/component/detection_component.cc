@@ -58,7 +58,13 @@ bool DetectionComponent::Init() {
 
 bool DetectionComponent::Proc(
     const std::shared_ptr<drivers::PointCloud>& message) {
+  // Yuting@2022.6.22: very heacky, set timestamp whenever sensor data go into system
+  message->mutable_header()->set_timestamp_sec(cyber::Time::Now().ToSecond());
+  message->set_measurement_time(cyber::Time::Now().ToSecond());
+  message->mutable_header()->set_lidar_timestamp(cyber::Time::Now().ToNanosecond());
   um_dev::profiling::UM_Timing timing("DetectionComponent::Proc");
+  timing.add_checkpoint("Beginning", cyber::Time(message->measurement_time()).ToNanosecond(), 
+    message->header().lidar_timestamp(), 0);
   AINFO << std::setprecision(16)
         << "Enter detection component, message timestamp: "
         << message->measurement_time()
@@ -68,9 +74,8 @@ bool DetectionComponent::Proc(
 
   bool status = InternalProc(message, out_message);
   if (status) {
-    cyber::Time ts(message->measurement_time());
+    timing.set_finish(0, out_message->lidar_timestamp_, 0);
     writer_->Write(out_message);
-    timing.set_finish(0, ts.ToNanosecond(), 0);
     AINFO << "Send lidar detect output message.";
   }
   return status;

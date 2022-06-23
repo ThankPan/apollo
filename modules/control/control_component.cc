@@ -420,8 +420,9 @@ bool ControlComponent::Proc() {
   long long ts_lidar = header.has_lidar_timestamp() ? header.lidar_timestamp() : 0;
   long long ts_radar = header.has_radar_timestamp() ? header.radar_timestamp() : 0;
   
-  control_cmd_writer_->Write(control_command);
   timing.set_finish(ts_cam, ts_lidar, ts_radar);
+  control_cmd_writer_->Write(control_command);
+
   return true;
 }
 

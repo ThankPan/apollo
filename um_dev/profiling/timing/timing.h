@@ -19,6 +19,7 @@ class UM_Timing {
   UM_Timing(std::string taskname);
   ~UM_Timing();
   void set_finish(const long long ts_cam, const long long ts_lidar, const long long ts_radar);
+  void add_checkpoint(std::string name, const long long ts_cam, const long long ts_lidar, const long long ts_radar);
 
  private:
   std::string taskname_;
