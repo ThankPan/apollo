@@ -278,6 +278,8 @@ void LaneDetectionComponent::OnReceiveImage(
     const std::string &camera_name) {
   // Yuting@2022.6.23: now sets ts when sensor goes into system
   auto enter_ts = cyber::Time::Now();
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("LaneDetectionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
@@ -316,7 +318,7 @@ void LaneDetectionComponent::OnReceiveImage(
     AERROR << "InternalProc failed, error_code: " << error_code;
     return;
   }
-  timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
+  timing.set_finish(latest_camera_ts_, 0, 0);
 
   // for e2e lantency statistics
   {

@@ -56,6 +56,10 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
   if (message->process_stage_ == ProcessStage::SENSOR_FUSION) {
     return true;
   }
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = message->camera_timestamp_ > latest_camera_ts_ ? message->camera_timestamp_ : latest_camera_ts_;
+  latest_lidar_ts_ = message->lidar_timestamp_ > latest_lidar_ts_ ? message->lidar_timestamp_ : latest_lidar_ts_;
+  latest_radar_ts_ = message->radar_timestamp_ > latest_radar_ts_ ? message->radar_timestamp_ : latest_radar_ts_;
   um_dev::profiling::UM_Timing timing("FusionComponent::Proc"); // timing the whole function
   std::shared_ptr<PerceptionObstacles> out_message(new (std::nothrow)
                                                        PerceptionObstacles);
@@ -63,17 +67,20 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
                                                       SensorFrameMessage);
   bool status = InternalProc(message, out_message, viz_message);
   // Yuting@2022.6.16: Complete radar and camera timestamp here
-  out_message->mutable_header()->set_radar_timestamp(message->radar_timestamp_);
-  out_message->mutable_header()->set_camera_timestamp(message->camera_timestamp_);
+  out_message->mutable_header()->set_camera_timestamp(latest_camera_ts_);
+  out_message->mutable_header()->set_lidar_timestamp(latest_lidar_ts_);
+  out_message->mutable_header()->set_radar_timestamp(latest_radar_ts_);
 
   if (status) {
     // TODO(conver sensor id)
+    // Yuting@2022.6.23: let pass all sensors, that's hacking!
+    // Yuting@2022.6.24: stop let pass all sensors.
     if (message->sensor_id_ != fusion_main_sensor_) {
       AINFO << "Fusion receive from " << message->sensor_id_ << "not from "
             << fusion_main_sensor_ << ". Skip send.";
     } else {
       // Send("/apollo/perception/obstacles", out_message);
-      timing.set_finish(out_message->header().camera_timestamp(), out_message->header().lidar_timestamp(), out_message->header().radar_timestamp());
+      timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
       writer_->Write(out_message);
       AINFO << "Send fusion processing output message.";
       // send msg for visualization

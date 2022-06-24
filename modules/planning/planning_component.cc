@@ -74,6 +74,8 @@ bool PlanningComponent::Init() {
   traffic_light_reader_ = node_->CreateReader<TrafficLightDetection>(
       config_.topic_config().traffic_light_detection_topic(),
       [this](const std::shared_ptr<TrafficLightDetection>& traffic_light) {
+        // Yuting@2022.6.24: now keep latest timestamps for sensors
+        this->latest_camera_ts_ = traffic_light->header().camera_timestamp();
         ADEBUG << "Received traffic light data: run traffic light callback.";
         std::lock_guard<std::mutex> lock(mutex_);
         traffic_light_.CopyFrom(*traffic_light);
@@ -122,6 +124,19 @@ bool PlanningComponent::Proc(
     const std::shared_ptr<canbus::Chassis>& chassis,
     const std::shared_ptr<localization::LocalizationEstimate>&
         localization_estimate) {
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = 
+    prediction_obstacles->header().has_camera_timestamp() && prediction_obstacles->header().camera_timestamp() > latest_camera_ts_
+    ? prediction_obstacles->header().camera_timestamp()
+    : latest_camera_ts_;
+  latest_lidar_ts_ = 
+    prediction_obstacles->header().has_lidar_timestamp() && prediction_obstacles->header().lidar_timestamp() > latest_lidar_ts_
+    ? prediction_obstacles->header().lidar_timestamp()
+    : latest_lidar_ts_;
+  latest_radar_ts_ = 
+    prediction_obstacles->header().has_radar_timestamp() && prediction_obstacles->header().radar_timestamp() > latest_radar_ts_
+    ? prediction_obstacles->header().radar_timestamp()
+    : latest_radar_ts_;
   um_dev::profiling::UM_Timing timing("PlanningComponent::Proc");
   ACHECK(prediction_obstacles != nullptr);
 
@@ -199,16 +214,12 @@ bool PlanningComponent::Proc(
   }
 
   // Yuting: Set ts for sensors and record E2E latency.
-  adc_trajectory_pb.mutable_header()->set_camera_timestamp(
-    prediction_obstacles->header().has_camera_timestamp() ? prediction_obstacles->header().camera_timestamp() : 0);
-  adc_trajectory_pb.mutable_header()->set_lidar_timestamp(
-    prediction_obstacles->header().has_lidar_timestamp() ? prediction_obstacles->header().lidar_timestamp() : 0);  
-  adc_trajectory_pb.mutable_header()->set_radar_timestamp(
-    prediction_obstacles->header().has_radar_timestamp() ? prediction_obstacles->header().radar_timestamp() : 0);
-  timing.set_finish(adc_trajectory_pb.header().camera_timestamp(), adc_trajectory_pb.header().lidar_timestamp(), adc_trajectory_pb.header().radar_timestamp());
+  adc_trajectory_pb.mutable_header()->set_camera_timestamp(latest_camera_ts_);
+  adc_trajectory_pb.mutable_header()->set_lidar_timestamp(latest_lidar_ts_);  
+  adc_trajectory_pb.mutable_header()->set_radar_timestamp(latest_radar_ts_);
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
   planning_writer_->Write(adc_trajectory_pb);
   
-
   // record in history
   auto* history = injector_->history();
   history->Add(adc_trajectory_pb);

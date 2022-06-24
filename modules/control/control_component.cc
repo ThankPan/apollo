@@ -137,6 +137,19 @@ void ControlComponent::OnChassis(const std::shared_ptr<Chassis> &chassis) {
 
 void ControlComponent::OnPlanning(
     const std::shared_ptr<ADCTrajectory> &trajectory) {
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = 
+    trajectory->header().has_camera_timestamp() && trajectory->header().camera_timestamp() > latest_camera_ts_
+    ? trajectory->header().camera_timestamp()
+    : latest_camera_ts_;
+  latest_lidar_ts_ = 
+    trajectory->header().has_lidar_timestamp() && trajectory->header().lidar_timestamp() > latest_lidar_ts_
+    ? trajectory->header().lidar_timestamp()
+    : latest_lidar_ts_;
+  latest_radar_ts_ = 
+    trajectory->header().has_radar_timestamp() && trajectory->header().radar_timestamp() > latest_radar_ts_
+    ? trajectory->header().radar_timestamp()
+    : latest_radar_ts_;
   ADEBUG << "Received chassis data: run trajectory callback.";
   std::lock_guard<std::mutex> lock(mutex_);
   latest_trajectory_.CopyFrom(*trajectory);
@@ -415,12 +428,7 @@ bool ControlComponent::Proc() {
         end_time);
   }
   // Yuting: record E2E latency here, @2022.6.22: all writes to one line
-  auto &header = local_view_.trajectory().header();
-  long long ts_cam = header.has_camera_timestamp() ? header.camera_timestamp() : 0;
-  long long ts_lidar = header.has_lidar_timestamp() ? header.lidar_timestamp() : 0;
-  long long ts_radar = header.has_radar_timestamp() ? header.radar_timestamp() : 0;
-  
-  timing.set_finish(ts_cam, ts_lidar, ts_radar);
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
   control_cmd_writer_->Write(control_command);
 
   return true;

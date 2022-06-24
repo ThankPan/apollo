@@ -22,10 +22,8 @@ nohup mainboard -d modules/localization/dag/dag_streaming_rtk_localization.dag &
 nohup mainboard -d modules/drivers/tools/image_decompress/dag/image_decompress.dag &
 # Perception (for lgsvl, would use velodyne128_detection_conf_lgsvl.pb.txt)
 nohup mainboard -d modules/perception/production/dag/dag_streaming_perception_lgsvl.dag &
-# Camera sensor fusion
-nohup mainboard -d modules/perception/production/dag/dag_streaming_perception_camera.dag &
 # Camera obstacle detection
-nohup mainboard -d modules/perception/production/dag/dag_streaming_obstacle_detection.dag &
+# nohup mainboard -d modules/perception/production/dag/dag_streaming_obstacle_detection.dag &
 # Lane detection
 nohup mainboard -d modules/perception/production/dag/dag_streaming_perception_lane.dag &
 # Motion service

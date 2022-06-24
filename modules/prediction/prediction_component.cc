@@ -114,6 +114,16 @@ bool PredictionComponent::Init() {
 
 bool PredictionComponent::Proc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles) {
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = perception_obstacles->header().has_camera_timestamp() && perception_obstacles->header().camera_timestamp() > latest_camera_ts_
+  ? perception_obstacles->header().camera_timestamp() 
+  : latest_camera_ts_;
+  latest_lidar_ts_ = perception_obstacles->header().has_lidar_timestamp() && perception_obstacles->header().lidar_timestamp() > latest_lidar_ts_
+  ? perception_obstacles->header().lidar_timestamp() 
+  : latest_lidar_ts_;
+  latest_radar_ts_ = perception_obstacles->header().has_radar_timestamp() && perception_obstacles->header().radar_timestamp() > latest_radar_ts_
+  ? perception_obstacles->header().radar_timestamp() 
+  : latest_radar_ts_;
   if (FLAGS_use_lego) {
     return ContainerSubmoduleProcess(perception_obstacles);
   }
@@ -170,7 +180,7 @@ bool PredictionComponent::ContainerSubmoduleProcess(
       obstacles_container_ptr->GetSubmoduleOutput(kHistorySize,
                                                   frame_start_time);
   submodule_output.set_curr_scenario(scenario_manager_->scenario());
-  timing.set_finish(perception_obstacles->header().camera_timestamp(), perception_obstacles->header().lidar_timestamp(), perception_obstacles->header().radar_timestamp());
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
   container_writer_->Write(submodule_output);
   adc_container_writer_->Write(*adc_trajectory_container_ptr);
   perception_obstacles_writer_->Write(*perception_obstacles); // Yuting@2022.6.16: Why output it again? See predicator_module.cc
@@ -276,7 +286,11 @@ bool PredictionComponent::PredictionEndToEndProc(
 
   // Publish output
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
-  timing.set_finish(perception_msg.header().camera_timestamp(), perception_msg.header().lidar_timestamp(), perception_msg.header().radar_timestamp());
+  prediction_obstacles.mutable_header()->set_camera_timestamp(latest_camera_ts_);
+  prediction_obstacles.mutable_header()->set_lidar_timestamp(latest_lidar_ts_);
+  prediction_obstacles.mutable_header()->set_radar_timestamp(latest_radar_ts_);
+
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
   prediction_writer_->Write(prediction_obstacles);  
   return true;
 }

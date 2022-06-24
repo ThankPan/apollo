@@ -272,6 +272,8 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
     const std::string &camera_name) {
   // Yuting@2022.6.23: now sets ts when sensor goes into system
   auto enter_ts = cyber::Time::Now();
+  // Yuting@2022.6.24: now keep latest timestamps for sensors
+  latest_camera_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("CameraObstacleDetectionComponent::OnReceiveImage");
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
@@ -315,21 +317,23 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
       return;
     }
     if (output_final_obstacles_) {
-      out_message->mutable_header()->set_camera_timestamp(enter_ts.ToNanosecond());
-      timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
+      // out_message->mutable_header()->set_camera_timestamp(enter_ts.ToNanosecond());
+      // timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
       writer_->Write(out_message);
     }
     return;
   }
 
   // Yuting@2022.6.16: set camera timestamp for prefused
-  prefused_message->camera_timestamp_ = enter_ts.ToNanosecond();
+  prefused_message->camera_timestamp_ = latest_camera_ts_;
+  timing.set_finish(latest_camera_ts_, 0, 0);
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
-    timing.set_finish(prefused_message->camera_timestamp_, 0, 0);
+    // out_message->mutable_header()->set_camera_timestamp(enter_ts.ToNanosecond());
+    // timing.set_finish(enter_ts.ToNanosecond(), 0, 0);
     writer_->Write(out_message);
   }
   // for e2e lantency statistics

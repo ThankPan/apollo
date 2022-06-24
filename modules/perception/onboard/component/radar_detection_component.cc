@@ -63,8 +63,8 @@ bool RadarDetectionComponent::Init() {
 
 bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
   // Yuting@2022.6.23: now sets ts when sensor goes into system
-  message->mutable_header()->set_timestamp_sec(cyber::Time::Now().ToSecond());
-  message->mutable_header()->set_radar_timestamp(cyber::Time::Now().ToNanosecond());
+  auto enter_ts = cyber::Time::Now();
+  latest_radar_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("RadarDetectionComponent::Proc");
   AINFO << "Enter radar preprocess, message timestamp: "
         << message->header().timestamp_sec() << " current timestamp "
@@ -75,8 +75,8 @@ bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
     return false;
   }
 
-  out_message->radar_timestamp_ = cyber::Time(message->header().timestamp_sec()).ToNanosecond();
-  timing.set_finish(0, 0, out_message->radar_timestamp_);
+  out_message->radar_timestamp_ = enter_ts.ToNanosecond();
+  timing.set_finish(0, 0, latest_radar_ts_);
   writer_->Write(out_message);
   AINFO << "Send radar processing output message.";
   return true;
