@@ -41,17 +41,17 @@ void UM_Timing::set_finish(const long long ts_cam,
   is_finish_ = true;
   auto ts_end =  apollo::cyber::Time::Now();
   auto duration = ts_end - ts_start_;
-  auto lat_cam = ts_cam > 0 ? ts_end.ToNanosecond() - ts_cam : 0;
-  auto lat_lidar = ts_lidar > 0 ? ts_end.ToNanosecond() - ts_lidar : 0;
-  auto lat_radar = ts_radar > 0 ? ts_end.ToNanosecond() - ts_radar : 0;
+  // auto lat_cam = ts_cam > 0 ? ts_end.ToNanosecond() - ts_cam : 0;
+  // auto lat_lidar = ts_lidar > 0 ? ts_end.ToNanosecond() - ts_lidar : 0;
+  // auto lat_radar = ts_radar > 0 ? ts_end.ToNanosecond() - ts_radar : 0;
   ProfilingResultWriter::Instance().write_to_file(PROFILING_METRICS::TIMING,
                                                   ts_start_,
                                                   ts_end,
                                                   taskname_,
                                                   duration,
-                                                  lat_cam, // All zero since the component output nothing this time
-                                                  lat_lidar,
-                                                  lat_radar,
+                                                  ts_cam,
+                                                  ts_lidar,
+                                                  ts_radar,
                                                   true);
 }
 

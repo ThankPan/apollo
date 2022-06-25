@@ -42,15 +42,14 @@ ProfilingResultWriter::ProfilingResultWriter()
   // Open result files here
   auto time_str = now.ToString();
   std::vector<std::string> fields = {
-    "timestamp", // The result recorded ts(ns)
     "ts_start", // The timing starting ts(ns)
     "ts_end", // The timing ending ts(ns), also the ts it outputs result if is_finish
     "type", // What type of latency it records
     "component", // Which component it is
     "execution_time", // The execution time of this component (ns)
-    "lat_cam", // E2E latency for camera information carried by output result (ns)
-    "lat_lidar", // E2E latency for lidar information carried by output result (ns)
-    "lat_radar", // E2E latency for radar information carried by output result (ns)
+    "ts_cam", // ts for camera information carried by output result (ns) (0 means this message carries NO such info)
+    "ts_lidar", // ts for lidar information carried by output result (ns)
+    "ts_radar", // ts for radar information carried by output result (ns)
     "is_finish", // Whether the component outputs a valid result this time
     };
   for (auto it : metrics_to_names_) {
@@ -94,9 +93,9 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           apollo::cyber::Time ts_end,
                                           const std::string& component,
                                           apollo::cyber::Duration& execution_time,
-                                          const long long lat_cam,
-                                          const long long lat_lidar,
-                                          const long long lat_radar,
+                                          const long long ts_cam,
+                                          const long long ts_lidar,
+                                          const long long ts_radar,
                                           const bool is_finish,
                                           bool is_throttled) {
   if (is_throttled) {
@@ -120,15 +119,14 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
     std::lock_guard<std::mutex> locker(metrics_to_mutex_[profiling_type]);
     auto& fout_ = metrics_to_files_[profiling_type];
     // The CSV header: "timestamp", "ts_start", "ts_end", "type", "component", "result"
-    fout_ << apollo::cyber::Time::Now().ToNanosecond() << ',' // "timestamp"
-          << ts_start.ToNanosecond() << ',' // "ts_start"
+    fout_ << ts_start.ToNanosecond() << ',' // "ts_start"
           << ts_end.ToNanosecond() << ',' // "ts_end"
           << metrics_to_names_[profiling_type] << ',' // "type"
           << component << ',' // "component"
           << execution_time.ToNanosecond() << ',' // "execution_time"
-          << lat_cam << ',' // "lat_cam"
-          << lat_lidar << ',' // "lat_lidar"
-          << lat_radar << ',' // "lat_radar"
+          << ts_cam << ',' // "ts_cam"
+          << ts_lidar << ',' // "ts_lidar"
+          << ts_radar << ',' // "ts_radar"
           << int(is_finish) << std::endl; // "is_finish"
   }
 
