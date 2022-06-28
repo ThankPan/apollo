@@ -97,6 +97,13 @@ bool PlanningComponent::Init() {
         stories_.CopyFrom(*stories);
       });
 
+  lane_reader_ = node_->CreateReader<apollo::perception::PerceptionLanes>(
+      "apollo/perception/lanes",
+      [this](const std::shared_ptr<apollo::perception::PerceptionLanes>& lane_msg) {
+        ADEBUG << "Received lane data: run lane_msg callback.";
+      });
+  )
+
   if (FLAGS_use_navigation_mode) {
     relative_map_reader_ = node_->CreateReader<MapMsg>(
         config_.topic_config().relative_map_topic(),

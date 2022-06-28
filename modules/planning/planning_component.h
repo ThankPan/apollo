@@ -34,6 +34,7 @@
 #include "modules/prediction/proto/prediction_obstacle.pb.h"
 #include "modules/routing/proto/routing.pb.h"
 #include "modules/storytelling/proto/story.pb.h"
+#include "modules/perception/proto/perception_lane.pb.h"
 
 namespace apollo {
 namespace planning {
@@ -66,6 +67,9 @@ class PlanningComponent final
   std::shared_ptr<cyber::Reader<planning::PadMessage>> pad_msg_reader_;
   std::shared_ptr<cyber::Reader<relative_map::MapMsg>> relative_map_reader_;
   std::shared_ptr<cyber::Reader<storytelling::Stories>> story_telling_reader_;
+
+  // Yuting@2022.6.26: Planning now read lane msgs
+  std::shared_ptr<cyber::Reader<apollo::perception::PerceptionLanes>> lane_reader_;
 
   std::shared_ptr<cyber::Writer<ADCTrajectory>> planning_writer_;
   std::shared_ptr<cyber::Writer<routing::RoutingRequest>> rerouting_writer_;
