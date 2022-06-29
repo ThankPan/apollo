@@ -50,6 +50,9 @@ ProfilingResultWriter::ProfilingResultWriter()
     "ts_cam", // ts for camera information carried by output result (ns) (0 means this message carries NO such info)
     "ts_lidar", // ts for lidar information carried by output result (ns)
     "ts_radar", // ts for radar information carried by output result (ns)
+    "lat_cam", // E2E latency for camera information carried by output result (ns) (0 means this message carries NO such info)
+    "lat_lidar", // E2E latency for lidar information carried by output result (ns)
+    "lat_radar", // E2E latency for radar information carried by output result (ns)
     "is_finish", // Whether the component outputs a valid result this time
     };
   for (auto it : metrics_to_names_) {
@@ -127,6 +130,9 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
           << ts_cam << ',' // "ts_cam"
           << ts_lidar << ',' // "ts_lidar"
           << ts_radar << ',' // "ts_radar"
+          << ts_end.ToNanosecond() - ts_cam << ',' // "lat_cam"
+          << ts_end.ToNanosecond() - ts_lidar << ',' // "lat_lidar"
+          << ts_end.ToNanosecond() - ts_radar << ',' // "lat_radar"
           << int(is_finish) << std::endl; // "is_finish"
   }
 

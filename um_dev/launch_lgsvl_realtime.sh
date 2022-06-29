@@ -6,6 +6,9 @@
 
 source cyber/setup.bash
 
+# Shutdown current running nodes
+bash um_dev/stop_all.sh
+
 # First write current ts as result directory suffix
 S1=`date -I | awk -v OFS='' '{split($0,a,"-" ); print a[1], "_", a[2], "_", a[3]}'`
 S2=`date +"%T" | awk -v OFS='' '{split($0,a,":" ); print a[1], "_", a[2], "_", a[3]}'`
