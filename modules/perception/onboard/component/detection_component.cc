@@ -76,7 +76,8 @@ bool DetectionComponent::Proc(
   if (status) {
     out_message->timestamp_ = enter_ts.ToSecond();
     out_message->lidar_timestamp_ = enter_ts.ToNanosecond();
-    timing.set_finish(0, latest_lidar_ts_, 0);
+    timing.set_info(message->point_size());
+    timing.set_finish(0, latest_lidar_ts_, 0, 0, 0);
     writer_->Write(out_message);
     AINFO << "Send lidar detect output message.";
   }

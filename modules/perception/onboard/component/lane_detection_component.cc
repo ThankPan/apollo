@@ -318,7 +318,7 @@ void LaneDetectionComponent::OnReceiveImage(
     AERROR << "InternalProc failed, error_code: " << error_code;
     return;
   }
-  timing.set_finish(latest_camera_ts_, 0, 0);
+  timing.set_finish(0, 0, 0, 0, latest_lane_ts_);
 
   // for e2e lantency statistics
   {
@@ -697,6 +697,7 @@ int LaneDetectionComponent::InternalProc(
     AERROR << "make lanes_msg failed";
     return cyber::FAIL;
   }
+  lanes_msg->mutable_header()->set_lane_timestamp(latest_lane_ts_);
   writer_->Write(lanes_msg);
 
   return cyber::SUCC;

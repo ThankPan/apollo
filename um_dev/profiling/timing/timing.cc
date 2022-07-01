@@ -30,11 +30,17 @@ UM_Timing::~UM_Timing() {
                                                   0, // All zero since the component output nothing this time
                                                   0,
                                                   0,
-                                                  false);
+                                                  0,
+                                                  0,
+                                                  false,
+                                                  0);
 }
 
 void UM_Timing::set_finish(const long long ts_cam, 
-    const long long ts_lidar, const long long ts_radar) {
+                          const long long ts_lidar, 
+                          const long long ts_radar, 
+                          const long long ts_TL,
+                          const long long ts_lane) {
   if (is_finish_) {
     return;
   }
@@ -52,7 +58,15 @@ void UM_Timing::set_finish(const long long ts_cam,
                                                   ts_cam,
                                                   ts_lidar,
                                                   ts_radar,
-                                                  true);
+                                                  ts_TL,
+                                                  ts_lane,
+                                                  true,
+                                                  info
+                                                  );
+}
+
+void UM_Timing::set_info(const int info) {
+  this->info = info;
 }
 
 void UM_Timing::add_checkpoint(std::string name, const long long ts_cam, 

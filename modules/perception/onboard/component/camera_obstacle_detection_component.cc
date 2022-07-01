@@ -326,7 +326,7 @@ void CameraObstacleDetectionComponent::OnReceiveImage(
 
   // Yuting@2022.6.16: set camera timestamp for prefused
   prefused_message->camera_timestamp_ = latest_camera_ts_;
-  timing.set_finish(latest_camera_ts_, 0, 0);
+  timing.set_finish(latest_camera_ts_, 0, 0, 0, 0);
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;

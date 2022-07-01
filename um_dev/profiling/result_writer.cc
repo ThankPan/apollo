@@ -50,10 +50,15 @@ ProfilingResultWriter::ProfilingResultWriter()
     "ts_cam", // ts for camera information carried by output result (ns) (0 means this message carries NO such info)
     "ts_lidar", // ts for lidar information carried by output result (ns)
     "ts_radar", // ts for radar information carried by output result (ns)
+    "ts_TL", // ts for TL information carried by output result (ns)
+    "ts_lane", // ts for lane information carried by output result (ns)
     "lat_cam", // E2E latency for camera information carried by output result (ns) (0 means this message carries NO such info)
     "lat_lidar", // E2E latency for lidar information carried by output result (ns)
     "lat_radar", // E2E latency for radar information carried by output result (ns)
+    "lat_TL", // E2E latency for lidar information carried by output result (ns)
+    "lat_lane", // E2E latency for radar information carried by output result (ns)
     "is_finish", // Whether the component outputs a valid result this time
+    "info", // Component-specified information to be carried.
     };
   for (auto it : metrics_to_names_) {
     metrics_to_files_[it.first].open(result_root_dir + it.second + "/" + time_str + '_' + pid_str + ".csv");
@@ -99,7 +104,10 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           const long long ts_cam,
                                           const long long ts_lidar,
                                           const long long ts_radar,
+                                          const long long ts_TL,
+                                          const long long ts_lane,
                                           const bool is_finish,
+                                          const int info,
                                           bool is_throttled) {
   if (is_throttled) {
     std::lock_guard<std::mutex> lock(mutex_map_);
@@ -130,10 +138,15 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
           << ts_cam << ',' // "ts_cam"
           << ts_lidar << ',' // "ts_lidar"
           << ts_radar << ',' // "ts_radar"
+          << ts_TL << ',' // "ts_TL"
+          << ts_lane << ',' // "ts_lane"
           << ts_end.ToNanosecond() - ts_cam << ',' // "lat_cam"
           << ts_end.ToNanosecond() - ts_lidar << ',' // "lat_lidar"
           << ts_end.ToNanosecond() - ts_radar << ',' // "lat_radar"
-          << int(is_finish) << std::endl; // "is_finish"
+          << ts_end.ToNanosecond() - ts_TL << ',' // "lat_lidar"
+          << ts_end.ToNanosecond() - ts_lane << ',' // "lat_radar"
+          << int(is_finish) << ',' // "is_finish"
+          << info << std::endl; // "info"
   }
 
   return true;

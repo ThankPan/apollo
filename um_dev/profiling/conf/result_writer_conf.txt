@@ -1,1 +1,1 @@
-profiling_result_suffix lgsvl_{trafficlight}_2022_06_29_13_48_29
+profiling_result_suffix lgsvl_realtime_2022_06_30_21_29_08

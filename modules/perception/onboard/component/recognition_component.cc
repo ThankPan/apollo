@@ -50,6 +50,7 @@ bool RecognitionComponent::Proc(
     const std::shared_ptr<LidarFrameMessage>& message) {
   latest_lidar_ts_ = message->lidar_timestamp_;
   um_dev::profiling::UM_Timing timing("RecognitionComponent::Proc");
+  timing.set_info(message->lidar_frame_->segmented_objects.size());
   AINFO << std::setprecision(16)
         << "Enter Tracking component, message timestamp: "
         << message->timestamp_
@@ -59,7 +60,7 @@ bool RecognitionComponent::Proc(
 
   if (InternalProc(message, out_message)) {
     writer_->Write(out_message);
-    timing.set_finish(0, latest_lidar_ts_, 0);
+    timing.set_finish(0, latest_lidar_ts_, 0, 0, 0);
     AINFO << "Send lidar recognition output message.";
     return true;
   }

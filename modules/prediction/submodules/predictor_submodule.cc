@@ -83,7 +83,7 @@ bool PredictorSubmodule::Proc(
 
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
 
-  timing.set_finish(prediction_obstacles.header().camera_timestamp(), prediction_obstacles.header().lidar_timestamp(), prediction_obstacles.header().radar_timestamp());
+  timing.set_finish(prediction_obstacles.header().camera_timestamp(), prediction_obstacles.header().lidar_timestamp(), prediction_obstacles.header().radar_timestamp(), 0, 0);
   predictor_writer_->Write(prediction_obstacles);
 
   const apollo::cyber::Time& end_time = Clock::Now();

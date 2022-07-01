@@ -75,7 +75,7 @@ bool PlanningComponent::Init() {
       config_.topic_config().traffic_light_detection_topic(),
       [this](const std::shared_ptr<TrafficLightDetection>& traffic_light) {
         // Yuting@2022.6.24: now keep latest timestamps for sensors
-        this->latest_camera_ts_ = traffic_light->header().camera_timestamp();
+        this->latest_TL_ts_ = traffic_light->header().camera_timestamp();
         ADEBUG << "Received traffic light data: run traffic light callback.";
         std::lock_guard<std::mutex> lock(mutex_);
         traffic_light_.CopyFrom(*traffic_light);
@@ -131,6 +131,7 @@ bool PlanningComponent::Proc(
     const std::shared_ptr<localization::LocalizationEstimate>&
         localization_estimate) {
   // Yuting@2022.6.24: now keep latest timestamps for sensors
+  // Yuting@2022.6.30: now keep latest timestamps for information sources
   latest_camera_ts_ = 
     prediction_obstacles->header().has_camera_timestamp() && prediction_obstacles->header().camera_timestamp() > latest_camera_ts_
     ? prediction_obstacles->header().camera_timestamp()
@@ -223,7 +224,10 @@ bool PlanningComponent::Proc(
   adc_trajectory_pb.mutable_header()->set_camera_timestamp(latest_camera_ts_);
   adc_trajectory_pb.mutable_header()->set_lidar_timestamp(latest_lidar_ts_);  
   adc_trajectory_pb.mutable_header()->set_radar_timestamp(latest_radar_ts_);
-  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
+  adc_trajectory_pb.mutable_header()->set_tl_timestamp(latest_TL_ts_);
+  adc_trajectory_pb.mutable_header()->set_lane_timestamp(latest_lane_ts_);
+  timing.set_info(prediction_obstacles->prediction_obstacle_size());
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, latest_TL_ts_, latest_lane_ts_);
   planning_writer_->Write(adc_trajectory_pb);
   
   // record in history

@@ -118,6 +118,8 @@ class ComponentBase : public std::enable_shared_from_this<ComponentBase> {
   unsigned long long latest_camera_ts_ = 0;
   unsigned long long latest_lidar_ts_ = 0;
   unsigned long long latest_radar_ts_ = 0;
+  unsigned long long latest_TL_ts_ = 0;
+  unsigned long long latest_lane_ts_ = 0;
 };
 
 }  // namespace cyber

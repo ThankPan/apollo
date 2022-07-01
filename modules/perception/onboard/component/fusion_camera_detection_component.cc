@@ -317,21 +317,21 @@ void FusionCameraDetectionComponent::OnReceiveImage(
       return;
     }
     if (output_final_obstacles_) {
-      timing.set_finish(latest_camera_ts_, 0, 0);
+      timing.set_finish(latest_camera_ts_, 0, 0, 0, 0);
       writer_->Write(out_message);
     }
     return;
   }
 
   prefused_message->camera_timestamp_ = latest_camera_ts_;
-  timing.set_finish(latest_camera_ts_, 0, 0);
+  timing.set_finish(latest_camera_ts_, 0, 0, 0, 0);
   bool send_sensorframe_ret = sensorframe_writer_->Write(prefused_message);
   AINFO << "send out prefused msg, ts: " << msg_timestamp
         << "ret: " << send_sensorframe_ret;
   // Send output msg
   if (output_final_obstacles_) {
     writer_->Write(out_message);
-    timing.set_finish(latest_camera_ts_, 0, 0);
+    timing.set_finish(latest_camera_ts_, 0, 0, 0, 0);
   }
   // for e2e lantency statistics
   {

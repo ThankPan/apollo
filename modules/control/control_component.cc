@@ -150,6 +150,14 @@ void ControlComponent::OnPlanning(
     trajectory->header().has_radar_timestamp() && trajectory->header().radar_timestamp() > latest_radar_ts_
     ? trajectory->header().radar_timestamp()
     : latest_radar_ts_;
+  latest_TL_ts_ = 
+    trajectory->header().has_tl_timestamp() && trajectory->header().tl_timestamp() > latest_TL_ts_
+    ? trajectory->header().tl_timestamp()
+    : latest_TL_ts_;
+  latest_lane_ts_ = 
+    trajectory->header().has_lane_timestamp() && trajectory->header().lane_timestamp() > latest_lane_ts_
+    ? trajectory->header().lane_timestamp()
+    : latest_lane_ts_;
   ADEBUG << "Received chassis data: run trajectory callback.";
   std::lock_guard<std::mutex> lock(mutex_);
   latest_trajectory_.CopyFrom(*trajectory);
@@ -428,7 +436,8 @@ bool ControlComponent::Proc() {
         end_time);
   }
   // Yuting: record E2E latency here, @2022.6.22: all writes to one line
-  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
+  timing.set_info(local_view_.chassis().speed_mps());
+  timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, latest_TL_ts_, latest_lane_ts_);
   control_cmd_writer_->Write(control_command);
 
   return true;

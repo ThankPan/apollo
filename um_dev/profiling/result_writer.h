@@ -43,7 +43,10 @@ class ProfilingResultWriter {
                                           const long long ts_cam,
                                           const long long ts_lidar,
                                           const long long ts_radar,
+                                          const long long ts_TL,
+                                          const long long ts_lane,
                                           const bool is_finish,
+                                          const int info,
                                           bool is_throttled = false);
 
  private:

@@ -80,7 +80,8 @@ bool FusionComponent::Proc(const std::shared_ptr<SensorFrameMessage>& message) {
             << fusion_main_sensor_ << ". Skip send.";
     } else {
       // Send("/apollo/perception/obstacles", out_message);
-      timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_);
+      timing.set_info(out_message->perception_obstacle_size());
+      timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, 0, 0);
       writer_->Write(out_message);
       AINFO << "Send fusion processing output message.";
       // send msg for visualization
@@ -205,6 +206,7 @@ bool FusionComponent::InternalProc(
         << timestamp << "]:cur_time[" << cur_time << "]:cur_latency[" << latency
         << "]:obj_cnt[" << valid_objects.size() << "]";
   AINFO << "publish_number: " << valid_objects.size() << " obj";
+  num_objects_ = valid_objects.size();
   return true;
 }
 
