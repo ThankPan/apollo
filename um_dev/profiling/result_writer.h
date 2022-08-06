@@ -46,7 +46,9 @@ class ProfilingResultWriter {
                                           const long long ts_TL,
                                           const long long ts_lane,
                                           const bool is_finish,
-                                          const int info,
+                                          const int info1,
+                                          const int info2,
+                                          const int info3,
                                           bool is_throttled = false);
 
  private:

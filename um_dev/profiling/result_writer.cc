@@ -58,7 +58,9 @@ ProfilingResultWriter::ProfilingResultWriter()
     "lat_TL", // E2E latency for lidar information carried by output result (ns)
     "lat_lane", // E2E latency for radar information carried by output result (ns)
     "is_finish", // Whether the component outputs a valid result this time
-    "info", // Component-specified information to be carried.
+    "info1", // Component-specified information 1 to be carried.
+    "info2", // Component-specified information 2 to be carried.
+    "info3", // Component-specified information 3 to be carried.
     };
   for (auto it : metrics_to_names_) {
     metrics_to_files_[it.first].open(result_root_dir + it.second + "/" + time_str + '_' + pid_str + ".csv");
@@ -78,9 +80,9 @@ ProfilingResultWriter::~ProfilingResultWriter() {
 
 bool ProfilingResultWriter::Init() {
   metrics_to_names_[PROFILING_METRICS::TIMING] = "Timing";
-  metrics_to_names_[PROFILING_METRICS::LATENCY_CAMERA] = "Lat_Cam";
-  metrics_to_names_[PROFILING_METRICS::LATENCY_RADAR] = "Lat_Rad";
-  metrics_to_names_[PROFILING_METRICS::LATENCY_LIDAR] = "Lat_Lid";
+  // metrics_to_names_[PROFILING_METRICS::LATENCY_CAMERA] = "Lat_Cam";
+  // metrics_to_names_[PROFILING_METRICS::LATENCY_RADAR] = "Lat_Rad";
+  // metrics_to_names_[PROFILING_METRICS::LATENCY_LIDAR] = "Lat_Lid";
 
   std::ifstream conf_fin("/apollo/um_dev/profiling/conf/result_writer_conf.txt");
   if (!conf_fin.is_open()) {
@@ -107,7 +109,9 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
                                           const long long ts_TL,
                                           const long long ts_lane,
                                           const bool is_finish,
-                                          const int info,
+                                          const int info1,
+                                          const int info2,
+                                          const int info3,
                                           bool is_throttled) {
   if (is_throttled) {
     std::lock_guard<std::mutex> lock(mutex_map_);
@@ -117,7 +121,7 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
     if (it == task_to_timestamp_.end()) {
       task_to_timestamp_[throttle_timestamp] = now;
     } else if (now - it->second <
-               apollo::cyber::Duration(throttle_threshold_)) {
+               apollo::cyber::Duration(throttle_threshold_)) { 
       return true;
     } else {
       it->second = now;
@@ -146,7 +150,9 @@ bool ProfilingResultWriter::write_to_file(PROFILING_METRICS profiling_type,
           << ts_end.ToNanosecond() - ts_TL << ',' // "lat_lidar"
           << ts_end.ToNanosecond() - ts_lane << ',' // "lat_radar"
           << int(is_finish) << ',' // "is_finish"
-          << info << std::endl; // "info"
+          << info1 << ',' // "info1"
+          << info2 << ',' // "info2"
+          << info3 << std::endl; // "info3"
   }
 
   return true;

@@ -33,6 +33,8 @@ UM_Timing::~UM_Timing() {
                                                   0,
                                                   0,
                                                   false,
+                                                  0,
+                                                  0,
                                                   0);
 }
 
@@ -61,12 +63,15 @@ void UM_Timing::set_finish(const long long ts_cam,
                                                   ts_TL,
                                                   ts_lane,
                                                   true,
-                                                  info
-                                                  );
+                                                  info1,
+                                                  info2,
+                                                  info3);
 }
 
-void UM_Timing::set_info(const int info) {
-  this->info = info;
+void UM_Timing::set_info(const int info1, const int info2, const int info3) {
+  this->info1 = info1;
+  this->info2 = info2;
+  this->info3 = info3;
 }
 
 void UM_Timing::add_checkpoint(std::string name, const long long ts_cam, 

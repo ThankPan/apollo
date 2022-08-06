@@ -436,7 +436,7 @@ bool ControlComponent::Proc() {
         end_time);
   }
   // Yuting: record E2E latency here, @2022.6.22: all writes to one line
-  timing.set_info(local_view_.chassis().speed_mps());
+  timing.set_info(local_view_.chassis().speed_mps(), trajectory_msg->trajectory_point_size());
   timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, latest_TL_ts_, latest_lane_ts_);
   control_cmd_writer_->Write(control_command);
 

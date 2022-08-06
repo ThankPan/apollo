@@ -226,7 +226,28 @@ bool PlanningComponent::Proc(
   adc_trajectory_pb.mutable_header()->set_radar_timestamp(latest_radar_ts_);
   adc_trajectory_pb.mutable_header()->set_tl_timestamp(latest_TL_ts_);
   adc_trajectory_pb.mutable_header()->set_lane_timestamp(latest_lane_ts_);
-  timing.set_info(prediction_obstacles->prediction_obstacle_size());
+  // Yuting@2022.7.8： Compose story number
+  int stories_num = 0;
+  if (stories_.has_close_to_clear_area()) {
+    stories_num += 1e0;
+  }
+  if (stories_.has_close_to_crosswalk()) {
+    stories_num += 1e1;
+  }
+  if (stories_.has_close_to_junction()) {
+    stories_num += 1e2;
+  }
+  if (stories_.has_close_to_signal()) {
+    stories_num += 1e3;
+  }
+  if (stories_.has_close_to_stop_sign()) {
+    stories_num += 1e4;
+  }
+  if (stories_.has_close_to_yield_sign()) {
+    stories_num += 1e5;
+  }
+
+  timing.set_info(prediction_obstacles->prediction_obstacle_size(), stories_num, 0);
   timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, latest_TL_ts_, latest_lane_ts_);
   planning_writer_->Write(adc_trajectory_pb);
   

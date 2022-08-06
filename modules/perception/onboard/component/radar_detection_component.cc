@@ -76,6 +76,7 @@ bool RadarDetectionComponent::Proc(const std::shared_ptr<ContiRadar>& message) {
   }
 
   out_message->radar_timestamp_ = enter_ts.ToNanosecond();
+  timing.set_info(message->contiobs_size());
   timing.set_finish(0, 0, latest_radar_ts_, 0, 0);
   writer_->Write(out_message);
   AINFO << "Send radar processing output message.";
