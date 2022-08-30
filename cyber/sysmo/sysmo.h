@@ -42,7 +42,7 @@ class SysMo {
   std::atomic<bool> shut_down_{false};
   bool start_ = false;
 
-  int sysmo_interval_ms_ = 100;
+  int sysmo_interval_ms_ = 10; // Yuting@2022.8.29: 100 -> 10
   std::condition_variable cv_;
   std::mutex lk_;
   std::thread sysmo_;
