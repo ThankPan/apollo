@@ -23,6 +23,7 @@
 #include "modules/perception/lidar/common/lidar_log.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/trace_timer/trace_timer.h"
 
 using ::apollo::cyber::Clock;
 
@@ -63,8 +64,8 @@ bool DetectionComponent::Proc(
   // Yuting@2022.6.24: now keep latest timestamps for sensors
   latest_lidar_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("DetectionComponent::Proc");
-  timing.add_checkpoint("Beginning", cyber::Time(message->measurement_time()).ToNanosecond(), 
-    message->header().lidar_timestamp(), 0);
+  um_dev::profiling::TraceTimer::Instance().set("detection", um_dev::profiling::Event::START);
+
   AINFO << std::setprecision(16)
         << "Enter detection component, message timestamp: "
         << message->measurement_time()
@@ -78,6 +79,7 @@ bool DetectionComponent::Proc(
     out_message->lidar_timestamp_ = enter_ts.ToNanosecond();
     timing.set_info(message->point_size(), message->is_dense());
     timing.set_finish(0, latest_lidar_ts_, 0, 0, 0);
+    um_dev::profiling::TraceTimer::Instance().set("detection", um_dev::profiling::Event::END);
     writer_->Write(out_message);
     AINFO << "Send lidar detect output message.";
   }
@@ -144,8 +146,12 @@ bool DetectionComponent::InternalProc(
   lidar::LidarObstacleDetectionOptions detect_opts;
   detect_opts.sensor_name = sensor_name_;
   lidar2world_trans_.GetExtrinsics(&detect_opts.sensor2novatel_extrinsics);
+
+  um_dev::profiling::TraceTimer::Instance().set("detection", um_dev::profiling::Event::GPU_START);
   lidar::LidarProcessResult ret =
       detector_->Process(detect_opts, in_message, frame.get());
+  um_dev::profiling::TraceTimer::Instance().set("detection", um_dev::profiling::Event::GPU_END);
+  
   if (ret.error_code != lidar::LidarErrorCode::Succeed) {
     out_message->error_code_ =
         apollo::common::ErrorCode::PERCEPTION_ERROR_PROCESS;

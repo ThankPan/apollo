@@ -39,6 +39,7 @@
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "modules/perception/onboard/component/camera_perception_viz_message.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/trace_timer/trace_timer.h"
 
 namespace apollo {
 namespace perception {
@@ -281,6 +282,8 @@ void LaneDetectionComponent::OnReceiveImage(
   // Yuting@2022.6.24: now keep latest timestamps for sensors
   latest_camera_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("LaneDetectionComponent::OnReceiveImage");
+  um_dev::profiling::TraceTimer::Instance().set("lane_" + camera_name, um_dev::profiling::Event::START);
+
   std::lock_guard<std::mutex> lock(mutex_);
   const double msg_timestamp = message->measurement_time() + timestamp_offset_;
   AINFO << "Enter LaneDetectionComponent::OnReceiveImage(), camera_name: " << camera_name
@@ -641,6 +644,7 @@ int LaneDetectionComponent::InternalProc(
   camera_lane_pipeline_->GetCalibrationService(
       &camera_frame.calibration_service);
 
+  um_dev::profiling::TraceTimer::Instance().set("lane_" + camera_name, um_dev::profiling::Event::GPU_START);
   if (!camera_lane_pipeline_->Perception(camera_perception_options_,
                                          &camera_frame)) {
     AERROR << "camera_lane_pipeline_->Perception() failed msg_timestamp: "
@@ -649,6 +653,7 @@ int LaneDetectionComponent::InternalProc(
     prefused_message->error_code_ = *error_code;
     return cyber::FAIL;
   }
+  um_dev::profiling::TraceTimer::Instance().set("lane_" + camera_name, um_dev::profiling::Event::GPU_END);
   AINFO << "##" << camera_name << ": pitch "
         << camera_frame.calibration_service->QueryPitchAngle()
         << " | camera_grond_height "
@@ -699,6 +704,7 @@ int LaneDetectionComponent::InternalProc(
   }
   lanes_msg->mutable_header()->set_lane_timestamp(latest_lane_ts_);
   writer_->Write(lanes_msg);
+  um_dev::profiling::TraceTimer::Instance().set("lane_" + camera_name, um_dev::profiling::Event::END);
 
   return cyber::SUCC;
 }

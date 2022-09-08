@@ -38,6 +38,7 @@
 #include "modules/perception/common/sensor_manager/sensor_manager.h"
 #include "modules/perception/onboard/common_flags/common_flags.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/trace_timer/trace_timer.h"
 
 namespace apollo {
 namespace perception {
@@ -317,6 +318,8 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   auto enter_ts = cyber::Time::Now();
   latest_lane_ts_ = enter_ts.ToNanosecond();
   um_dev::profiling::UM_Timing timing("TrafficLightsPerceptionComponent::OnReceiveImage");
+  um_dev::profiling::TraceTimer::Instance().set("trafficlight_" + camera_name, um_dev::profiling::Event::START);
+
   std::lock_guard<std::mutex> lck(mutex_);
   double receive_img_timestamp = Clock::NowInSeconds();
   double image_msg_ts = msg->measurement_time();
@@ -402,7 +405,9 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   last_proc_image_ts_ = Clock::NowInSeconds();
 
   AINFO << "start proc.";
+  um_dev::profiling::TraceTimer::Instance().set("trafficlight_" + camera_name, um_dev::profiling::Event::GPU_START);
   traffic_light_pipeline_->Perception(camera_perception_options_, frame_.get());
+  um_dev::profiling::TraceTimer::Instance().set("trafficlight_" + camera_name, um_dev::profiling::Event::GPU_END);
 
   for (auto light : frame_->traffic_lights) {
     AINFO << "after tl pipeline " << light->id << " color "
@@ -423,6 +428,7 @@ void TrafficLightsPerceptionComponent::OnReceiveImage(
   timing.set_info(out_msg->traffic_light_size());
   timing.set_finish(0, 0, 0, latest_TL_ts_, 0);
   out_msg->mutable_header()->set_tl_timestamp(latest_TL_ts_);
+  um_dev::profiling::TraceTimer::Instance().set("trafficlight_" + camera_name, um_dev::profiling::Event::END);
   writer_->Write(out_msg);
 
   //  SendSimulationMsg();

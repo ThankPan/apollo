@@ -31,6 +31,7 @@ cc_library(
         "//modules/prediction/proto:prediction_conf_cc_proto",
         "//modules/prediction/pipeline:vector_net",
         "//third_party:libtorch",
+        "//um_dev/profiling/trace_timer:trace_timer",
     ],
 )
 

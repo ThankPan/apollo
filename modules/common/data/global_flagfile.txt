@@ -48,3 +48,5 @@
 --map_dir=/apollo/modules/map/data/borregas_ave
 
 --map_dir=/apollo/modules/map/data/test_map1
+
+--map_dir=/apollo/modules/map/data/borregas_ave

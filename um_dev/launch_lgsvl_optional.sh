@@ -9,8 +9,8 @@ source cyber/setup.bash
 # Check # of args
 if [ $# != 1 ]
 then 
-    echo "error: not node name is provided"
-    exit
+    echo "No node name is provided"
+    # exit
 else
     echo "Launching $1"
 fi

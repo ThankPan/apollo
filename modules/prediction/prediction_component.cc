@@ -34,6 +34,7 @@
 #include "modules/prediction/scenario/scenario_manager.h"
 #include "modules/prediction/util/data_extraction.h"
 #include "um_dev/profiling/timing/timing.h"
+#include "um_dev/profiling/trace_timer/trace_timer.h"
 
 namespace apollo {
 namespace prediction {
@@ -196,6 +197,8 @@ bool PredictionComponent::ContainerSubmoduleProcess(
 bool PredictionComponent::PredictionEndToEndProc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles) {
   um_dev::profiling::UM_Timing timing("PredictionComponent::PredictionEndToEndProc");
+  um_dev::profiling::TraceTimer::Instance().set("prediction", um_dev::profiling::Event::START);
+  
   if (FLAGS_prediction_test_mode &&
       (Clock::NowInSeconds() - component_start_time_ >
        FLAGS_prediction_test_duration)) {
@@ -300,6 +303,7 @@ bool PredictionComponent::PredictionEndToEndProc(
 
   timing.set_info(perception_obstacles->perception_obstacle_size());
   timing.set_finish(latest_camera_ts_, latest_lidar_ts_, latest_radar_ts_, 0, 0);
+  um_dev::profiling::TraceTimer::Instance().set("prediction", um_dev::profiling::Event::END);
   prediction_writer_->Write(prediction_obstacles);  
   return true;
 }

@@ -37,6 +37,7 @@
 #include "modules/prediction/evaluator/vehicle/semantic_lstm_evaluator.h"
 #include "modules/prediction/evaluator/vehicle/jointly_prediction_planning_evaluator.h"
 #include "modules/prediction/evaluator/vehicle/vectornet_evaluator.h"
+#include "um_dev/profiling/trace_timer/trace_timer.h"
 
 namespace apollo {
 namespace prediction {
@@ -214,7 +215,7 @@ void EvaluatorManager::Run(
   }
 
   std::vector<Obstacle*> dynamic_env;
-
+  um_dev::profiling::TraceTimer::Instance().set("prediction", um_dev::profiling::Event::GPU_START);
   if (FLAGS_enable_multi_thread) {
     IdObstacleListMap id_obstacle_map;
     GroupObstaclesByObstacleIds(obstacles_container, &id_obstacle_map);
@@ -242,6 +243,7 @@ void EvaluatorManager::Run(
                        obstacles_container, dynamic_env);
     }
   }
+  um_dev::profiling::TraceTimer::Instance().set("prediction", um_dev::profiling::Event::GPU_END);
 }
 
 void EvaluatorManager::EvaluateObstacle(
