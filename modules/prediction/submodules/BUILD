@@ -59,6 +59,7 @@ cc_library(
         "//modules/prediction/container/adc_trajectory:adc_trajectory_container",
         "//modules/prediction/predictor:predictor_manager",
         "//modules/prediction/proto:prediction_obstacle_cc_proto",
+        "//um_dev/profiling/timing:timing",
     ],
     alwayslink = True,
 )

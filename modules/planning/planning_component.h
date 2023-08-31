@@ -67,6 +67,7 @@ class PlanningComponent final
   std::shared_ptr<cyber::Reader<relative_map::MapMsg>> relative_map_reader_;
   std::shared_ptr<cyber::Reader<storytelling::Stories>> story_telling_reader_;
 
+
   std::shared_ptr<cyber::Writer<ADCTrajectory>> planning_writer_;
   std::shared_ptr<cyber::Writer<routing::RoutingRequest>> rerouting_writer_;
   std::shared_ptr<cyber::Writer<PlanningLearningData>>

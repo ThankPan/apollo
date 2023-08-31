@@ -3,6 +3,7 @@ header:
   stamp:
     secs: 0
     nsecs: 0
+<<<<<<< HEAD
   frame_id: short_camera
 child_frame_id: radar
 transform:
@@ -15,3 +16,17 @@ transform:
     x: 0.04894393984902981
     y: 1.168500489918554
     z: 1.371936986822701
+=======
+  frame_id: front_6mm
+child_frame_id: radar
+transform:
+  translation:
+    x: 0.0
+    y: 1.0110000371933034
+    z: 2.4720000773668316
+  rotation:
+    x: 0.5
+    y: -0.4999999999999999
+    z: 0.5
+    w: 0.5000000000000001
+>>>>>>> main

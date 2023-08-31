@@ -23,6 +23,7 @@
 #include "modules/common/adapters/proto/adapter_config.pb.h"
 #include "modules/common/util/message_util.h"
 #include "modules/prediction/common/prediction_system_gflags.h"
+#include "um_dev/profiling/timing/timing.h"
 
 namespace apollo {
 namespace prediction {
@@ -58,6 +59,7 @@ bool PredictorSubmodule::Proc(
     const std::shared_ptr<PerceptionObstacles>& perception_obstacles,
     const std::shared_ptr<ADCTrajectoryContainer>& adc_trajectory_container,
     const std::shared_ptr<SubmoduleOutput>& submodule_output) {
+  um_dev::profiling::UM_Timing timing("PredictorSubmodule::Proc");
   const apollo::common::Header& perception_header =
       perception_obstacles->header();
   const apollo::common::ErrorCode& perception_error_code =
@@ -80,6 +82,8 @@ bool PredictorSubmodule::Proc(
   prediction_obstacles.set_perception_error_code(perception_error_code);
 
   common::util::FillHeader(node_->Name(), &prediction_obstacles);
+
+  timing.set_finish(prediction_obstacles.header().camera_timestamp(), prediction_obstacles.header().lidar_timestamp(), prediction_obstacles.header().radar_timestamp(), 0, 0);
   predictor_writer_->Write(prediction_obstacles);
 
   const apollo::cyber::Time& end_time = Clock::Now();

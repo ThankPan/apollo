@@ -252,7 +252,7 @@ bool TransformWrapper::QueryTrans(double timestamp, StampedTransform* trans,
                                  static_cast<float>(FLAGS_obs_tf2_buff_size),
                                  &err_string)) {
     // In simulation mode, use the latest transform information if query failed.
-    if (!cyber::common::GlobalData::Instance()->IsRealityMode()) {
+    if (true || !cyber::common::GlobalData::Instance()->IsRealityMode()) {
       query_time = cyber::Time(0);
     } else {
       AERROR << "Can not find transform. " << FORMAT_TIMESTAMP(timestamp)

@@ -54,29 +54,29 @@ message ADCTrajectory {
   optional apollo.common.Header header = 1;
 
   optional double total_path_length = 2;  // in meters
-  
-  optional double total_path_time = 3;    // in seconds
-  
+
+  optional double total_path_time = 3;  // in seconds
+
   optional EStop estop = 6;
-  
+
   optional apollo.planning_internal.Debug debug = 8;
-  
+
   // is_replan == true mean replan triggered
   optional bool is_replan = 9 [default = false];
-  
+
   // Specify trajectory gear
   optional apollo.canbus.Chassis.GearPosition gear = 10;
-  
+
   // path data + speed data
   repeated apollo.common.TrajectoryPoint trajectory_point = 12;
-  
+
   // path point without speed info
   repeated apollo.common.PathPoint path_point = 13;
-  
+
   optional apollo.planning.DecisionResult decision = 14;
-  
+
   optional LatencyStats latency_stats = 15;
-  
+
   // the routing used for current planning result
   optional apollo.common.Header routing_header = 16;
   enum RightOfWayStatus {
@@ -84,13 +84,13 @@ message ADCTrajectory {
     PROTECTED = 1;
   }
   optional RightOfWayStatus right_of_way_status = 17;
-  
+
   // lane id along current reference line
   repeated apollo.hdmap.Id lane_id = 18;
-  
+
   // set the engage advice for based on current planning result.
   optional apollo.common.EngageAdvice engage_advice = 19;
-  
+
   // the region where planning cares most
   message CriticalRegion {
     repeated apollo.common.Polygon region = 1;
@@ -99,7 +99,7 @@ message ADCTrajectory {
   // critical
   // critical regions may or may not overlap
   optional CriticalRegion critical_region = 20;
-  
+
   enum TrajectoryType {
     UNKNOWN = 0;
     NORMAL = 1;
@@ -108,12 +108,12 @@ message ADCTrajectory {
     PATH_REUSED = 4;
   }
   optional TrajectoryType trajectory_type = 21 [default = UNKNOWN];
-  
+
   optional string replan_reason = 22;
-  
+
   // lane id along target reference line
   repeated apollo.hdmap.Id target_lane_id = 23;
-  
+
   // complete dead end flag
   optional bool car_in_dead_end = 24;
 
